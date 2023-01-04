@@ -1,0 +1,19 @@
+{
+  "name": "axframe-core",
+  "version": "1.0.0",
+  "description": "axframe core",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axisj/axframe-core.git"
+  },
+  "author": "tom@axisj.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/axisj/axframe-core/issues"
+  },
+  "homepage": "https://github.com/axisj/axframe-core#readme"
+}
