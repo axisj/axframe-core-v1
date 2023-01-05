@@ -1,9 +1,5 @@
 import create from "zustand";
-import {
-  ExampleItem,
-  ExampleListRequest,
-  ExampleListResponse,
-} from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
@@ -12,12 +8,12 @@ import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
+import { ROUTES } from "router/Routes";
 
-interface APIRequest extends ExampleListRequest {}
-interface APIResponse extends ExampleListResponse {}
+interface ListRequest extends ExampleListRequest {}
 
 interface MetaData {
-  listRequestValue: APIRequest;
+  listRequestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
 }
@@ -30,20 +26,22 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  setListRequestValue: (requestValue: APIRequest) => void;
+  setListRequestValue: (requestValue: ListRequest) => void;
   setListColWidths: (colWidths: number[]) => void;
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  callListApi: (request?: APIRequest) => Promise<void>;
+  callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
 }
 
 // create states
+const routePath = ROUTES.EXAMPLES.children.LIST_DETAIL.children.LIST.path;
 const _listRequestValue = {
   pageNumber: 1,
   pageSize: 100,
 };
 const createState: States = {
+  routePath,
   listRequestValue: { ..._listRequestValue },
   listColWidths: [],
   listSpinning: false,
@@ -127,8 +125,6 @@ export const useExampleListStore = create(
 export const unSubscribeExampleListStore = useExampleListStore.subscribe(
   (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
   ([listSortParams, listRequestValue, listColWidths]) => {
-    const routePath = useExampleListStore.getState().routePath;
-    if (!routePath) return;
     console.log(`Save metaData '${routePath}', Store : useExampleListStore`);
 
     setMetaDataByPath<MetaData>(routePath, {

@@ -6,7 +6,6 @@ import { AXFIWriteForm } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks/useI18n";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
-import { ROUTES } from "router/Routes";
 import { ExampleFormSet } from "./ExampleFormSet";
 import { useExampleFormStore } from "./useExampleFormStore";
 
@@ -18,7 +17,7 @@ function App({}: Props) {
   const saveSpinning = useExampleFormStore((s) => s.saveSpinning);
 
   useDidMountEffect(() => {
-    init(ROUTES.EXAMPLES.children.LIST_DETAIL.children.REGISTRATION.path);
+    init();
   });
 
   return (

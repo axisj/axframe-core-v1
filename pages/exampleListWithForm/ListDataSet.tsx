@@ -3,36 +3,34 @@ import styled from "@emotion/styled";
 import { SearchParams, SearchParamType } from "@core/components/search";
 import { useI18n } from "@core/hooks/useI18n";
 import { Form } from "antd";
-import { ExampleListDataGrid } from "./ExampleListDataGrid";
-import { useExampleListStore } from "./useExampleListStore";
-import { SMixinFlexColumn } from "@core/styles/emotion";
+import { ListDataGrid } from "./ListDataGrid";
+import { useExampleListWithFormStore } from "./useExampleListWithFormStore";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
-import { ROUTES } from "../../../router/Routes";
-import { useLink } from "@core/hooks/useLink";
-import { PageLayout } from "../../../styles/pageStyled";
+import { PageLayout } from "styles/pageStyled";
 
 interface Props {}
 
-function ExampleListDataSet({}: Props) {
+function ListDataSet({}: Props) {
   const { t } = useI18n();
-  const { linkByRoute } = useLink();
-  const listRequestValue = useExampleListStore((s) => s.listRequestValue);
-  const setListRequestValue = useExampleListStore((s) => s.setListRequestValue);
-  const callApi = useExampleListStore((s) => s.callListApi);
-  const spinning = useExampleListStore((s) => s.listSpinning);
+  const listRequestValue = useExampleListWithFormStore((s) => s.listRequestValue);
+  const setListRequestValue = useExampleListWithFormStore((s) => s.setListRequestValue);
+  const callListApi = useExampleListWithFormStore((s) => s.callListApi);
+  const listSpinning = useExampleListWithFormStore((s) => s.listSpinning);
+  const setListSelectedRowKey = useExampleListWithFormStore((s) => s.setListSelectedRowKey);
+  const flexGrow = useExampleListWithFormStore((s) => s.flexGrow);
 
   const [searchForm] = Form.useForm();
 
   const handleSearch = React.useCallback(async () => {
-    await callApi();
-  }, [callApi]);
+    await callListApi();
+  }, [callListApi]);
 
   const onClickItem = React.useCallback(
     (params: AXFDGClickParams<ExampleItem>) => {
-      linkByRoute(ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL, { id: params.item.id });
+      setListSelectedRowKey(params.item.id);
     },
-    [linkByRoute]
+    [setListSelectedRowKey]
   );
 
   const params = React.useMemo(
@@ -59,21 +57,23 @@ function ExampleListDataSet({}: Props) {
   );
 
   return (
-    <Body>
+    <Frame style={{ flex: flexGrow }}>
       <SearchParams
         form={searchForm}
         params={params}
         paramsValue={listRequestValue}
         onChangeParamsValue={(value) => setListRequestValue(value)}
         onSearch={handleSearch}
-        spinning={spinning}
+        spinning={listSpinning}
       />
 
-      <ExampleListDataGrid onClick={onClickItem} />
-    </Body>
+      <ListDataGrid onClick={onClickItem} />
+    </Frame>
   );
 }
 
-const Body = styled(PageLayout.Body)``;
+const Frame = styled(PageLayout.FrameColumn)`
+  padding: 0 15px 30px 30px;
+`;
 
-export { ExampleListDataSet };
+export { ListDataSet };

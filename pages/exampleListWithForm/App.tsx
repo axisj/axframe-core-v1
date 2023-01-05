@@ -7,20 +7,19 @@ import { Button } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { useI18n } from "@core/hooks/useI18n";
-import { useExampleListWithListStore } from "./useExampleListWithListStore";
+import { useExampleListWithFormStore } from "./useExampleListWithFormStore";
 import { ListDataSet } from "./ListDataSet";
-import { SubListDataSet } from "./SubListDataSet";
+import { FormSet } from "./FormSet";
 
 interface Props {}
 
 function App({}: Props) {
   const { t } = useI18n();
 
-  const init = useExampleListWithListStore((s) => s.init);
-  const reset = useExampleListWithListStore((s) => s.reset);
-  const callListApi = useExampleListWithListStore((s) => s.callListApi);
-
-  const setFlexGrow = useExampleListWithListStore((s) => s.setFlexGrow);
+  const init = useExampleListWithFormStore((s) => s.init);
+  const reset = useExampleListWithFormStore((s) => s.reset);
+  const callListApi = useExampleListWithFormStore((s) => s.callListApi);
+  const setFlexGrow = useExampleListWithFormStore((s) => s.setFlexGrow);
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
 
   const handleReset = React.useCallback(async () => {
@@ -36,7 +35,7 @@ function App({}: Props) {
   return (
     <Container stretch role={"page-container"}>
       <Header>
-        <IconText icon={<AXFIListSearch />}>{t.pages.example.listWithList.title}</IconText>
+        <IconText icon={<AXFIListSearch />}>{t.pages.example.listWithForm.title}</IconText>
 
         <ButtonGroup compact>
           <Button size='small' onClick={() => {}}>
@@ -51,7 +50,7 @@ function App({}: Props) {
       <Body ref={resizerContainerRef}>
         <ListDataSet />
         <ColResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
-        <SubListDataSet />
+        <FormSet />
       </Body>
     </Container>
   );
@@ -60,7 +59,7 @@ function App({}: Props) {
 const Container = styled(PageLayout)``;
 const Header = styled(PageLayout.Header)``;
 const Body = styled(PageLayout.FrameRow)`
-  padding-top: 0;
+  padding: 0;
 `;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
 

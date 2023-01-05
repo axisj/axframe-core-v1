@@ -3,7 +3,6 @@ import {
   ExampleDetailRequest,
   ExampleItem,
   ExampleSaveRequest,
-  ExampleSaveResponse,
 } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
@@ -12,13 +11,13 @@ import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
+import { ROUTES } from "router/Routes";
 
-interface APIRequest extends ExampleSaveRequest {}
-interface APIResponse extends ExampleSaveResponse {}
+interface SaveRequest extends ExampleSaveRequest {}
 interface APIDetailRequest extends ExampleDetailRequest {}
 
 interface MetaData {
-  detailRequestValue: APIRequest;
+  saveRequestValue: SaveRequest;
 }
 
 interface States extends MetaData {
@@ -28,29 +27,31 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  setDetailRequestValue: (exampleSaveRequestValue: APIRequest) => void;
+  setDetailRequestValue: (exampleSaveRequestValue: SaveRequest) => void;
   setDetailSpinning: (exampleSaveSpinning: boolean) => void;
   callDetailApi: (request?: APIDetailRequest) => Promise<void>;
 }
 
 // create states
-const _detailRequestValue = {};
+const routePath = ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL.path;
+const _saveRequestValue = {};
 const state: States = {
-  detailRequestValue: { ..._detailRequestValue },
+  routePath,
+  saveRequestValue: { ..._saveRequestValue },
   detailSpinning: false,
 };
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setDetailRequestValue: (requestValue) => {
-    set({ detailRequestValue: requestValue });
+    set({ saveRequestValue: requestValue });
   },
   setDetailSpinning: (spinning) => set({ detailSpinning: spinning }),
   callDetailApi: async (request) => {
     await set({ detailSpinning: true });
 
     try {
-      const apiParam = request ?? get().detailRequestValue;
+      const apiParam = request ?? get().saveRequestValue;
       const response = await ExampleService.detail(apiParam);
 
       console.log(response);
@@ -67,11 +68,11 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     if (metaData) {
       console.log(`apply metaData Store : useExampleFormStore`);
       set({
-        detailRequestValue: metaData.detailRequestValue,
+        saveRequestValue: metaData.saveRequestValue,
       });
     } else {
       console.log(`clear metaData Store : useExampleFormStore`);
-      set({ detailRequestValue: undefined });
+      set({ saveRequestValue: undefined });
     }
   },
   ...pageStoreActions(set, get, () => unSubscribeExampleDetailStore()),
@@ -87,14 +88,12 @@ export const useExampleDetailStore = create(
 );
 
 export const unSubscribeExampleDetailStore = useExampleDetailStore.subscribe(
-  (s) => [s.detailRequestValue],
-  ([detailRequestValue]) => {
-    const routePath = useExampleDetailStore.getState().routePath;
-    if (!routePath) return;
+  (s) => [s.saveRequestValue],
+  ([saveRequestValue]) => {
     console.log(`Save metaData '${routePath}', Store : useExampleDetailStore`);
 
     setMetaDataByPath<MetaData>(routePath, {
-      detailRequestValue,
+      saveRequestValue: saveRequestValue,
     });
   },
   { equalityFn: shallow }

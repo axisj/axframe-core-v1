@@ -9,6 +9,7 @@ import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
+import { ROUTES } from "router/Routes";
 
 interface ListRequest extends ExampleListRequest {}
 interface SubListRequest {}
@@ -53,11 +54,13 @@ interface Actions extends PageStoreActions<States> {
 }
 
 // create states
+const routePath = ROUTES.EXAMPLES.children.LIST_WITH_LIST.path;
 const _listRequestValue = {
   pageNumber: 1,
   pageSize: 100,
 };
 const createState: States = {
+  routePath,
   listRequestValue: { ..._listRequestValue },
   listColWidths: [],
   listSpinning: false,
@@ -229,8 +232,6 @@ export const unSubscribeExampleListWithListStore = useExampleListWithListStore.s
     subListColWidths,
     listSelectedRowKey,
   ]) => {
-    const routePath = useExampleListWithListStore.getState().routePath;
-    if (!routePath) return;
     console.log(`Save metaData '${routePath}', Store : useExampleListWithListStore`);
 
     setMetaDataByPath<MetaData>(routePath, {

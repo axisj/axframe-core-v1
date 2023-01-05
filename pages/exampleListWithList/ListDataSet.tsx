@@ -5,9 +5,9 @@ import { useI18n } from "@core/hooks/useI18n";
 import { Form } from "antd";
 import { ListDataGrid } from "./ListDataGrid";
 import { useExampleListWithListStore } from "./useExampleListWithListStore";
-import { SMixinFlexColumn } from "@core/styles/emotion";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { PageLayout } from "styles/pageStyled";
 
 interface Props {}
 
@@ -18,6 +18,7 @@ function ListDataSet({}: Props) {
   const callListApi = useExampleListWithListStore((s) => s.callListApi);
   const listSpinning = useExampleListWithListStore((s) => s.listSpinning);
   const setListSelectedRowKey = useExampleListWithListStore((s) => s.setListSelectedRowKey);
+  const flexGrow = useExampleListWithListStore((s) => s.flexGrow);
 
   const [searchForm] = Form.useForm();
 
@@ -56,7 +57,7 @@ function ListDataSet({}: Props) {
   );
 
   return (
-    <Container>
+    <Frame style={{ flex: flexGrow }}>
       <SearchParams
         form={searchForm}
         params={params}
@@ -65,16 +66,13 @@ function ListDataSet({}: Props) {
         onSearch={handleSearch}
         spinning={listSpinning}
       />
-
       <ListDataGrid onClick={onClickItem} />
-    </Container>
+    </Frame>
   );
 }
 
-const Container = styled.div`
-  position: relative;
-  flex: 1;
-  ${SMixinFlexColumn("stretch", "stretch")};
+const Frame = styled(PageLayout.FrameColumn)`
+  padding-top: 0;
 `;
 
 export { ListDataSet };

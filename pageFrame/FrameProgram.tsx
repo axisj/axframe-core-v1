@@ -39,6 +39,7 @@ const PageFrameContainer = styled.div`
   height: 100vh;
   width: 100vw;
   flex: 1;
+  overflow: hidden;
 `;
 const PageFrameNav = styled.div<StyleProps>`
   ${SMixinFlexRow("stretch", "stretch")};
@@ -62,11 +63,11 @@ const PageFrameNav = styled.div<StyleProps>`
 const PageFrameContent = styled.div`
   flex: 1;
   ${SMixinFlexColumn("stretch", "stretch")};
+  overflow: hidden;
 `;
 const Content = styled.div`
   flex: 1;
   overflow: auto;
-  padding: 30px;
   ${SMixinFlexColumn("stretch", "stretch")};
 `;
 

@@ -1,15 +1,16 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { useExampleListWithListStore } from "./useExampleListWithListStore";
-import { SMixinFlexColumn, SMixinFlexRow } from "@core/styles/emotion";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { SubListDataGrid } from "./SubListDataGrid";
+import { PageLayout } from "styles/pageStyled";
 
 interface Props {}
 
 function SubListDataSet({}: Props) {
   const setListSelectedRowKey = useExampleListWithListStore((s) => s.setListSelectedRowKey);
+  const flexGrow = useExampleListWithListStore((s) => s.flexGrow);
 
   const onClickItem = React.useCallback(
     (params: AXFDGClickParams<ExampleItem>) => {
@@ -19,25 +20,16 @@ function SubListDataSet({}: Props) {
   );
 
   return (
-    <Container>
+    <Frame style={{ flex: 2 - flexGrow }}>
       <Header>Title</Header>
       <SubListDataGrid onClick={onClickItem} />
-    </Container>
+    </Frame>
   );
 }
 
-const Container = styled.div`
-  position: relative;
-  flex: 1;
-  ${SMixinFlexColumn("stretch", "stretch")};
+const Frame = styled(PageLayout.FrameColumn)`
+  padding-top: 0;
 `;
-const Header = styled.div`
-  ${SMixinFlexRow("flex-start", "center")};
-  line-height: 32px;
-  gap: 10px;
-  margin-bottom: 15px;
-  font-size: 18px;
-  font-weight: bold;
-`;
+const Header = styled(PageLayout.FrameHeader)``;
 
 export { SubListDataSet };

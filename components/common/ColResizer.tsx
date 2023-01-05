@@ -4,12 +4,11 @@ import { mouseEventSubscribe } from "@core/utils/event";
 import { IMousePosition } from "@core/utils/types";
 
 interface Props {
-  margin?: number;
   containerRef: React.RefObject<HTMLDivElement>;
   onResize: (flexGlow: number) => void;
 }
 
-function ColResizer({ margin = 10, containerRef, onResize }: Props) {
+function ColResizer({ containerRef, onResize }: Props) {
   const handleMove = React.useCallback(() => {
     if (!containerRef.current) {
       return;
@@ -23,7 +22,7 @@ function ColResizer({ margin = 10, containerRef, onResize }: Props) {
     });
   }, [containerRef, onResize]);
 
-  return <Container style={{ marginLeft: margin, marginRight: margin }} onMouseDown={handleMove} />;
+  return <Container onMouseDown={handleMove} />;
 }
 
 const Container = styled.div`

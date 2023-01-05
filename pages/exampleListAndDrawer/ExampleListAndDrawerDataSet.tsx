@@ -5,10 +5,10 @@ import { useI18n } from "@core/hooks/useI18n";
 import { Form, message } from "antd";
 import { ExampleListAndDrawerDataGrid } from "./ExampleListAndDrawerDataGrid";
 import { useExampleListAndDrawerStore } from "./useExampleListAndDrawerStore";
-import { SMixinFlexColumn } from "@core/styles/emotion";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { openExampleDrawer } from "./ExampleDrawer";
+import { PageLayout } from "styles/pageStyled";
 
 interface Props {}
 
@@ -59,7 +59,7 @@ function ExampleListAndDrawerDataSet({}: Props) {
   );
 
   return (
-    <Container>
+    <Body>
       <SearchParams
         form={searchForm}
         params={params}
@@ -70,14 +70,10 @@ function ExampleListAndDrawerDataSet({}: Props) {
       />
 
       <ExampleListAndDrawerDataGrid onClick={onClickItem} />
-    </Container>
+    </Body>
   );
 }
 
-const Container = styled.div`
-  position: relative;
-  flex: 1;
-  ${SMixinFlexColumn("stretch", "stretch")};
-`;
+const Body = styled(PageLayout.Body)``;
 
 export { ExampleListAndDrawerDataSet };

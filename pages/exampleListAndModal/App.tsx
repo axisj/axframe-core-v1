@@ -5,7 +5,6 @@ import * as React from "react";
 import { AXFIListSearch } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks/useI18n";
-import { ROUTES } from "router/Routes";
 import { ExampleListAndModalDataSet } from "./ExampleListAndModalDataSet";
 import { useExampleListAndModalStore } from "./useExampleListAndModalStore";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
@@ -23,7 +22,7 @@ function App({}: Props) {
   }, [callListApi, reset]);
 
   useDidMountEffect(() => {
-    init(ROUTES.EXAMPLES.children.LIST_AND_MODAL.path);
+    init();
     callListApi();
   });
 

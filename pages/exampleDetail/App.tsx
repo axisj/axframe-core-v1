@@ -5,7 +5,6 @@ import { AXFIWriteForm } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks/useI18n";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
-import { ROUTES } from "router/Routes";
 import { ExampleDetailView } from "./ExampleDetailView";
 import { useExampleDetailStore } from "./useExampleDetailStore";
 import { useParams } from "react-router-dom";
@@ -19,7 +18,7 @@ function App({}: Props) {
   const urlParams = useParams<{ id: string }>();
 
   useDidMountEffect(() => {
-    init(ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL.path);
+    init();
     if (urlParams.id) callDetailApi({ id: urlParams.id });
   });
 

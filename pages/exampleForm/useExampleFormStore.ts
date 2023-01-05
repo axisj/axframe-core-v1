@@ -1,5 +1,5 @@
 import create from "zustand";
-import { ExampleSaveRequest, ExampleSaveResponse } from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleSaveRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
@@ -7,12 +7,12 @@ import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
+import { ROUTES } from "router/Routes";
 
-interface APIRequest extends ExampleSaveRequest {}
-interface APIResponse extends ExampleSaveResponse {}
+interface SaveRequest extends ExampleSaveRequest {}
 
 interface MetaData {
-  saveRequestValue: APIRequest;
+  saveRequestValue: SaveRequest;
 }
 
 interface States extends MetaData {
@@ -21,14 +21,16 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  setSaveRequestValue: (exampleSaveRequestValue: APIRequest) => void;
+  setSaveRequestValue: (exampleSaveRequestValue: SaveRequest) => void;
   setSaveSpinning: (exampleSaveSpinning: boolean) => void;
-  callSaveApi: (request?: APIRequest) => Promise<void>;
+  callSaveApi: (request?: SaveRequest) => Promise<void>;
 }
 
 // create states
+const routePath = ROUTES.EXAMPLES.children.LIST_DETAIL.children.REGISTRATION.path;
 const _exampleFormRequestValue = {};
 const createState: States = {
+  routePath,
   saveRequestValue: { ..._exampleFormRequestValue },
   saveSpinning: false,
 };
@@ -79,8 +81,6 @@ export const useExampleFormStore = create(
 export const unSubscribeExampleFormStore = useExampleFormStore.subscribe(
   (s) => [s.saveRequestValue],
   ([saveRequestValue]) => {
-    const routePath = useExampleFormStore.getState().routePath;
-    if (!routePath) return;
     console.log(`Save metaData '${routePath}', Store : useExampleFormStore`);
 
     setMetaDataByPath<MetaData>(routePath, {

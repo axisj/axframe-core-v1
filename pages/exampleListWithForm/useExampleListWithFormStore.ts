@@ -1,9 +1,5 @@
 import create from "zustand";
-import {
-  ExampleDetailRequest,
-  ExampleItem,
-  ExampleListRequest,
-} from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
@@ -12,15 +8,19 @@ import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
+import React from "react";
 import { ROUTES } from "router/Routes";
 
 interface ListRequest extends ExampleListRequest {}
-interface DetailRequest extends ExampleDetailRequest {}
+interface SaveRequest {}
 
 interface MetaData {
   listRequestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
+  listSelectedRowKey?: React.Key;
+  flexGrow: number;
+  saveRequestValue: SaveRequest;
 }
 
 interface States extends MetaData {
@@ -28,8 +28,7 @@ interface States extends MetaData {
   listSpinning: boolean;
   listData: AXFDGDataItem<ExampleItem>[];
   listPage: AXFDGPage;
-  detailSpinning: boolean;
-  detail?: ExampleItem;
+  saveSpinning: boolean;
 }
 
 interface Actions extends PageStoreActions<States> {
@@ -37,18 +36,23 @@ interface Actions extends PageStoreActions<States> {
   setListColWidths: (colWidths: number[]) => void;
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
+  setListSelectedRowKey: (key?: React.Key) => void;
   callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
-  setDetailSpinning: (spinning: boolean) => void;
-  callDetailApi: (request?: DetailRequest) => Promise<void>;
+  setFlexGrow: (flexGlow: number) => void;
+
+  setSaveRequestValue: (exampleSaveRequestValue: SaveRequest) => void;
+  setSaveSpinning: (exampleSaveSpinning: boolean) => void;
+  callSaveApi: (request?: SaveRequest) => Promise<void>;
 }
 
 // create states
-const routePath = ROUTES.EXAMPLES.children.LIST_AND_MODAL.path;
+const routePath = ROUTES.EXAMPLES.children.LIST_WITH_FORM.path;
 const _listRequestValue = {
   pageNumber: 1,
   pageSize: 100,
 };
+const _formRequestValue = {};
 const createState: States = {
   routePath,
   listRequestValue: { ..._listRequestValue },
@@ -60,7 +64,10 @@ const createState: States = {
     totalPages: 0,
   },
   listSortParams: [],
-  detailSpinning: false,
+  listSelectedRowKey: "",
+  flexGrow: 1,
+  saveRequestValue: { ..._formRequestValue },
+  saveSpinning: false,
 };
 
 // create actions
@@ -71,6 +78,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setListSpinning: (spinning) => set({ listSpinning: spinning }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
+  setListSelectedRowKey: (key) => {
+    set({ listSelectedRowKey: key });
+  },
   callListApi: async (request) => {
     await set({ listSpinning: true });
 
@@ -96,29 +106,36 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    const exampleListRequestValues = {
+    const requestValues = {
       ...get().listRequestValue,
       pageNumber,
       pageSize,
     };
-    set({ listRequestValue: exampleListRequestValues });
+    set({ listRequestValue: requestValues });
     await get().callListApi();
   },
-  setDetailSpinning: (spinning) => set({ detailSpinning: spinning }),
-  callDetailApi: async (request) => {
-    await set({ detailSpinning: true });
+  setFlexGrow: (flexGlow) => {
+    set({ flexGrow: flexGlow });
+  },
+  setSaveRequestValue: (exampleSaveRequestValue) => {
+    set({ saveRequestValue: exampleSaveRequestValue });
+  },
+  setSaveSpinning: (exampleSaveSpinning) => set({ saveSpinning: exampleSaveSpinning }),
+  callSaveApi: async (request) => {
+    await set({ saveSpinning: true });
 
     try {
-      const response = await ExampleService.detail(request);
-      console.log(response);
+      const apiParam = request ?? get().saveRequestValue;
+      const response = await ExampleService.save(apiParam);
 
-      set({ detail: response.rs });
+      console.log(response);
     } catch (e) {
       await errorDialog(e as any);
     } finally {
-      await set({ detailSpinning: false });
+      await set({ saveSpinning: false });
     }
   },
+
   syncMetadata: (metaData) => {
     if (metaData) {
       console.log(`apply metaData Store : useExampleListStore`);
@@ -126,37 +143,58 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         listSortParams: metaData.listSortParams,
         listRequestValue: metaData.listRequestValue,
         listColWidths: metaData.listColWidths,
+        flexGrow: metaData.flexGrow,
+        saveRequestValue: metaData.saveRequestValue,
       });
     } else {
       console.log(`clear metaData Store : useExampleListStore`);
       set({
         listRequestValue: _listRequestValue,
+        flexGrow: 1,
+        listSelectedRowKey: "",
+        saveRequestValue: undefined,
       });
     }
   },
-  ...pageStoreActions(set, get, () => unSubscribeExampleListStore()),
+
+  ...pageStoreActions(set, get, () => unSubscribeExampleListWithFormStore()),
 });
 
 // ---------------- exports
-export interface ExampleListStore extends States, Actions, PageStoreActions<States> {}
-export const useExampleListAndModalStore = create(
-  subscribeWithSelector<ExampleListStore>((set, get) => ({
+export interface ExampleListWithListStore extends States, Actions, PageStoreActions<States> {}
+export const useExampleListWithFormStore = create(
+  subscribeWithSelector<ExampleListWithListStore>((set, get) => ({
     ...createState,
     ...createActions(set, get),
   }))
 );
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
-export const unSubscribeExampleListStore = useExampleListAndModalStore.subscribe(
-  (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
-  ([listSortParams, listRequestValue, listColWidths]) => {
-    console.log(`Save metaData '${routePath}', Store : useExampleListAndModalStore`);
+export const unSubscribeExampleListWithFormStore = useExampleListWithFormStore.subscribe(
+  (s) => [s.listSortParams, s.listRequestValue, s.listColWidths, s.listSelectedRowKey, s.flexGrow, s.saveRequestValue],
+  ([listSortParams, listRequestValue, listColWidths, listSelectedRowKey, flexGrow, saveRequestValue]) => {
+    console.log(`Save metaData '${routePath}', Store : useExampleListWithListStore`);
 
     setMetaDataByPath<MetaData>(routePath, {
       listSortParams,
       listRequestValue,
       listColWidths,
+      listSelectedRowKey,
+      flexGrow,
+      saveRequestValue,
     });
+  },
+  { equalityFn: shallow }
+);
+
+useExampleListWithFormStore.subscribe(
+  (s) => [s.listSelectedRowKey],
+  ([listSelectedRowKey]) => {
+    if (listSelectedRowKey) {
+      // useExampleListWithFormStore.getState().callSubListApi();
+    } else {
+      // clear
+    }
   },
   { equalityFn: shallow }
 );

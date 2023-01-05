@@ -5,10 +5,10 @@ import { useI18n } from "@core/hooks/useI18n";
 import { Form, message } from "antd";
 import { ExampleListAndModalDataGrid } from "./ExampleListAndModalDataGrid";
 import { useExampleListAndModalStore } from "./useExampleListAndModalStore";
-import { SMixinFlexColumn } from "@core/styles/emotion";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { openExampleModal } from "./ExampleModal";
+import { PageLayout } from "styles/pageStyled";
 
 interface Props {}
 
@@ -62,7 +62,7 @@ function ExampleListAndModalDataSet({}: Props) {
   );
 
   return (
-    <Container>
+    <Body>
       <SearchParams
         form={searchForm}
         params={params}
@@ -73,14 +73,10 @@ function ExampleListAndModalDataSet({}: Props) {
       />
 
       <ExampleListAndModalDataGrid onClick={onClickItem} />
-    </Container>
+    </Body>
   );
 }
 
-const Container = styled.div`
-  position: relative;
-  flex: 1;
-  ${SMixinFlexColumn("stretch", "stretch")};
-`;
+const Body = styled(PageLayout.Body)``;
 
 export { ExampleListAndModalDataSet };

@@ -1,11 +1,9 @@
 import { getMetaDataByPath, setMetaDataByPath } from "./usePageTabStore";
 
 export const pageStoreActions = (set, get, unSubscribe) => ({
-  init: (routePath) => {
-    const metaData = getMetaDataByPath(routePath);
+  init: () => {
+    const metaData = getMetaDataByPath(get().routePath);
     if (metaData) get().syncMetadata(metaData);
-
-    set({ routePath });
   },
   reset: () => {
     const routePath = get().routePath;
