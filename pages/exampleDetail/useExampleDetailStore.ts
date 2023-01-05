@@ -12,6 +12,7 @@ import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
+import { pick } from "lodash";
 
 interface SaveRequest extends ExampleSaveRequest {}
 interface APIDetailRequest extends ExampleDetailRequest {}
@@ -21,7 +22,7 @@ interface MetaData {
 }
 
 interface States extends MetaData {
-  routePath?: string; // initialized Store;
+  routePath: string; // initialized Store;
   detailSpinning: boolean;
   detail?: ExampleItem;
 }
@@ -33,11 +34,9 @@ interface Actions extends PageStoreActions<States> {
 }
 
 // create states
-const routePath = ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL.path;
-const _saveRequestValue = {};
-const state: States = {
-  routePath,
-  saveRequestValue: { ..._saveRequestValue },
+const createState: States = {
+  routePath: ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL.path,
+  saveRequestValue: {},
   detailSpinning: false,
 };
 
@@ -72,7 +71,8 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       });
     } else {
       console.log(`clear metaData Store : useExampleFormStore`);
-      set({ saveRequestValue: undefined });
+      const metaDataKeys: (keyof MetaData)[] = ["saveRequestValue"];
+      set(pick(createState, metaDataKeys));
     }
   },
   ...pageStoreActions(set, get, () => unSubscribeExampleDetailStore()),
@@ -82,7 +82,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 export interface ExampleDetailStore extends States, Actions, PageStoreActions<States> {}
 export const useExampleDetailStore = create(
   subscribeWithSelector<ExampleDetailStore>((set, get) => ({
-    ...state,
+    ...createState,
     ...createActions(set, get),
   }))
 );
@@ -90,9 +90,9 @@ export const useExampleDetailStore = create(
 export const unSubscribeExampleDetailStore = useExampleDetailStore.subscribe(
   (s) => [s.saveRequestValue],
   ([saveRequestValue]) => {
-    console.log(`Save metaData '${routePath}', Store : useExampleDetailStore`);
+    console.log(`Save metaData '${createState.routePath}', Store : useExampleDetailStore`);
 
-    setMetaDataByPath<MetaData>(routePath, {
+    setMetaDataByPath<MetaData>(createState.routePath, {
       saveRequestValue: saveRequestValue,
     });
   },

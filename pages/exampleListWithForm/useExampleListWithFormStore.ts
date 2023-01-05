@@ -10,6 +10,7 @@ import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
+import { pick } from "lodash";
 
 interface ListRequest extends ExampleListRequest {}
 interface SaveRequest {}
@@ -24,7 +25,7 @@ interface MetaData {
 }
 
 interface States extends MetaData {
-  routePath?: string; // initialized Store;
+  routePath: string; // initialized Store;
   listSpinning: boolean;
   listData: AXFDGDataItem<ExampleItem>[];
   listPage: AXFDGPage;
@@ -143,17 +144,21 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         listSortParams: metaData.listSortParams,
         listRequestValue: metaData.listRequestValue,
         listColWidths: metaData.listColWidths,
+        listSelectedRowKey: metaData.listSelectedRowKey,
         flexGrow: metaData.flexGrow,
         saveRequestValue: metaData.saveRequestValue,
       });
     } else {
       console.log(`clear metaData Store : useExampleListStore`);
-      set({
-        listRequestValue: _listRequestValue,
-        flexGrow: 1,
-        listSelectedRowKey: "",
-        saveRequestValue: undefined,
-      });
+      const metaDataKeys: (keyof MetaData)[] = [
+        "listSortParams",
+        "listRequestValue",
+        "listColWidths",
+        "listSelectedRowKey",
+        "flexGrow",
+        "saveRequestValue",
+      ];
+      set(pick(createState, metaDataKeys));
     }
   },
 
@@ -173,9 +178,9 @@ export const useExampleListWithFormStore = create(
 export const unSubscribeExampleListWithFormStore = useExampleListWithFormStore.subscribe(
   (s) => [s.listSortParams, s.listRequestValue, s.listColWidths, s.listSelectedRowKey, s.flexGrow, s.saveRequestValue],
   ([listSortParams, listRequestValue, listColWidths, listSelectedRowKey, flexGrow, saveRequestValue]) => {
-    console.log(`Save metaData '${routePath}', Store : useExampleListWithListStore`);
+    console.log(`Save metaData '${createState.routePath}', Store : useExampleListWithListStore`);
 
-    setMetaDataByPath<MetaData>(routePath, {
+    setMetaDataByPath<MetaData>(createState.routePath, {
       listSortParams,
       listRequestValue,
       listColWidths,

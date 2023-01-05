@@ -10,6 +10,7 @@ import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
+import { pick } from "lodash";
 
 interface ListRequest extends ExampleListRequest {}
 interface SubListRequest {}
@@ -26,7 +27,7 @@ interface MetaData {
 }
 
 interface States extends MetaData {
-  routePath?: string; // initialized Store;
+  routePath: string; // initialized Store;
   listSpinning: boolean;
   listData: AXFDGDataItem<ExampleItem>[];
   listPage: AXFDGPage;
@@ -54,14 +55,12 @@ interface Actions extends PageStoreActions<States> {
 }
 
 // create states
-const routePath = ROUTES.EXAMPLES.children.LIST_WITH_LIST.path;
-const _listRequestValue = {
-  pageNumber: 1,
-  pageSize: 100,
-};
 const createState: States = {
-  routePath,
-  listRequestValue: { ..._listRequestValue },
+  routePath: ROUTES.EXAMPLES.children.LIST_WITH_LIST.path,
+  listRequestValue: {
+    pageNumber: 1,
+    pageSize: 100,
+  },
   listColWidths: [],
   listSpinning: false,
   listData: [],
@@ -72,7 +71,7 @@ const createState: States = {
   listSortParams: [],
   listSelectedRowKey: "",
   flexGrow: 1,
-  subListRequestValue: { ..._listRequestValue },
+  subListRequestValue: { pageNumber: 1, pageSize: 100 },
   subListColWidths: [],
   subListSpinning: false,
   subListData: [],
@@ -172,28 +171,24 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   },
 
   syncMetadata: (metaData) => {
+    const metaDataKeys: (keyof MetaData)[] = [
+      "listSortParams",
+      "listRequestValue",
+      "listColWidths",
+      "flexGrow",
+      "listSelectedRowKey",
+      "subListSortParams",
+      "subListColWidths",
+    ];
     if (metaData) {
       console.log(`apply metaData Store : useExampleListStore`);
-      set({
-        listSortParams: metaData.listSortParams,
-        listRequestValue: metaData.listRequestValue,
-        listColWidths: metaData.listColWidths,
-        flexGrow: metaData.flexGrow,
-        listSelectedRowKey: metaData.listSelectedRowKey,
-        subListSortParams: metaData.subListSortParams,
-        subListColWidths: metaData.subListColWidths,
-      });
+      set(pick(metaData, metaDataKeys));
     } else {
       console.log(`clear metaData Store : useExampleListStore`);
+      set(pick(createState, metaDataKeys));
       set({
-        listRequestValue: _listRequestValue,
-        flexGrow: 1,
-        listSelectedRowKey: "",
         subListData: [],
-        subListPage: {
-          currentPage: 0,
-          totalPages: 0,
-        },
+        subListPage: createState.subListPage,
       });
     }
   },
@@ -232,9 +227,9 @@ export const unSubscribeExampleListWithListStore = useExampleListWithListStore.s
     subListColWidths,
     listSelectedRowKey,
   ]) => {
-    console.log(`Save metaData '${routePath}', Store : useExampleListWithListStore`);
+    console.log(`Save metaData '${createState.routePath}', Store : useExampleListWithListStore`);
 
-    setMetaDataByPath<MetaData>(routePath, {
+    setMetaDataByPath<MetaData>(createState.routePath, {
       listSortParams,
       listRequestValue,
       listColWidths,

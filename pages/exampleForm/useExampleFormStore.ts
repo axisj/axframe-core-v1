@@ -8,6 +8,7 @@ import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
+import { pick } from "lodash";
 
 interface SaveRequest extends ExampleSaveRequest {}
 
@@ -16,7 +17,7 @@ interface MetaData {
 }
 
 interface States extends MetaData {
-  routePath?: string; // initialized Store;
+  routePath: string; // initialized Store;
   saveSpinning: boolean;
 }
 
@@ -27,11 +28,9 @@ interface Actions extends PageStoreActions<States> {
 }
 
 // create states
-const routePath = ROUTES.EXAMPLES.children.LIST_DETAIL.children.REGISTRATION.path;
-const _exampleFormRequestValue = {};
 const createState: States = {
-  routePath,
-  saveRequestValue: { ..._exampleFormRequestValue },
+  routePath: ROUTES.EXAMPLES.children.LIST_DETAIL.children.REGISTRATION.path,
+  saveRequestValue: {},
   saveSpinning: false,
 };
 
@@ -63,7 +62,8 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       });
     } else {
       console.log(`clear metaData Store : useExampleFormStore`);
-      set({ saveRequestValue: undefined });
+      const metaDataKeys: (keyof MetaData)[] = ["saveRequestValue"];
+      set(pick(createState, metaDataKeys));
     }
   },
   ...pageStoreActions(set, get, () => unSubscribeExampleFormStore()),
@@ -81,9 +81,9 @@ export const useExampleFormStore = create(
 export const unSubscribeExampleFormStore = useExampleFormStore.subscribe(
   (s) => [s.saveRequestValue],
   ([saveRequestValue]) => {
-    console.log(`Save metaData '${routePath}', Store : useExampleFormStore`);
+    console.log(`Save metaData '${createState.routePath}', Store : useExampleFormStore`);
 
-    setMetaDataByPath<MetaData>(routePath, {
+    setMetaDataByPath<MetaData>(createState.routePath, {
       saveRequestValue: saveRequestValue,
     });
   },

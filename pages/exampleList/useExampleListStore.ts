@@ -9,6 +9,7 @@ import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
+import { pick } from "lodash";
 
 interface ListRequest extends ExampleListRequest {}
 
@@ -19,7 +20,7 @@ interface MetaData {
 }
 
 interface States extends MetaData {
-  routePath?: string; // initialized Store;
+  routePath: string; // initialized Store;
   listSpinning: boolean;
   listData: AXFDGDataItem<ExampleItem>[];
   listPage: AXFDGPage;
@@ -35,14 +36,12 @@ interface Actions extends PageStoreActions<States> {
 }
 
 // create states
-const routePath = ROUTES.EXAMPLES.children.LIST_DETAIL.children.LIST.path;
-const _listRequestValue = {
-  pageNumber: 1,
-  pageSize: 100,
-};
 const createState: States = {
-  routePath,
-  listRequestValue: { ..._listRequestValue },
+  routePath: ROUTES.EXAMPLES.children.LIST_DETAIL.children.LIST.path,
+  listRequestValue: {
+    pageNumber: 1,
+    pageSize: 100,
+  },
   listColWidths: [],
   listSpinning: false,
   listData: [],
@@ -104,9 +103,8 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       });
     } else {
       console.log(`clear metaData Store : useExampleListStore`);
-      set({
-        listRequestValue: _listRequestValue,
-      });
+      const metaDataKeys: (keyof MetaData)[] = ["listSortParams", "listRequestValue", "listColWidths"];
+      set(pick(createState, metaDataKeys));
     }
   },
   ...pageStoreActions(set, get, () => unSubscribeExampleListStore()),
@@ -125,9 +123,9 @@ export const useExampleListStore = create(
 export const unSubscribeExampleListStore = useExampleListStore.subscribe(
   (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
   ([listSortParams, listRequestValue, listColWidths]) => {
-    console.log(`Save metaData '${routePath}', Store : useExampleListStore`);
+    console.log(`Save metaData '${createState.routePath}', Store : useExampleListStore`);
 
-    setMetaDataByPath<MetaData>(routePath, {
+    setMetaDataByPath<MetaData>(createState.routePath, {
       listSortParams,
       listRequestValue,
       listColWidths,
