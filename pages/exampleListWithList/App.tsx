@@ -9,8 +9,8 @@ import { useDidMountEffect } from "../../hooks/useDidMountEffect";
 import { ROUTES } from "../../../router/Routes";
 import { useI18n } from "../../hooks/useI18n";
 import { useExampleListWithListStore } from "./useExampleListWithListStore";
-import { ExampleListWithListDataGrid } from "./ExampleListWithListDataGrid";
-import { ExampleListWithListDataSet } from "./ExampleListWithListDataSet";
+import { ListDataSet } from "./ListDataSet";
+import { SubListDataSet } from "./SubListDataSet";
 
 interface Props {}
 
@@ -34,6 +34,8 @@ function App({}: Props) {
     callListApi();
   });
 
+  console.log("flexGrow", flexGrow);
+
   return (
     <Container stretch role={"page-container"}>
       <Header>
@@ -51,10 +53,12 @@ function App({}: Props) {
 
       <Body ref={resizerContainerRef}>
         <Frame style={{ flex: flexGrow }}>
-          <ExampleListWithListDataSet />
+          <ListDataSet />
         </Frame>
         <ColResizer margin={15} containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
-        <Frame style={{ flex: 2 - flexGrow }}>B Frame</Frame>
+        <Frame style={{ flex: 2 - flexGrow }}>
+          <SubListDataSet />
+        </Frame>
       </Body>
     </Container>
   );

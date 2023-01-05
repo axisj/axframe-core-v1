@@ -11,7 +11,7 @@ interface Props {
   onClick: AXFDGProps<ExampleItem>["onClick"];
 }
 
-function ExampleListWithListDataGrid({ onClick }: Props) {
+function ListDataGrid({ onClick }: Props) {
   const listColWidths = useExampleListWithListStore((s) => s.listColWidths);
   const listSortParams = useExampleListWithListStore((s) => s.listSortParams);
   const listData = useExampleListWithListStore((s) => s.listData);
@@ -20,6 +20,7 @@ function ExampleListWithListDataGrid({ onClick }: Props) {
   const setListColWidths = useExampleListWithListStore((s) => s.setListColWidths);
   const setListSortParams = useExampleListWithListStore((s) => s.setListSortParams);
   const changeListPage = useExampleListWithListStore((s) => s.changeListPage);
+  const listSelectedRowKey = useExampleListWithListStore((s) => s.listSelectedRowKey);
 
   const { t } = useI18n();
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -81,6 +82,8 @@ function ExampleListWithListDataGrid({ onClick }: Props) {
           onChange: setListSortParams,
         }}
         onChangeColumns={handleColumnsChange}
+        rowKey={"id"}
+        selectedRowKey={listSelectedRowKey ?? ""}
       />
     </Container>
   );
@@ -90,4 +93,4 @@ const Container = styled.div`
   flex: 1;
 `;
 
-export { ExampleListWithListDataGrid };
+export { ListDataGrid };

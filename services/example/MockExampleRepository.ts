@@ -3,7 +3,7 @@ import { ExampleRepositoryInterface } from "./ExampleRepositoryInterface";
 
 export class MockExampleRepository extends ExampleRepositoryInterface {
   async list(params) {
-    console.log("CounselingListRequest", params);
+    console.log("ListRequest", params);
     await delay(300);
     return {
       result: "00",
@@ -5573,6 +5573,35 @@ export class MockExampleRepository extends ExampleRepositoryInterface {
         hopePoint1: "집수리",
         hopePoint3: "주거복지 상담/사례관리",
         new: false,
+      },
+    };
+  }
+
+  async subList(params) {
+    console.log("SubListRequest", params);
+    await delay(300);
+    return {
+      result: "00",
+      msg: "",
+      ds: [
+        {
+          pid: params.pid,
+          id: 1,
+          name: "ITEM 1",
+          type: "NORMAL",
+        },
+        {
+          pid: params.pid,
+          id: 2,
+          name: "ITEM 2",
+          type: "NORMAL",
+        },
+      ],
+      rs: {
+        pgCount: 3,
+        total: 100,
+        pageNumber: params.pageNumber ?? 0,
+        pageSize: params.pageSize ?? 0,
       },
     };
   }

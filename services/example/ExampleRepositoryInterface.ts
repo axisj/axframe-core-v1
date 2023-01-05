@@ -79,13 +79,27 @@ export interface ExampleDetailResponse {
   rs: ExampleItem;
 }
 
-// export interface ExampleRepositoryInterface {
-//   list(params: ExampleListRequest): Promise<ExampleListResponse>;
-//   save(params: ExampleFormRequest): Promise<ExampleFormResponse>;
-// }
+export interface ExampleSubItem {
+  pid?: number;
+  id?: number;
+  name?: string;
+  type?: string;
+}
+
+export interface ExampleSubListRequest {
+  pid?: number;
+  pageSize?: number;
+  pageNumber?: number;
+}
+
+export interface ExampleSubListResponse {
+  ds: ExampleSubItem[];
+  rs: ApiPageResponse;
+}
 
 export abstract class ExampleRepositoryInterface {
   abstract list(params: ExampleListRequest): Promise<ExampleListResponse>;
   abstract save(params: ExampleSaveRequest): Promise<ExampleSaveResponse>;
   abstract detail(params: ExampleDetailRequest): Promise<ExampleDetailResponse>;
+  abstract subList(params: ExampleSubListRequest): Promise<ExampleSubListResponse>;
 }

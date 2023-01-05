@@ -8,6 +8,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
+import React from "react";
 
 interface ListRequest extends ExampleListRequest {}
 interface SubListRequest {}
@@ -16,6 +17,7 @@ interface MetaData {
   listRequestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
+  listSelectedRowKey?: React.Key;
   flexGrow: number;
   subListRequestValue: SubListRequest;
   subListColWidths: number[];
@@ -37,6 +39,7 @@ interface Actions extends PageStoreActions<States> {
   setListColWidths: (colWidths: number[]) => void;
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
+  setListSelectedRowKey: (key?: React.Key) => void;
   callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
   setFlexGrow: (flexGlow: number) => void;
@@ -64,6 +67,7 @@ const createState: States = {
     totalPages: 0,
   },
   listSortParams: [],
+  listSelectedRowKey: "",
   flexGrow: 1,
   subListRequestValue: { ..._listRequestValue },
   subListColWidths: [],
@@ -84,6 +88,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setListSpinning: (spinning) => set({ listSpinning: spinning }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
+  setListSelectedRowKey: (key) => {
+    set({ listSelectedRowKey: key, subListRequestValue: { ...get().subListRequestValue, pid: key } });
+  },
   callListApi: async (request) => {
     await set({ listSpinning: true });
 
@@ -132,7 +139,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
     try {
       const apiParam = request ?? get().subListRequestValue;
-      const response = await ExampleService.list(apiParam);
+      const response = await ExampleService.subList(apiParam);
 
       set({
         subListData: response.ds.map((values) => ({
@@ -169,11 +176,21 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         listRequestValue: metaData.listRequestValue,
         listColWidths: metaData.listColWidths,
         flexGrow: metaData.flexGrow,
+        listSelectedRowKey: metaData.listSelectedRowKey,
+        subListSortParams: metaData.subListSortParams,
+        subListColWidths: metaData.subListColWidths,
       });
     } else {
       console.log(`clear metaData Store : useExampleListStore`);
       set({
         listRequestValue: _listRequestValue,
+        flexGrow: 1,
+        listSelectedRowKey: "",
+        subListData: [],
+        subListPage: {
+          currentPage: 0,
+          totalPages: 0,
+        },
       });
     }
   },
@@ -200,6 +217,7 @@ export const unSubscribeExampleListWithListStore = useExampleListWithListStore.s
     s.subListSortParams,
     s.subListRequestValue,
     s.subListColWidths,
+    s.listSelectedRowKey,
   ],
   ([
     listSortParams,
@@ -209,6 +227,7 @@ export const unSubscribeExampleListWithListStore = useExampleListWithListStore.s
     subListSortParams,
     subListRequestValue,
     subListColWidths,
+    listSelectedRowKey,
   ]) => {
     const routePath = useExampleListWithListStore.getState().routePath;
     if (!routePath) return;
@@ -222,7 +241,20 @@ export const unSubscribeExampleListWithListStore = useExampleListWithListStore.s
       subListSortParams,
       subListRequestValue,
       subListColWidths,
+      listSelectedRowKey,
     });
+  },
+  { equalityFn: shallow }
+);
+
+useExampleListWithListStore.subscribe(
+  (s) => [s.listSelectedRowKey],
+  ([listSelectedRowKey]) => {
+    if (listSelectedRowKey) {
+      useExampleListWithListStore.getState().callSubListApi();
+    } else {
+      // clear
+    }
   },
   { equalityFn: shallow }
 );

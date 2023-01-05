@@ -15,14 +15,31 @@ export function DataGrid<T>({
   sort,
   onClick,
   onChangeColumns,
+  rowKey,
+  selectedRowKey,
 }: Props<T>) {
+  // console.log("data", data, selectedRowKey);
+
   return (
     <Container>
       <AXFDataGrid
         headerHeight={35}
         itemHeight={20}
         footerHeight={35}
-        {...{ frozenColumnIndex, width, height, columns, data, spinning, page, onClick, sort, onChangeColumns }}
+        {...{
+          frozenColumnIndex,
+          width,
+          height,
+          columns,
+          data,
+          spinning,
+          page,
+          onClick,
+          sort,
+          onChangeColumns,
+          rowKey,
+          selectedRowKey,
+        }}
       />
     </Container>
   );

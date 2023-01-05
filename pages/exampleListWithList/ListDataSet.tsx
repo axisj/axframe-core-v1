@@ -3,23 +3,21 @@ import styled from "@emotion/styled";
 import { SearchParams, SearchParamType } from "@core/components/search";
 import { useI18n } from "@core/hooks/useI18n";
 import { Form } from "antd";
-import { ExampleListWithListDataGrid } from "./ExampleListWithListDataGrid";
+import { ListDataGrid } from "./ListDataGrid";
 import { useExampleListWithListStore } from "./useExampleListWithListStore";
 import { SMixinFlexColumn } from "@core/styles/emotion";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
-import { ROUTES } from "../../../router/Routes";
-import { useLink } from "@core/hooks/useLink";
 
 interface Props {}
 
-function ExampleListWithListDataSet({}: Props) {
+function ListDataSet({}: Props) {
   const { t } = useI18n();
-  const { linkByRoute } = useLink();
   const listRequestValue = useExampleListWithListStore((s) => s.listRequestValue);
   const setListRequestValue = useExampleListWithListStore((s) => s.setListRequestValue);
   const callListApi = useExampleListWithListStore((s) => s.callListApi);
   const listSpinning = useExampleListWithListStore((s) => s.listSpinning);
+  const setListSelectedRowKey = useExampleListWithListStore((s) => s.setListSelectedRowKey);
 
   const [searchForm] = Form.useForm();
 
@@ -27,9 +25,12 @@ function ExampleListWithListDataSet({}: Props) {
     await callListApi();
   }, [callListApi]);
 
-  const onClickItem = React.useCallback((params: AXFDGClickParams<ExampleItem>) => {
-    // linkByRoute(ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL, { id: params.item.id });
-  }, []);
+  const onClickItem = React.useCallback(
+    (params: AXFDGClickParams<ExampleItem>) => {
+      setListSelectedRowKey(params.item.id);
+    },
+    [setListSelectedRowKey]
+  );
 
   const params = React.useMemo(
     () => [
@@ -65,7 +66,7 @@ function ExampleListWithListDataSet({}: Props) {
         spinning={listSpinning}
       />
 
-      <ExampleListWithListDataGrid onClick={onClickItem} />
+      <ListDataGrid onClick={onClickItem} />
     </Container>
   );
 }
@@ -76,4 +77,4 @@ const Container = styled.div`
   ${SMixinFlexColumn("stretch", "stretch")};
 `;
 
-export { ExampleListWithListDataSet };
+export { ListDataSet };
