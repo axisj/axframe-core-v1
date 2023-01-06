@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { IconText, Loading } from "@core/components/common";
 import * as React from "react";
-import { AXFIWriteForm } from "@axframe/icon";
+import { AXFIDefaultProgram } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks/useI18n";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
@@ -25,7 +25,7 @@ function App({}: Props) {
   return (
     <Container>
       <Header>
-        <IconText icon={<AXFIWriteForm />}>{t.pages.counseling.registration.title}</IconText>
+        <IconText icon={<AXFIDefaultProgram />}>{t.pages.counseling.registration.title}</IconText>
 
         <ButtonGroup compact>
           {/*<Button size='small' onClick={reset}>*/}

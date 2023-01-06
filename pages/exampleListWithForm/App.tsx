@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { ColResizer, IconText } from "@core/components/common";
-import { AXFIListSearch } from "@axframe/icon";
+import { AXFIDefaultProgram } from "@axframe/icon";
 import { Button } from "antd";
 
 import { PageLayout } from "styles/pageStyled";
@@ -35,7 +35,7 @@ function App({}: Props) {
   return (
     <Container stretch role={"page-container"}>
       <Header>
-        <IconText icon={<AXFIListSearch />}>{t.pages.example.listWithForm.title}</IconText>
+        <IconText icon={<AXFIDefaultProgram />}>{t.pages.example.listWithForm.title}</IconText>
 
         <ButtonGroup compact>
           <Button size='small' onClick={() => {}}>
