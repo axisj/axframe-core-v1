@@ -176,6 +176,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       "listRequestValue",
       "listColWidths",
       "flexGrow",
+      "subListRequestValue",
       "listSelectedRowKey",
       "subListSortParams",
       "subListColWidths",

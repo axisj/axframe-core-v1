@@ -9,15 +9,12 @@ import { PageLayout } from "styles/pageStyled";
 interface Props {}
 
 function SubListDataSet({}: Props) {
-  const setListSelectedRowKey = useExampleListWithListStore((s) => s.setListSelectedRowKey);
+  // const setListSelectedRowKey = useExampleListWithListStore((s) => s.setListSelectedRowKey);
   const flexGrow = useExampleListWithListStore((s) => s.flexGrow);
 
-  const onClickItem = React.useCallback(
-    (params: AXFDGClickParams<ExampleItem>) => {
-      setListSelectedRowKey(params.item.id);
-    },
-    [setListSelectedRowKey]
-  );
+  const onClickItem = React.useCallback((_params: AXFDGClickParams<ExampleItem>) => {
+    // setListSelectedRowKey(params.item.id);
+  }, []);
 
   return (
     <Frame style={{ flex: 2 - flexGrow }}>
