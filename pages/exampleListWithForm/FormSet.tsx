@@ -8,7 +8,7 @@ import { useI18n } from "@core/hooks/useI18n";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useExampleListWithFormStore } from "./useExampleListWithFormStore";
-import { SMixinFlexColumn } from "../../styles/emotion";
+import { SMixinFlexColumn } from "@core/styles/emotion";
 
 interface Props {}
 interface FormField extends ExampleItem {}
