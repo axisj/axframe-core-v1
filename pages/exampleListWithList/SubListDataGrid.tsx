@@ -34,19 +34,21 @@ function SubListDataGrid({ onClick }: Props) {
 
   const columns = React.useMemo(
     () =>
-      [
-        { key: "pid", label: "PID", align: "left", width: 80 },
-        { key: "id", label: t.datagrid.id, align: "left", width: 80 },
-        { key: "name", label: t.datagrid.성명, align: "left", width: 80 },
-        { key: "type", label: "Type", align: "left", width: 100 },
-      ].map((column, colIndex) => {
+      (
+        [
+          { key: "pid", label: "PID", align: "left", width: 80 },
+          { key: "id", label: t.datagrid.id, align: "left", width: 80 },
+          { key: "name", label: t.datagrid.성명, align: "left", width: 80 },
+          { key: "type", label: "Type", align: "left", width: 100 },
+        ] as AXFDGColumn<ExampleSubItem>[]
+      ).map((column, colIndex) => {
         if (listColWidths.length > 0) {
           column.width = listColWidths[colIndex];
           return column;
         }
 
         return column;
-      }) as AXFDGColumn<ExampleSubItem>[],
+      }),
     [t, listColWidths]
   );
 
