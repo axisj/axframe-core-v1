@@ -5,7 +5,6 @@ import { PageLayout } from "styles/pageStyled";
 import moment from "moment/moment";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { useI18n } from "@core/hooks/useI18n";
-import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useExampleListWithFormStore } from "./useExampleListWithFormStore";
@@ -19,8 +18,10 @@ function FormSet({}: Props) {
   const setSaveRequestValue = useExampleListWithFormStore((s) => s.setSaveRequestValue);
   const callSaveApi = useExampleListWithFormStore((s) => s.callSaveApi);
   const saveSpinning = useExampleListWithFormStore((s) => s.saveSpinning);
-  const reset = useExampleListWithFormStore((s) => s.reset);
   const flexGrow = useExampleListWithFormStore((s) => s.flexGrow);
+  const listSelectedRowKey = useExampleListWithFormStore((s) => s.listSelectedRowKey);
+  const formActive = useExampleListWithFormStore((s) => s.formActive);
+  const cancelFormActive = useExampleListWithFormStore((s) => s.cancelFormActive);
 
   const { t } = useI18n();
   const [form] = Form.useForm();
@@ -61,13 +62,22 @@ function FormSet({}: Props) {
   React.useEffect(() => {
     if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
       form.resetFields();
+    } else {
+      form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
     }
   }, [saveRequestValue, form]);
 
-  useDidMountEffect(() => {
-    console.log("form.setFieldsValue by metaData");
-    form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
-  });
+  React.useEffect(() => {
+    form.resetFields();
+  }, [form, listSelectedRowKey]);
+
+  if (!formActive && !listSelectedRowKey) {
+    return (
+      <Frame style={{ flex: 2 - flexGrow }}>
+        <EmptyMsg>좌측 목록을 선택하거나 신규등록을 눌러주세요</EmptyMsg>
+      </Frame>
+    );
+  }
 
   return (
     <Frame style={{ flex: 2 - flexGrow }}>
@@ -82,13 +92,17 @@ function FormSet({}: Props) {
           onValuesChange={onValuesChange}
           onFinish={async () => {
             await callSaveApi();
-            await reset();
+            await cancelFormActive();
           }}
         >
           <FormBox>
             <Row gutter={20}>
               <Col xs={24} sm={8}>
-                <Form.Item label={t.formItem.counseling.area.label} name={"area"} rules={[{ required: true }]}>
+                <Form.Item
+                  label={t.formItem.counseling.area.label}
+                  name={"area"}
+                  rules={[{ required: true, message: "커스텀 메세지 사용 가능" }]}
+                >
                   <Select options={t.formItem.counseling.area.options} />
                 </Form.Item>
               </Col>
@@ -295,7 +309,7 @@ function FormSet({}: Props) {
             <Button type={"primary"} htmlType={"submit"} loading={saveSpinning}>
               저장히기
             </Button>
-            <Button onClick={reset}>{t.button.reset}</Button>
+            <Button onClick={() => cancelFormActive()}>{t.button.cancel}</Button>
           </ButtonGroup>
         </Form>
       </Body>
@@ -315,5 +329,9 @@ const FormBox = styled(PageLayout.ContentBox)`
   }
 `;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
+
+const EmptyMsg = styled.div`
+  ${SMixinFlexColumn("center", "center")};
+`;
 
 export { FormSet };
