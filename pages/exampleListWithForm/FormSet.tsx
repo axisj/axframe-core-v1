@@ -5,11 +5,9 @@ import { PageLayout } from "styles/pageStyled";
 import moment from "moment/moment";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { useI18n } from "@core/hooks/useI18n";
-import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { useExampleListWithFormStore } from "./useExampleListWithFormStore";
-import { SMixinFlexColumn } from "@core/styles/emotion";
 
 interface Props {}
 interface FormField extends ExampleItem {}
@@ -19,8 +17,10 @@ function FormSet({}: Props) {
   const setSaveRequestValue = useExampleListWithFormStore((s) => s.setSaveRequestValue);
   const callSaveApi = useExampleListWithFormStore((s) => s.callSaveApi);
   const saveSpinning = useExampleListWithFormStore((s) => s.saveSpinning);
-  const reset = useExampleListWithFormStore((s) => s.reset);
   const flexGrow = useExampleListWithFormStore((s) => s.flexGrow);
+  const listSelectedRowKey = useExampleListWithFormStore((s) => s.listSelectedRowKey);
+  const formActive = useExampleListWithFormStore((s) => s.formActive);
+  const cancelFormActive = useExampleListWithFormStore((s) => s.cancelFormActive);
 
   const { t } = useI18n();
   const [form] = Form.useForm();
@@ -64,10 +64,21 @@ function FormSet({}: Props) {
     }
   }, [saveRequestValue, form]);
 
-  useDidMountEffect(() => {
-    console.log("form.setFieldsValue by metaData");
-    form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
-  });
+  React.useEffect(() => {
+    if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
+      form.resetFields();
+    } else {
+      form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
+    }
+  }, [saveRequestValue, form]);
+
+  React.useEffect(() => {
+    form.resetFields();
+  }, [form, listSelectedRowKey]);
+
+  if (!formActive && !listSelectedRowKey) {
+    return <Frame style={{ flex: 2 - flexGrow }}>김동근</Frame>;
+  }
 
   return (
     <Frame style={{ flex: 2 - flexGrow }}>
@@ -82,7 +93,7 @@ function FormSet({}: Props) {
           onValuesChange={onValuesChange}
           onFinish={async () => {
             await callSaveApi();
-            await reset();
+            await cancelFormActive();
           }}
         >
           <FormBox>
@@ -295,7 +306,7 @@ function FormSet({}: Props) {
             <Button type={"primary"} htmlType={"submit"} loading={saveSpinning}>
               저장히기
             </Button>
-            <Button onClick={reset}>{t.button.reset}</Button>
+            <Button onClick={() => cancelFormActive()}>취소</Button>
           </ButtonGroup>
         </Form>
       </Body>

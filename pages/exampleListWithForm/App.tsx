@@ -20,6 +20,7 @@ function App({}: Props) {
   const reset = useExampleListWithFormStore((s) => s.reset);
   const callListApi = useExampleListWithFormStore((s) => s.callListApi);
   const setFlexGrow = useExampleListWithFormStore((s) => s.setFlexGrow);
+  const setFormActive = useExampleListWithFormStore((s) => s.setFormActive);
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
 
   const handleReset = React.useCallback(async () => {
@@ -38,8 +39,8 @@ function App({}: Props) {
         <IconText icon={<AXFIDefaultProgram />}>{t.pages.example.listWithForm.title}</IconText>
 
         <ButtonGroup compact>
-          <Button size='small' onClick={() => {}}>
-            {t.button.excel}
+          <Button size='small' onClick={setFormActive}>
+            {t.button.addNew}
           </Button>
           <Button size='small' onClick={handleReset}>
             {t.button.reset}

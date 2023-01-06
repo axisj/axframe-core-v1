@@ -1,5 +1,9 @@
 import create from "zustand";
-import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
+import {
+  ExampleDetailRequest,
+  ExampleItem,
+  ExampleListRequest,
+} from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
@@ -14,6 +18,7 @@ import { pick } from "lodash";
 
 interface ListRequest extends ExampleListRequest {}
 interface SaveRequest {}
+interface DetailRequest extends ExampleDetailRequest {}
 
 interface MetaData {
   listRequestValue: ListRequest;
@@ -22,6 +27,7 @@ interface MetaData {
   listSelectedRowKey?: React.Key;
   flexGrow: number;
   saveRequestValue: SaveRequest;
+  formActive: boolean;
 }
 
 interface States extends MetaData {
@@ -30,6 +36,7 @@ interface States extends MetaData {
   listData: AXFDGDataItem<ExampleItem>[];
   listPage: AXFDGPage;
   saveSpinning: boolean;
+  detailSpinning: boolean;
 }
 
 interface Actions extends PageStoreActions<States> {
@@ -45,6 +52,9 @@ interface Actions extends PageStoreActions<States> {
   setSaveRequestValue: (exampleSaveRequestValue: SaveRequest) => void;
   setSaveSpinning: (exampleSaveSpinning: boolean) => void;
   callSaveApi: (request?: SaveRequest) => Promise<void>;
+  callDetailApi: (request?: DetailRequest) => Promise<void>;
+  cancelFormActive: () => void;
+  setFormActive: () => void;
 }
 
 // create states
@@ -69,6 +79,8 @@ const createState: States = {
   flexGrow: 1,
   saveRequestValue: { ..._formRequestValue },
   saveSpinning: false,
+  detailSpinning: false,
+  formActive: false,
 };
 
 // create actions
@@ -136,30 +148,37 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       await set({ saveSpinning: false });
     }
   },
+  callDetailApi: async (request) => {
+    await set({ detailSpinning: true });
+
+    try {
+      const data = await ExampleService.detail(request ?? { id: get().listSelectedRowKey });
+      console.log(data);
+      set({ saveRequestValue: data.rs });
+    } catch (err) {
+      await errorDialog(err as any);
+    } finally {
+      await set({ detailSpinning: false });
+    }
+  },
+  cancelFormActive: () => {
+    set({ formActive: false, listSelectedRowKey: undefined });
+  },
+  setFormActive: () => {
+    set({ formActive: true });
+  },
 
   syncMetadata: (metaData) => {
-    if (metaData) {
-      console.log(`apply metaData Store : useExampleListStore`);
-      set({
-        listSortParams: metaData.listSortParams,
-        listRequestValue: metaData.listRequestValue,
-        listColWidths: metaData.listColWidths,
-        listSelectedRowKey: metaData.listSelectedRowKey,
-        flexGrow: metaData.flexGrow,
-        saveRequestValue: metaData.saveRequestValue,
-      });
-    } else {
-      console.log(`clear metaData Store : useExampleListStore`);
-      const metaDataKeys: (keyof MetaData)[] = [
-        "listSortParams",
-        "listRequestValue",
-        "listColWidths",
-        "listSelectedRowKey",
-        "flexGrow",
-        "saveRequestValue",
-      ];
-      set(pick(createState, metaDataKeys));
-    }
+    const metaDataKeys: (keyof MetaData)[] = [
+      "listSortParams",
+      "listRequestValue",
+      "listColWidths",
+      "listSelectedRowKey",
+      "flexGrow",
+      "saveRequestValue",
+      "formActive",
+    ];
+    set(pick(metaData ?? createState, metaDataKeys));
   },
 
   ...pageStoreActions(set, get, () => unSubscribeExampleListWithFormStore()),
@@ -176,8 +195,16 @@ export const useExampleListWithFormStore = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 export const unSubscribeExampleListWithFormStore = useExampleListWithFormStore.subscribe(
-  (s) => [s.listSortParams, s.listRequestValue, s.listColWidths, s.listSelectedRowKey, s.flexGrow, s.saveRequestValue],
-  ([listSortParams, listRequestValue, listColWidths, listSelectedRowKey, flexGrow, saveRequestValue]) => {
+  (s) => [
+    s.listSortParams,
+    s.listRequestValue,
+    s.listColWidths,
+    s.listSelectedRowKey,
+    s.flexGrow,
+    s.saveRequestValue,
+    s.formActive,
+  ],
+  ([listSortParams, listRequestValue, listColWidths, listSelectedRowKey, flexGrow, saveRequestValue, formActive]) => {
     console.log(`Save metaData '${createState.routePath}', Store : useExampleListWithListStore`);
 
     setMetaDataByPath<MetaData>(createState.routePath, {
@@ -187,6 +214,7 @@ export const unSubscribeExampleListWithFormStore = useExampleListWithFormStore.s
       listSelectedRowKey,
       flexGrow,
       saveRequestValue,
+      formActive,
     });
   },
   { equalityFn: shallow }
@@ -196,7 +224,7 @@ useExampleListWithFormStore.subscribe(
   (s) => [s.listSelectedRowKey],
   ([listSelectedRowKey]) => {
     if (listSelectedRowKey) {
-      // useExampleListWithFormStore.getState().callSubListApi();
+      useExampleListWithFormStore.getState().callDetailApi();
     } else {
       // clear
     }
