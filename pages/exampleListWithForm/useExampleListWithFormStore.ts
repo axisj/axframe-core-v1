@@ -58,15 +58,9 @@ interface Actions extends PageStoreActions<States> {
 }
 
 // create states
-const routePath = ROUTES.EXAMPLES.children.LIST_WITH_FORM.path;
-const _listRequestValue = {
-  pageNumber: 1,
-  pageSize: 100,
-};
-const _formRequestValue = {};
 const createState: States = {
-  routePath,
-  listRequestValue: { ..._listRequestValue },
+  routePath: ROUTES.EXAMPLES.children.LIST_WITH_FORM.path,
+  listRequestValue: { pageNumber: 1, pageSize: 100 },
   listColWidths: [],
   listSpinning: false,
   listData: [],
@@ -77,7 +71,7 @@ const createState: States = {
   listSortParams: [],
   listSelectedRowKey: "",
   flexGrow: 1,
-  saveRequestValue: { ..._formRequestValue },
+  saveRequestValue: {},
   saveSpinning: false,
   detailSpinning: false,
   formActive: false,

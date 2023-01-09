@@ -63,18 +63,10 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   syncMetadata: (metaData) => {
-    console.log("metaData", metaData);
-    if (metaData) {
-      console.log(`apply metaData Store : useExampleFormStore`);
-      set({
-        saveRequestValue: metaData.saveRequestValue,
-      });
-    } else {
-      console.log(`clear metaData Store : useExampleFormStore`);
-      const metaDataKeys: (keyof MetaData)[] = ["saveRequestValue"];
-      set(pick(createState, metaDataKeys));
-    }
+    const metaDataKeys: (keyof MetaData)[] = ["saveRequestValue"];
+    set(pick(metaData ?? createState, metaDataKeys));
   },
+
   ...pageStoreActions(set, get, () => unSubscribeExampleDetailStore()),
 });
 

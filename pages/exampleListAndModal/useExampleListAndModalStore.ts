@@ -119,19 +119,10 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   syncMetadata: (metaData) => {
-    if (metaData) {
-      console.log(`apply metaData Store : useExampleListStore`);
-      set({
-        listSortParams: metaData.listSortParams,
-        listRequestValue: metaData.listRequestValue,
-        listColWidths: metaData.listColWidths,
-      });
-    } else {
-      console.log(`clear metaData Store : useExampleListStore`);
-      const metaDataKeys: (keyof MetaData)[] = ["listRequestValue"];
-      set(pick(createState, metaDataKeys));
-    }
+    const metaDataKeys: (keyof MetaData)[] = ["listSortParams", "listRequestValue", "listColWidths"];
+    set(pick(metaData ?? createState, metaDataKeys));
   },
+
   ...pageStoreActions(set, get, () => unSubscribeExampleListStore()),
 });
 

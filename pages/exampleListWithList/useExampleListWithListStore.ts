@@ -181,17 +181,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       "subListSortParams",
       "subListColWidths",
     ];
-    if (metaData) {
-      console.log(`apply metaData Store : useExampleListStore`);
-      set(pick(metaData, metaDataKeys));
-    } else {
-      console.log(`clear metaData Store : useExampleListStore`);
-      set(pick(createState, metaDataKeys));
-      set({
-        subListData: [],
-        subListPage: createState.subListPage,
-      });
-    }
+    set(pick(metaData ?? createState, metaDataKeys));
   },
 
   ...pageStoreActions(set, get, () => unSubscribeExampleListWithListStore()),
