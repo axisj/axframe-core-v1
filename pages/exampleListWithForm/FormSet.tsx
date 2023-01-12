@@ -29,7 +29,6 @@ function FormSet({}: Props) {
 
   const cnsltHow = Form.useWatch("cnsltHow", form);
   const cnsltPath = Form.useWatch("cnsltPath", form);
-  const birthDt = Form.useWatch("birthDt", form);
 
   const formInitialValues = {}; // form 의 초기값 reset해도 이값 으로 리셋됨
 
@@ -47,17 +46,13 @@ function FormSet({}: Props) {
 
   const onValuesChange = React.useCallback(
     (changedValues: any, values: Record<string, any>) => {
+      if ("birthDt" in changedValues) {
+        values["age"] = moment().diff(moment(changedValues.birthDt), "years");
+      }
       setSaveRequestValue(values);
     },
     [setSaveRequestValue]
   );
-
-  React.useEffect(() => {
-    if (birthDt) {
-      const age = moment().diff(moment(birthDt), "years");
-      form.setFieldValue("age", age);
-    }
-  }, [birthDt, form]);
 
   React.useEffect(() => {
     if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
@@ -66,10 +61,6 @@ function FormSet({}: Props) {
       form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
     }
   }, [saveRequestValue, form]);
-
-  React.useEffect(() => {
-    form.resetFields();
-  }, [form, listSelectedRowKey]);
 
   if (!formActive && !listSelectedRowKey) {
     return (
