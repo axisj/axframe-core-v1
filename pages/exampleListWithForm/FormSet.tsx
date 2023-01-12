@@ -62,10 +62,6 @@ function FormSet({}: Props) {
     }
   }, [saveRequestValue, form]);
 
-  // React.useEffect(() => {
-  //   form.resetFields();
-  // }, [form, listSelectedRowKey]);
-
   if (!formActive && !listSelectedRowKey) {
     return (
       <Frame style={{ flex: 2 - flexGrow }}>

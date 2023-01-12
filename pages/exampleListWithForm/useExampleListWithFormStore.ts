@@ -227,15 +227,3 @@ export const unSubscribeExampleListWithFormStore = useExampleListWithFormStore.s
   },
   { equalityFn: shallow }
 );
-
-// useExampleListWithFormStore.subscribe(
-//   (s) => [s.listSelectedRowKey],
-//   ([listSelectedRowKey]) => {
-//     if (listSelectedRowKey) {
-//       useExampleListWithFormStore.getState().callDetailApi();
-//     } else {
-//       // clear
-//     }
-//   },
-//   { equalityFn: shallow }
-// );
