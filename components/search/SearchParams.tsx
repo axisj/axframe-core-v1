@@ -8,6 +8,7 @@ import { PageLayout } from "styles/pageStyled";
 import { SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
 import moment from "moment";
 import { getMomentRangeValue } from "../../utils/object";
+import { css } from "@emotion/react";
 
 export interface IParam {
   title: React.ReactNode;
@@ -30,6 +31,8 @@ interface Props {
   expand?: boolean;
   onChangeExpand?: (expand: boolean) => void;
   spinning?: boolean;
+  filterWidth?: number;
+  extraButtons?: React.FC;
 }
 
 export function SearchParams({
@@ -42,6 +45,8 @@ export function SearchParams({
   expand,
   onChangeExpand,
   spinning,
+  filterWidth,
+  extraButtons: ExtraButtons,
 }: Props) {
   const [showChildren, setShowChildren] = React.useState(false);
 
@@ -112,19 +117,29 @@ export function SearchParams({
 
           <SearchInput>
             <Form.Item name={"filter"} noStyle>
-              <Input placeholder={"search"} allowClear />
+              <Input.Search
+                loading={spinning}
+                placeholder={"search"}
+                allowClear
+                onSearch={handleSearch}
+                style={{ width: filterWidth }}
+              />
             </Form.Item>
           </SearchInput>
 
-          <Buttons>
-            <IconText icon={spinning ? <Spinner /> : <AXFISearch fontSize={18} />} onClick={handleSearch} />
-            {children && (
+          {ExtraButtons && (
+            <Buttons>
+              <ExtraButtons />
+            </Buttons>
+          )}
+          {children && (
+            <Buttons>
               <IconText
                 icon={showChildren ? <AXFIArrowUp fontSize={18} /> : <AXFIArrowDown fontSize={18} />}
                 onClick={toggleShowExtraParam}
               />
-            )}
-          </Buttons>
+            </Buttons>
+          )}
         </DefaultWrap>
         {children && showChildren && <FormBox>{children}</FormBox>}
       </Container>
@@ -154,6 +169,7 @@ const SearchInput = styled.div`
 const Buttons = styled.div`
   ${SMixinFlexRow("flex-start", "center")};
   flex: none;
+  gap: 5px;
 `;
 
 const FormBox = styled(PageLayout.ContentBox)`
