@@ -1,7 +1,7 @@
 import { delay } from "@core/utils/thread/timing";
 import { ExampleRepositoryInterface } from "./ExampleRepositoryInterface";
 
-export class MockExampleRepository extends ExampleRepositoryInterface {
+export class ExampleRepositoryMock extends ExampleRepositoryInterface {
   async list(params) {
     console.log("ListRequest", params);
     await delay(300);
