@@ -9,6 +9,7 @@ import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { use$LIST_WITH_FORM$Store } from "./use$LIST_WITH_FORM$Store";
 import { SMixinFlexColumn } from "@core/styles/emotion";
+import { NotSelectedDetail } from "../../components/common";
 
 interface Props {}
 interface FormField extends ExampleItem {}
@@ -22,6 +23,7 @@ function FormSet({}: Props) {
   const listSelectedRowKey = use$LIST_WITH_FORM$Store((s) => s.listSelectedRowKey);
   const formActive = use$LIST_WITH_FORM$Store((s) => s.formActive);
   const cancelFormActive = use$LIST_WITH_FORM$Store((s) => s.cancelFormActive);
+  const setFormActive = use$LIST_WITH_FORM$Store((s) => s.setFormActive);
 
   const { t } = useI18n();
   const [form] = Form.useForm();
@@ -65,7 +67,19 @@ function FormSet({}: Props) {
   if (!formActive && !listSelectedRowKey) {
     return (
       <Frame style={{ flex: 2 - flexGrow }}>
-        <EmptyMsg>좌측 목록을 선택하거나 신규등록을 눌러주세요</EmptyMsg>
+        <NotSelectedDetail>
+          <Button
+            type={"ghost"}
+            size='small'
+            onClick={() => {
+              cancelFormActive();
+              setFormActive();
+            }}
+          >
+            {t.button.addNew}
+          </Button>
+        </NotSelectedDetail>
+        <Form form={form} />
       </Frame>
     );
   }

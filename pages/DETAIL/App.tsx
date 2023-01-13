@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import { IconText, Loading } from "@core/components/common";
+import { Loading, ProgramTitle } from "@core/components/common";
 import * as React from "react";
-import { AXFIDefaultProgram } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
@@ -25,13 +24,9 @@ function App({}: Props) {
   return (
     <Container>
       <Header>
-        <IconText icon={<AXFIDefaultProgram />}>{t.pages.counseling.registration.title}</IconText>
+        <ProgramTitle title={t.pages.example.detail.title}></ProgramTitle>
 
-        <ButtonGroup compact>
-          {/*<Button size='small' onClick={reset}>*/}
-          {/*  {t.button.reset}*/}
-          {/*</Button>*/}
-        </ButtonGroup>
+        <ButtonGroup compact></ButtonGroup>
       </Header>
 
       <View />

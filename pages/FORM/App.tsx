@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { Button } from "antd";
-import { IconText, Loading } from "@core/components/common";
+import { Loading, ProgramTitle } from "@core/components/common";
 import * as React from "react";
-import { AXFIWriteForm } from "@axframe/icon";
+import { AXFIRevert, AXFIWriteForm } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
@@ -23,14 +23,12 @@ function App({}: Props) {
   return (
     <Container>
       <Header>
-        <IconText icon={<AXFIWriteForm />}>{t.pages.counseling.registration.title}</IconText>
-
-        <ButtonGroup compact>
-          <Button size='small'>{t.button.temporaryStorageList}</Button>
-          <Button size='small' onClick={reset}>
+        <ProgramTitle icon={<AXFIWriteForm />} title={t.pages.example.form.title}>
+          <Button icon={<AXFIRevert />} onClick={reset} size='small' type={"ghost"}>
             {t.button.reset}
           </Button>
-        </ButtonGroup>
+        </ProgramTitle>
+        <ButtonGroup compact></ButtonGroup>
       </Header>
 
       <FormSet />

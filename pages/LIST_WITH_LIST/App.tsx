@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { ColResizer, IconText } from "@core/components/common";
-import { AXFIDefaultProgram } from "@axframe/icon";
+import { ColResizer, IconText, ProgramTitle } from "@core/components/common";
+import { AXFIDefaultProgram, AXFIListSearch, AXFIRevert } from "@axframe/icon";
 import { Button } from "antd";
 
 import { PageLayout } from "styles/pageStyled";
@@ -36,16 +36,13 @@ function App({}: Props) {
   return (
     <Container stretch role={"page-container"}>
       <Header>
-        <IconText icon={<AXFIDefaultProgram />}>{t.pages.example.listWithList.title}</IconText>
-
-        <ButtonGroup compact>
-          <Button size='small' onClick={() => {}}>
-            {t.button.excel}
-          </Button>
-          <Button size='small' onClick={handleReset}>
+        <ProgramTitle title={t.pages.example.listWithList.title}>
+          <Button icon={<AXFIRevert />} onClick={handleReset} size='small' type={"ghost"}>
             {t.button.reset}
           </Button>
-        </ButtonGroup>
+        </ProgramTitle>
+
+        <ButtonGroup compact></ButtonGroup>
       </Header>
 
       <Body ref={resizerContainerRef}>

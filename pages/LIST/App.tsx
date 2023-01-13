@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { Button } from "antd";
-import { IconText } from "@core/components/common";
+import { IconText, ProgramTitle } from "@core/components/common";
 import * as React from "react";
-import { AXFIListSearch } from "@axframe/icon";
+import { AXFIListSearch, AXFIRevert } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks/useI18n";
 import { ListDataSet } from "./ListDataSet";
@@ -29,16 +29,13 @@ function App({}: Props) {
   return (
     <Container stretch role={"page-container"}>
       <Header>
-        <IconText icon={<AXFIListSearch />}>{t.pages.example.list.title}</IconText>
-
-        <ButtonGroup compact>
-          <Button size='small' onClick={() => {}}>
-            {t.button.excel}
-          </Button>
-          <Button size='small' onClick={handleReset}>
+        <ProgramTitle title={t.pages.example.list.title}>
+          <Button icon={<AXFIRevert />} onClick={handleReset} size='small' type={"ghost"}>
             {t.button.reset}
           </Button>
-        </ButtonGroup>
+        </ProgramTitle>
+
+        <ButtonGroup compact></ButtonGroup>
       </Header>
 
       <ListDataSet />
