@@ -5,7 +5,7 @@ import { AXFIArrowLogOut } from "@axframe/icon";
 import { SMixinFlexColumn } from "@core/styles/emotion";
 import { IconText, LabelText } from "@core/components/common";
 import { useDialog } from "@core/hooks/useDialog";
-import { useUserStore } from "@core/stores/useUserStore";
+import { useUserStore } from "stores/useUserStore";
 
 interface StyleProps {
   asPopover?: boolean;

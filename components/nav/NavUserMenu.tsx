@@ -2,13 +2,12 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Menu } from "antd";
 import { MenuProps } from "antd/lib/menu";
-import { useLink } from "@core/hooks/useLink";
+import { useI18n, useLink } from "@core/hooks";
 import * as React from "react";
 import { SMixinScrollerStyle } from "@core/styles/emotion";
 import { MenuItem, MENUS } from "router/menus";
-import { useAppStore } from "../../stores/useAppStore";
-import { useUserStore } from "../../stores/useUserStore";
-import { useI18n } from "../../hooks/useI18n";
+import { useAppStore } from "@core/stores/useAppStore";
+import { useUserStore } from "stores/useUserStore";
 
 interface StyleProps {
   sideMenuOpened?: boolean;
