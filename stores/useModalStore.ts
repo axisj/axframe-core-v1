@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export type ModalFactory<T> = (
   open: boolean,
-  resolve: (value: any) => T,
+  resolve: (value: T) => T,
   reject: (reason?: any) => void,
   onClose: (evt: React.MouseEvent) => void,
   afterClose: () => void

@@ -9,6 +9,7 @@ export interface IErrorDialogOptions {
   title?: string | React.ReactNode;
   content: React.ReactNode;
   message?: string;
+  code?: number;
   className?: string;
   width?: string | number;
 }
@@ -32,7 +33,7 @@ export const errorDialog = (
       okText: t.button.ok,
       cancelText: t.button.cancel,
       transitionName: "slide-down",
-      title: options.title === null ? null : options.title || "Error",
+      title: options.title ?? `Error ${options.code}`,
       content: options.content || options.message || "Unknown error occurred",
       width: options.width,
       bodyStyle: {

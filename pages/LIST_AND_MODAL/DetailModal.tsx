@@ -20,7 +20,7 @@ export interface ExampleModalResponse {
 
 interface Props {
   open: boolean;
-  onOk: (value: any) => ExampleModalResponse;
+  onOk: (value: ExampleModalResponse) => ExampleModalResponse;
   onCancel: (reason?: any) => void;
   params: ExampleModalRequest;
   afterClose: () => void;
@@ -67,7 +67,7 @@ function DetailModal({ open, onOk, onCancel, afterClose, params }: Props) {
   });
 
   return (
-    <Modal width={800} {...{ open, onCancel, onOk, afterClose }}>
+    <Modal width={800} {...{ open, onCancel, onOk: onOk as any, afterClose }}>
       <Container>
         <ModalLayout.Header title={`샘플(상세#${params.query?.id})`}>
           <Button size={"small"} onClick={handleTest} loading={spinning?.test}>
