@@ -3,6 +3,7 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import i18n from "i18n";
 import { useAppStore } from "stores";
+import EN from "../../../i18n/en";
 
 export interface IErrorDialogOptions {
   icon?: React.ReactNode;
@@ -25,6 +26,10 @@ export const errorDialog = (
 
     const currentLanguage = useAppStore.getState().currentLanguage;
     const t = i18n[currentLanguage ?? "en"];
+
+    if (options.code && t.apiErrMsg[options.code]) {
+      options.content = t.apiErrMsg[options.code];
+    }
 
     Modal.error({
       icon: options.icon === null ? null : options.icon || <CloseCircleOutlined />,
