@@ -16,15 +16,16 @@ function EmptyMsg({ disableImg, title, msg, children }: Props) {
 
   return (
     <Container>
-      {disableImg ? null : (
-        <Img>
-          <AXFIDirections />
-        </Img>
-      )}
-      <Title>{title ?? t.msg.NotSelectedDetail.title}</Title>
-      <Msg>{msg ?? t.msg.NotSelectedDetail.msg}</Msg>
-
-      {children}
+      <div>
+        {disableImg ? null : (
+          <Img>
+            <AXFIDirections />
+          </Img>
+        )}
+        <Title>{title ?? t.msg.NotSelectedDetail.title}</Title>
+        <Msg>{msg ?? t.msg.NotSelectedDetail.msg}</Msg>
+      </div>
+      {children && <div>{children}</div>}
     </Container>
   );
 }
@@ -32,6 +33,12 @@ function EmptyMsg({ disableImg, title, msg, children }: Props) {
 const Container = styled.div`
   flex: 1;
   ${SMixinFlexColumn("center", "center")};
+
+  gap: 20px;
+
+  > div {
+    ${SMixinFlexColumn("center", "center")};
+  }
 `;
 const Img = styled.div`
   font-size: 100px;
@@ -42,8 +49,6 @@ const Title = styled.div`
   font-weight: bold;
   color: ${(p) => p.theme.text_heading_color};
 `;
-const Msg = styled.div`
-  margin-bottom: 20px;
-`;
+const Msg = styled.div``;
 
 export { EmptyMsg };
