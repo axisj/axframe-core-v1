@@ -7,7 +7,7 @@ import { AXFIMoreVertical } from "@axframe/icon";
 import { useAppStore, User, useUserStore } from "stores";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import UserInfoDropdown from "./UserInfoDropdown";
-import { useDialog } from "../../hooks/useDialog";
+import { useDialog } from "@core/hooks";
 
 interface StyleProps {
   sideMenuOpened?: boolean;
