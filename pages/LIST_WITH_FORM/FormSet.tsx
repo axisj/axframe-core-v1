@@ -8,8 +8,7 @@ import { useI18n } from "@core/hooks";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { use$LIST_WITH_FORM$Store } from "./use$LIST_WITH_FORM$Store";
-import { SMixinFlexColumn } from "@core/styles/emotion";
-import { NotSelectedDetail } from "../../components/common";
+import { EmptyMsg } from "@core/components/common";
 
 interface Props {}
 interface FormField extends ExampleItem {}
@@ -67,7 +66,7 @@ function FormSet({}: Props) {
   if (!formActive && !listSelectedRowKey) {
     return (
       <Frame style={{ flex: 2 - flexGrow }}>
-        <NotSelectedDetail>
+        <EmptyMsg>
           <Button
             type={"ghost"}
             size='small'
@@ -78,7 +77,7 @@ function FormSet({}: Props) {
           >
             {t.button.addNew}
           </Button>
-        </NotSelectedDetail>
+        </EmptyMsg>
         <Form form={form} />
       </Frame>
     );
@@ -334,9 +333,5 @@ const FormBox = styled(PageLayout.ContentBox)`
   }
 `;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
-
-const EmptyMsg = styled.div`
-  ${SMixinFlexColumn("center", "center")};
-`;
 
 export { FormSet };

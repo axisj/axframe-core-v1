@@ -5,19 +5,22 @@ import { useI18n } from "../../hooks";
 import { SMixinFlexColumn } from "../../styles/emotion";
 
 interface Props {
+  disableImg?: boolean;
   title?: string;
   msg?: string;
   children?: React.ReactNode;
 }
 
-function NotSelectedDetail({ title, msg, children }: Props) {
+function EmptyMsg({ disableImg, title, msg, children }: Props) {
   const { t } = useI18n();
 
   return (
     <Container>
-      <Img>
-        <AXFIDirections />
-      </Img>
+      {disableImg ? null : (
+        <Img>
+          <AXFIDirections />
+        </Img>
+      )}
       <Title>{title ?? t.msg.NotSelectedDetail.title}</Title>
       <Msg>{msg ?? t.msg.NotSelectedDetail.msg}</Msg>
 
@@ -43,4 +46,4 @@ const Msg = styled.div`
   margin-bottom: 20px;
 `;
 
-export { NotSelectedDetail };
+export { EmptyMsg };
