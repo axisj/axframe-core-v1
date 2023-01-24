@@ -6,8 +6,7 @@ import { AXFIMenuFold, AXFIMenuUnfold } from "@axframe/icon";
 import { SMixinFlexColumn, SMixinFlexRow } from "@core/styles/emotion";
 import { useI18n } from "@core/hooks/useI18n";
 import { IconText } from "@core/components/common";
-import { useAppStore } from "@core/stores/useAppStore";
-import { useUserStore } from "stores/useUserStore";
+import { useAppStore, useUserStore } from "stores";
 import { BrandLogo } from "components/BrandLogo";
 
 interface Props {

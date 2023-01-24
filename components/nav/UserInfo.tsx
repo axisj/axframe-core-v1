@@ -4,10 +4,11 @@ import UserAvatar from "./UserAvatar";
 import { Dropdown, Popover } from "antd";
 import * as React from "react";
 import { AXFIMoreVertical } from "@axframe/icon";
-import { useAppStore, User, useUserStore } from "stores";
+import { useAppStore, useUserStore } from "stores";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import UserInfoDropdown from "./UserInfoDropdown";
 import { useDialog } from "@core/hooks";
+import { User } from "services";
 
 interface StyleProps {
   sideMenuOpened?: boolean;
@@ -23,7 +24,7 @@ function UserInfo({}: Props) {
   const signOut = useUserStore((s) => s.signOut);
   const { errorDialog } = useDialog();
 
-  const { name, jobTitle } = me ?? {};
+  const { userNm, email } = me ?? {};
 
   const handleSignOut = React.useCallback(async () => {
     try {
@@ -38,10 +39,10 @@ function UserInfo({}: Props) {
       <UserInfoBox sideMenuOpened={sideMenuOpened}>
         {sideMenuOpened ? (
           <>
-            <UserAvatar size={"medium"} userName={name} role='avatar' />
+            <UserAvatar size={"medium"} userName={userNm} role='avatar' />
             <UserCard>
-              <span role='name'>{name}</span>
-              <span role='job-title'>{jobTitle}</span>
+              <span role='name'>{userNm}</span>
+              <span role='job-title'>{email}</span>
             </UserCard>
             <Dropdown
               overlay={<UserInfoDropdown onSignOut={handleSignOut} />}
@@ -61,7 +62,7 @@ function UserInfo({}: Props) {
               align={{ targetOffset: [0, 8] }}
             >
               <div>
-                <UserAvatar size={"small"} userName={name} role='avatar' />
+                <UserAvatar size={"small"} userName={userNm} role='avatar' />
               </div>
             </Popover>
           </>

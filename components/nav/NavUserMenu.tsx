@@ -6,8 +6,7 @@ import { useI18n, useLink } from "@core/hooks";
 import * as React from "react";
 import { SMixinScrollerStyle } from "@core/styles/emotion";
 import { MenuItem, MENUS } from "router/menus";
-import { useAppStore } from "@core/stores/useAppStore";
-import { useUserStore } from "stores/useUserStore";
+import { useAppStore, useUserStore } from "stores";
 
 interface StyleProps {
   sideMenuOpened?: boolean;
@@ -21,7 +20,7 @@ interface Props extends StyleProps {
 
 function NavUserMenu({}: Props) {
   const sideMenuOpened = useAppStore((s) => s.sideMenuOpened);
-  const accessibleMenus = useUserStore((s) => s.accessibleMenus);
+  const accessibleMenus = useUserStore((s) => s.authorityList);
   const openedMenuUuids = useUserStore((s) => s.openedMenuUuids);
   const setOpenedMenuUuids = useUserStore((s) => s.setOpenedMenuUuids);
   const selectedMenuUuid = useUserStore((s) => s.selectedMenuUuid);

@@ -6,7 +6,7 @@ import { IconText } from "@core/components/common";
 import * as React from "react";
 import { AXFILanguage, AXFIMoon, AXFISun } from "@axframe/icon";
 import { SMixinFlexColumn, SMixinFlexRow } from "@core/styles/emotion";
-import { useAppStore } from "@core/stores/useAppStore";
+import { useAppStore } from "stores";
 
 interface Props {
   sideMenuOpened?: boolean;

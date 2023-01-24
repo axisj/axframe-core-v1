@@ -5,7 +5,7 @@ import { AXFIArrowLogOut } from "@axframe/icon";
 import { SMixinFlexColumn } from "@core/styles/emotion";
 import { IconText, LabelText } from "@core/components/common";
 import { useDialog } from "@core/hooks/useDialog";
-import { useUserStore } from "stores/useUserStore";
+import { useUserStore } from "stores";
 
 interface StyleProps {
   asPopover?: boolean;
@@ -21,7 +21,7 @@ function UserInfoDropdown({ asPopover }: Props) {
   const me = useUserStore((s) => s.me);
   const [signOutSpinning, setSignOutSpinning] = React.useState(false);
 
-  const { name, jobTitle, email } = me ?? {};
+  const { userNm, email } = me ?? {};
 
   const handleClickSignOut = React.useCallback(async () => {
     setSignOutSpinning(true);
@@ -37,13 +37,10 @@ function UserInfoDropdown({ asPopover }: Props) {
   return (
     <UserInfoDropdownContainer asPopover={asPopover}>
       <LabelText role={"info"} label='User Name'>
-        {name}
+        {userNm}
       </LabelText>
       <LabelText role={"info"} label='E-Mail'>
         {email}
-      </LabelText>
-      <LabelText role={"info"} label='Job Title'>
-        {jobTitle}
       </LabelText>
       <CustomDivider />
       <CustomMenus>

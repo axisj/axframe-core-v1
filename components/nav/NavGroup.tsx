@@ -4,11 +4,12 @@ import styled from "@emotion/styled";
 import NavHeader from "./NavHeader";
 import UserInfo from "./UserInfo";
 import NavUserMenu from "./NavUserMenu";
-import { User, useUserStore } from "stores/useUserStore";
+import { useUserStore } from "stores/useUserStore";
 import { SMixinFlexColumn } from "@core/styles/emotion";
 import { MenuItem } from "router/menus";
 import NavFooter from "./NavFooter";
-import { useAppStore } from "@core/stores/useAppStore";
+import { useAppStore } from "stores";
+import { User } from "services";
 
 interface StyleProps {
   sideMenuOpened?: boolean;
