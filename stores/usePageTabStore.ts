@@ -1,8 +1,10 @@
 import React from "react";
 import buildStore from "@core/stores/buildStore";
 import { v4 as uuidv4 } from "uuid";
-import { LanguageType } from "../../i18n";
-import { ROUTES, ROUTES_LIST } from "../../router/Routes";
+import { LanguageType } from "i18n";
+import { ROUTES_LIST } from "router";
+import { useAppStore } from "../../stores";
+import { getFlattedAppMenus } from "../utils/store";
 
 export interface Page {
   fixed?: boolean;
@@ -44,7 +46,7 @@ export interface TabsStore extends PagesGroup, TabsActions {}
 
 const initialUuid = "home-tab";
 
-const initialPage: Page = { labels: ROUTES.HOME.labels, path: ROUTES.HOME.path, fixed: true, isHome: true };
+const initialPage: Page = { labels: { en: "", ko: "" }, path: "/", fixed: true, isHome: true };
 export const tabsInitialState: PagesGroup = {
   loaded: false,
   pages: new Map<string, Page>([[initialUuid, initialPage]]),
@@ -128,14 +130,19 @@ export const usePageTabStore = buildStore<TabsStore>(
     setActiveTabByPath: (path) => {
       const pagesEntries = [...get().pages];
       const existsPageEntry = pagesEntries.find(([, _page]) => _page.path === path);
+      const MENUS_LIST = getFlattedAppMenus(useAppStore.getState().appMenuGroups);
 
       if (existsPageEntry) {
         set({ activeTabUuid: existsPageEntry[0] });
       } else {
         const existsRoute = ROUTES_LIST.find((route) => route.path === path);
         if (existsRoute && !existsRoute.hideTab) {
+          const menu = MENUS_LIST.find((m) => m.progCd === existsRoute.program_type);
           const addedTabUuid = get().addTab({
-            labels: existsRoute.labels,
+            labels: menu?.multiLanguage ?? {
+              en: existsRoute.program_type as string,
+              ko: existsRoute.program_type as string,
+            },
             path,
             fixed: false,
           });

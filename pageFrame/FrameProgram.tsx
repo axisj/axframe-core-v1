@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 import * as React from "react";
 import { Outlet } from "react-router-dom";
 import { SMixinFlexColumn, SMixinFlexRow } from "@core/styles/emotion";
-import NavGroup from "../components/nav/NavGroup";
-import TabGroup from "../components/tabs/TabGroup";
+import NavGroup from "components/nav/NavGroup";
+import TabGroup from "@core/components/tabs/TabGroup";
 
 interface StyleProps {
   sideMenuOpened: boolean;

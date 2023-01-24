@@ -1,13 +1,13 @@
-import { RawRoutes, RawRoute } from "router/Routes";
-import { MenuItem } from "router/menus";
+import { RawRoutes, RawRoute } from "router";
+import { MenuItem } from "router";
 
 export const getFlattedRoutes = (routes) => {
   function getRouteList(routes: RawRoutes): MenuItem[] {
-    return Object.entries(routes).map(([key, { path, labels, hideTab, children }]) => {
+    return Object.entries(routes).map(([key, { path, program_type, hideTab, children }]) => {
       return {
         key,
+        program_type,
         path,
-        labels,
         hideTab,
         children: children ? getRouteList(children) : undefined,
       };
