@@ -7,23 +7,31 @@ import { SMixinFlexRow } from "@core/styles/emotion";
 import { alpha } from "styles/palette/colorUtil";
 import { useI18n } from "@core/hooks/useI18n";
 import { usePageTabStore } from "@core/stores/usePageTabStore";
+import { useLink } from "../../hooks";
 
 interface StyleProps {
   visible?: boolean;
 }
 
-interface Props extends StyleProps {
-  onClickTab: (tabUuid: string, path?: string) => void;
-}
+interface Props extends StyleProps {}
 
-function TabItemMore({ onClickTab }: Props) {
+function TabItemMore({}: Props) {
   const { currentLanguage } = useI18n();
+  const { linkByTo } = useLink();
   const pages = usePageTabStore((s) => s.pages);
   const [visible, setVisible] = React.useState(false);
 
   const tabItemList = React.useMemo(() => {
     return [...pages].map(([k, v]) => ({ id: k, page: v }));
   }, [pages]);
+
+  const handleClickTab = React.useCallback(
+    (tabUuid: string, path?: string) => {
+      if (!path) return;
+      linkByTo(path);
+    },
+    [linkByTo]
+  );
 
   return (
     <Dropdown
@@ -35,7 +43,7 @@ function TabItemMore({ onClickTab }: Props) {
             label: (
               <div
                 onClick={() => {
-                  onClickTab(tabItem.id, tabItem.page.path);
+                  handleClickTab(tabItem.id, tabItem.page.path);
                 }}
               >
                 {tabItem.page.labels?.[currentLanguage]}

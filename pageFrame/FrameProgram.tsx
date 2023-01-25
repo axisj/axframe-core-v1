@@ -3,8 +3,9 @@ import styled from "@emotion/styled";
 import * as React from "react";
 import { Outlet } from "react-router-dom";
 import { SMixinFlexColumn, SMixinFlexRow } from "@core/styles/emotion";
-import NavGroup from "components/nav/NavGroup";
-import TabGroup from "@core/components/tabs/TabGroup";
+
+const NavGroup = React.lazy(() => import("components/nav/NavGroup"));
+const TabGroup = React.lazy(() => import("@core/components/tabs/TabGroup"));
 
 interface StyleProps {
   sideMenuOpened: boolean;
@@ -21,9 +22,8 @@ function FrameProgram({ sideMenuOpened }: Props) {
         </React.Suspense>
       </PageFrameNav>
       <PageFrameContent>
-        <React.Suspense fallback={<></>}>
-          <TabGroup />
-        </React.Suspense>
+        <TabGroup />
+
         <Content>
           <React.Suspense fallback={<></>}>
             <Outlet />

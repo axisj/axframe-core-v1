@@ -6,15 +6,16 @@ import { ReactSortable } from "react-sortablejs";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { darken } from "styles/palette/colorUtil";
 import TabItem from "./TabItem";
-import TabItemMore from "./TabItemMore";
 import { usePageTabStore } from "@core/stores/usePageTabStore";
 import { useI18n } from "@core/hooks/useI18n";
 import { useLink } from "@core/hooks/useLink";
 import { useLocation } from "react-router-dom";
+import TabItemMore from "./TabItemMore";
 
 interface Props {}
 
 function TabGroup(props: Props) {
+  const loaded = usePageTabStore((s) => s.loaded);
   const activeTabUuid = usePageTabStore((s) => s.activeTabUuid);
   const getActiveTabPage = usePageTabStore((s) => s.getActiveTabPage);
   const pages = usePageTabStore((s) => s.pages);
@@ -137,6 +138,10 @@ function TabGroup(props: Props) {
     tabGroupMenu.current.language = currentLanguage;
   }, [currentLanguage]);
 
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <TabGroupContainer>
       <TabLine />
@@ -166,7 +171,7 @@ function TabGroup(props: Props) {
             ))}
           </ReactSortable>
         </TabItemsScroller>
-        <TabItemMore onClickTab={handleClickTab} />
+        <TabItemMore />
       </TabItemsGroup>
     </TabGroupContainer>
   );
