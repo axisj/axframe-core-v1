@@ -71,9 +71,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 });
 
 // ---------------- exports
-export interface $Detail$Store extends States, Actions, PageStoreActions<States> {}
+export interface $DETAIL$Store extends States, Actions, PageStoreActions<States> {}
 export const use$DETAIL$Store = create(
-  subscribeWithSelector<$Detail$Store>((set, get) => ({
+  subscribeWithSelector<$DETAIL$Store>((set, get) => ({
     ...createState,
     ...createActions(set, get),
   }))
