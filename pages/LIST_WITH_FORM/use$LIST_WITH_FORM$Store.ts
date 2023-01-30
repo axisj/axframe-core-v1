@@ -178,7 +178,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     ];
     set(pick(metaData ?? createState, metaDataKeys));
   },
-  ...pageStoreActions(set, get, () => unSubscribe$LIST_WITH_FORM$Store()),
+  ...pageStoreActions(set, get),
 });
 
 // ---------------- exports
@@ -191,7 +191,7 @@ export const use$LIST_WITH_FORM$Store = create(
 );
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
-export const unSubscribe$LIST_WITH_FORM$Store = use$LIST_WITH_FORM$Store.subscribe(
+use$LIST_WITH_FORM$Store.subscribe(
   (s) => [
     s.listSortParams,
     s.listRequestValue,

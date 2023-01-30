@@ -1,6 +1,6 @@
 import { getMetaDataByPath, setMetaDataByPath } from "./usePageTabStore";
 
-export const pageStoreActions = (set, get, unSubscribe) => ({
+export const pageStoreActions = (set, get, unSubscribe?: () => void) => ({
   init: () => {
     const metaData = getMetaDataByPath(get().routePath);
     if (metaData) get().syncMetadata(metaData);
@@ -13,6 +13,6 @@ export const pageStoreActions = (set, get, unSubscribe) => ({
     get().syncMetadata();
   },
   destroy: () => {
-    unSubscribe();
+    unSubscribe?.();
   },
 });

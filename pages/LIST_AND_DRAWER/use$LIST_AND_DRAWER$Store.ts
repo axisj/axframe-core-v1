@@ -119,7 +119,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
-  ...pageStoreActions(set, get, () => unSubscribe$LIST_AND_DRAWER$Store()),
+  ...pageStoreActions(set, get),
 });
 
 // ---------------- exports
@@ -131,7 +131,7 @@ export const use$LIST_AND_DRAWER$Store = create(
   }))
 );
 
-export const unSubscribe$LIST_AND_DRAWER$Store = use$LIST_AND_DRAWER$Store.subscribe(
+use$LIST_AND_DRAWER$Store.subscribe(
   (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
   ([listSortParams, listRequestValue, listColWidths]) => {
     console.log(`Save metaData '${createState.routePath}', Store : use$LIST_AND_DRAWER$Store`);

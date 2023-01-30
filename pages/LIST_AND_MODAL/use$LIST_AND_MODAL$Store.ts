@@ -123,7 +123,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
-  ...pageStoreActions(set, get, () => unSubscribe$LIST_AND_MODAL$Store()),
+  ...pageStoreActions(set, get),
 });
 
 // ---------------- exports
@@ -136,7 +136,7 @@ export const use$LIST_AND_MODAL$Store = create(
 );
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
-export const unSubscribe$LIST_AND_MODAL$Store = use$LIST_AND_MODAL$Store.subscribe(
+use$LIST_AND_MODAL$Store.subscribe(
   (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
   ([listSortParams, listRequestValue, listColWidths]) => {
     console.log(`Save metaData '${createState.routePath}', Store : use$LIST_AND_MODAL$Store`);

@@ -67,7 +67,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
-  ...pageStoreActions(set, get, () => unSubscribe$DETAIL$Store()),
+  ...pageStoreActions(set, get),
 });
 
 // ---------------- exports
@@ -79,7 +79,7 @@ export const use$DETAIL$Store = create(
   }))
 );
 
-export const unSubscribe$DETAIL$Store = use$DETAIL$Store.subscribe(
+use$DETAIL$Store.subscribe(
   (s) => [s.saveRequestValue],
   ([saveRequestValue]) => {
     console.log(`Save metaData '${createState.routePath}', Store : unSubscribe$Detail$Store`);
