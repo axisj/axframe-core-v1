@@ -1,20 +1,19 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { Button, Form, FormInstance, Input } from "antd";
-import { AXFIArrowDown, AXFIArrowUp, AXFISearch } from "@axframe/icon";
-import { IconText, Spinner } from "@core/components/common";
+import { AXFIArrowDown, AXFIArrowUp } from "@axframe/icon";
+import { IconText } from "@core/components/common";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { PageLayout } from "styles/pageStyled";
 import { SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
-import moment from "moment";
 import { getMomentRangeValue } from "../../utils/object";
-import { css } from "@emotion/react";
 
 export interface IParam {
   title: React.ReactNode;
   name: string;
   type: SearchParamType;
   options?: SearchParamOption[];
+  label?: string;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -33,6 +32,7 @@ interface Props {
   spinning?: boolean;
   filterWidth?: number;
   extraButtons?: React.FC;
+  filterLabel?: string;
 }
 
 export function SearchParams({
@@ -47,6 +47,7 @@ export function SearchParams({
   spinning,
   filterWidth,
   extraButtons: ExtraButtons,
+  filterLabel,
 }: Props) {
   const [showChildren, setShowChildren] = React.useState(false);
 
@@ -96,7 +97,7 @@ export function SearchParams({
   }, [form, params, paramsValue, expand]);
 
   return (
-    <Form layout='vertical' form={form} onValuesChange={onValuesChange} onFinish={handleSearch} scrollToFirstError>
+    <Form layout='horizontal' form={form} onValuesChange={onValuesChange} onFinish={handleSearch} scrollToFirstError>
       <Container>
         <DefaultWrap>
           {params && params?.length > 0 && (
@@ -110,13 +111,14 @@ export function SearchParams({
                   value={paramsValue?.[filter.name]}
                   options={filter.options}
                   onClickExtraButton={onClickExtraButton}
+                  label={filter.label}
                 />
               ))}
             </Input.Group>
           )}
 
           <SearchInput>
-            <Form.Item name={"filter"} noStyle>
+            <Form.Item name={"filter"} label={filterLabel}>
               <Input.Search
                 loading={spinning}
                 placeholder={"search"}
@@ -156,6 +158,9 @@ const DefaultWrap = styled.div`
   ${SMixinFlexRow("stretch", "center")};
   gap: 10px;
   margin-bottom: 15px;
+  .ant-form-item {
+    margin-bottom: 0;
+  }
 `;
 
 const SearchInput = styled.div`
