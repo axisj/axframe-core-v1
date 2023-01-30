@@ -19,6 +19,7 @@ interface Props {
   value: any;
   options?: SearchParamOption[];
   onClickExtraButton?: (params: Record<string, any>) => void;
+  label?: string;
 }
 
 export type SearchParamComponentProp<R> = {
