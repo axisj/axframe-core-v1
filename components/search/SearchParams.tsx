@@ -82,8 +82,11 @@ export function SearchParams({
     };
 
     params?.forEach((filter) => {
+
       if (filter.type === SearchParamType.TIME_RANGE) {
         formValues[filter.name] = getMomentRangeValue(paramsValue?.[filter.name]);
+        // } else if (filter.type === SearchParamType.CHECKBOX) {
+        // formValues[filter.name] = getMomentRangeValue(paramsValue?.[filter.name]);
       } else {
         formValues[filter.name] = paramsValue?.[filter.name] ?? "";
       }
