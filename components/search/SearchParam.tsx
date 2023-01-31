@@ -22,6 +22,8 @@ interface Props {
   options?: SearchParamOption[];
   onClickExtraButton?: (params: Record<string, any>) => void;
   label?: string;
+  checkAllItem?: boolean;
+  onChangedCheckAllItem?: () => void;
 }
 
 export type SearchParamComponentProp<R> = {

@@ -14,6 +14,7 @@ export interface IParam {
   type: SearchParamType;
   options?: SearchParamOption[];
   label?: string;
+  checkAllItem?: boolean;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -75,6 +76,11 @@ export function SearchParams({
     setShowChildren(!showChildren);
   }, [onChangeExpand, showChildren]);
 
+  // 전체 선택 시 커스텀 처리
+  const onChangedCheckAllItem = React.useCallback(() => {
+    onValuesChange(undefined, form.getFieldsValue());
+  }, [form, onValuesChange]);
+
   React.useEffect(() => {
     const formValues = {
       filterType: paramsValue?.filterType,
@@ -82,11 +88,10 @@ export function SearchParams({
     };
 
     params?.forEach((filter) => {
-
       if (filter.type === SearchParamType.TIME_RANGE) {
         formValues[filter.name] = getMomentRangeValue(paramsValue?.[filter.name]);
         // } else if (filter.type === SearchParamType.CHECKBOX) {
-        // formValues[filter.name] = getMomentRangeValue(paramsValue?.[filter.name]);
+        // formValues[filter.name] = (paramsValue?.[filter.name]);
       } else {
         formValues[filter.name] = paramsValue?.[filter.name] ?? "";
       }
@@ -115,6 +120,8 @@ export function SearchParams({
                   options={filter.options}
                   onClickExtraButton={onClickExtraButton}
                   label={filter.label}
+                  checkAllItem={filter.checkAllItem}
+                  onChangedCheckAllItem={onChangedCheckAllItem}
                 />
               ))}
             </Input.Group>
