@@ -118,7 +118,7 @@ export function SearchParams({
           )}
 
           <SearchInput>
-            <Form.Item name={"filter"} label={filterLabel}>
+            <Form.Item name={"filter"} {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
               <Input.Search
                 loading={spinning}
                 placeholder={"search"}

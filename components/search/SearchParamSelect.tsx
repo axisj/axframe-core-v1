@@ -4,7 +4,7 @@ import { SearchParamComponent } from "./SearchParam";
 
 export const SearchParamSelect: SearchParamComponent = ({ name, title, options, label }) => {
   return (
-    <Form.Item name={name} initialValue={options?.[0].value} label={label}>
+    <Form.Item name={name} initialValue={options?.[0].value} {...(label ? { label } : { noStyle: true })}>
       <Select placeholder={title} allowClear style={{ minWidth: 100 }}>
         {options?.map((option, sidx) => (
           <Select.Option key={sidx} value={option.value}>
