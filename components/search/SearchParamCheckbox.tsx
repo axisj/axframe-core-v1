@@ -12,11 +12,8 @@ export const SearchParamCheckbox: SearchParamComponent = ({
   onChangedCheckAllItem,
 }) => {
   const { t } = useI18n();
-  const [indeterminate, setIndeterminate] = React.useState(false);
-  const [checkAll, setCheckAll] = React.useState(false);
-
   const form = Form.useFormInstance();
-  const checkedAll = Form.useWatch(name, form);
+  const checkedAll = Form.useWatch(name, form) || [];
 
   const onCheckAllChange = (e: CheckboxChangeEvent) => {
     const list = e.target.checked ? options.map((opt) => opt.value) : [];
@@ -24,17 +21,14 @@ export const SearchParamCheckbox: SearchParamComponent = ({
     onChangedCheckAllItem?.();
   };
 
-  React.useEffect(() => {
-    if (checkedAll) {
-      setIndeterminate(!!checkedAll.length && checkedAll.length < options.length);
-      setCheckAll(checkedAll.length === options.length);
-    }
-  }, [checkedAll, options.length]);
-
   return (
     <Form.Item {...(label ? { label, style: { marginRight: 10 } } : { noStyle: true })}>
       {checkAllItem && (
-        <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+        <Checkbox
+          indeterminate={checkedAll.length < options.length}
+          onChange={onCheckAllChange}
+          checked={checkedAll.length === options.length}
+        >
           {t.common.checkAll}
         </Checkbox>
       )}
