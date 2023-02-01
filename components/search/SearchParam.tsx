@@ -1,10 +1,12 @@
 import * as React from "react";
 import { SearchParamSelect } from "./SearchParamSelect";
 import { SearchParamTimeRange } from "./SearchParamTimeRange";
+import { SearchParamCheckbox } from "./SearchParamCheckbox";
 
 export enum SearchParamType {
   TIME_RANGE,
   SELECT,
+  CHECKBOX,
 }
 
 export interface SearchParamOption {
@@ -20,6 +22,8 @@ interface Props {
   options?: SearchParamOption[];
   onClickExtraButton?: (params: Record<string, any>) => void;
   label?: string;
+  checkAllItem?: boolean;
+  onChangedCheckAllItem?: () => void;
 }
 
 export type SearchParamComponentProp<R> = {
@@ -31,6 +35,7 @@ export type SearchParamComponent = React.FC<Props>;
 const SearchParamComponents: SearchParamComponentProp<SearchParamComponent> = {
   [SearchParamType.TIME_RANGE]: SearchParamTimeRange,
   [SearchParamType.SELECT]: SearchParamSelect,
+  [SearchParamType.CHECKBOX]: SearchParamCheckbox,
 };
 
 const SearchParam: SearchParamComponent = (props) => {
