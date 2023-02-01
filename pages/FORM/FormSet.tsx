@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button, Checkbox, Col, DatePicker, Form, Input, Radio, Row, Select, Space } from "antd";
 import styled from "@emotion/styled";
 import { PageLayout } from "styles/pageStyled";
-import moment from "moment/moment";
+import dayjs from "dayjs";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { useI18n } from "@core/hooks";
 import { use$FORM$Store } from "./use$FORM$Store";
@@ -55,7 +55,7 @@ function FormSet({}: Props) {
 
   React.useEffect(() => {
     if (birthDt) {
-      const age = moment().diff(moment(birthDt), "years");
+      const age = dayjs().diff(dayjs(birthDt), "years");
       form.setFieldValue("age", age);
     }
   }, [birthDt, form]);

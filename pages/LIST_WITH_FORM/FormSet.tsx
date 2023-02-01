@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select, Space } from "antd";
 import styled from "@emotion/styled";
 import { PageLayout } from "styles/pageStyled";
-import moment from "moment/moment";
+import dayjs from "dayjs";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { useI18n } from "@core/hooks";
 import { convertToDate } from "@core/utils/object";
@@ -48,7 +48,7 @@ function FormSet({}: Props) {
   const onValuesChange = React.useCallback(
     (changedValues: any, values: Record<string, any>) => {
       if ("birthDt" in changedValues) {
-        values["age"] = moment().diff(moment(changedValues.birthDt), "years");
+        values["age"] = dayjs().diff(dayjs(changedValues.birthDt), "years");
       }
       setSaveRequestValue(values);
     },

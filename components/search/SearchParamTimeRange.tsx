@@ -1,4 +1,4 @@
-import moment, { Moment } from "moment";
+import dayjs, { Dayjs } from "dayjs";
 import * as React from "react";
 import { SearchParamComponent } from "./SearchParam";
 import { DatePicker, Form, Space, Button } from "antd";
@@ -12,16 +12,16 @@ enum RangeType {
 export const SearchParamTimeRange: SearchParamComponent = ({ name, onClickExtraButton }) => {
   const onClickButton = React.useCallback(
     (rangeType: RangeType) => {
-      let range: Moment[] = [];
+      let range: Dayjs[] = [];
       switch (rangeType) {
         case RangeType.D3:
-          range = [moment().add(-3, "d"), moment()];
+          range = [dayjs().add(-3, "d"), dayjs()];
           break;
         case RangeType.D7:
-          range = [moment().add(-7, "d"), moment()];
+          range = [dayjs().add(-7, "d"), dayjs()];
           break;
         case RangeType.TODAY:
-          range = [moment(), moment()];
+          range = [dayjs(), dayjs()];
           break;
       }
 
