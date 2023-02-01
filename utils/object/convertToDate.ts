@@ -1,11 +1,11 @@
-import moment from "moment";
+import dayjs from "dayjs";
 
 export function convertToDate(target: Record<string, any> = {}, keys: string[]) {
   if (!target) return target;
 
   keys.forEach((key) => {
-    if (moment(target[key], moment.ISO_8601, true).isValid()) {
-      target[key] = moment(target[key]);
+    if (dayjs(dayjs(target[key]).toISOString()).isValid()) {
+      target[key] = dayjs(target[key]);
     }
   });
   return target;
