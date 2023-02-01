@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 
-const srcPath = "../src/styles/theme.ts";
+const srcPath = "../../styles/theme.ts";
 const srcTheme = path.resolve(__dirname, srcPath);
 const less = require("less");
 const theme = require(srcPath);
@@ -13,7 +13,7 @@ function compileLESS(from, to) {
     if (err) return;
     less.render(
       data.toString(),
-      { compress: true, paths: [path.join(__dirname, "../src/styles/less")], javascriptEnabled: true },
+      { compress: true, paths: [path.join(__dirname, "../../styles/less")], javascriptEnabled: true },
       function (e, output) {
         if (e) console.error(e);
         if (!e) {
@@ -31,7 +31,7 @@ const buildLessVar = () => {
     const themeValue = theme.themePalette[palette];
 
     fs.writeFileSync(
-      path.resolve(__dirname, `../src/styles/palette/theme-${palette}.less`),
+      path.resolve(__dirname, `../../styles/palette/theme-${palette}.less`),
       Object.keys(themeValue)
         .map((k) => {
           if (typeof themeValue[k] !== "string" || !themeValue[k].includes("#")) {
@@ -43,7 +43,7 @@ const buildLessVar = () => {
         .join("\r\n") + "\r\n"
     );
 
-    compileLESS(`../src/styles/less/app-${palette}.less`, `../public/app-${palette}.css`);
+    compileLESS(`../../styles/less/app-${palette}.less`, `../../../public/app-${palette}.css`);
   });
 
   console.log("compiled css file");

@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Dropdown, Menu } from "antd";
+import { Dropdown } from "antd";
 import * as React from "react";
 import styled from "@emotion/styled";
 import { AXFIArrowDown } from "@axframe/icon";
@@ -32,8 +32,6 @@ function TabItemMore({}: Props) {
     },
     [linkByTo]
   );
-
-  console.log("tabItemList", tabItemList);
 
   return (
     <Dropdown
