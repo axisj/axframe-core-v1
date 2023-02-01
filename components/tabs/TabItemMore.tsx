@@ -33,25 +33,24 @@ function TabItemMore({}: Props) {
     [linkByTo]
   );
 
+  console.log("tabItemList", tabItemList);
+
   return (
     <Dropdown
-      overlayClassName={"tab-item-more-dropdown"}
-      overlay={
-        <Menu
-          items={tabItemList.map((tabItem) => ({
-            key: tabItem.id,
-            label: (
-              <div
-                onClick={() => {
-                  handleClickTab(tabItem.id, tabItem.page.path);
-                }}
-              >
-                {tabItem.page.labels?.[currentLanguage]}
-              </div>
-            ),
-          }))}
-        />
-      }
+      menu={{
+        items: tabItemList.map((tabItem) => ({
+          key: tabItem.id,
+          label: (
+            <div
+              onClick={() => {
+                handleClickTab(tabItem.id, tabItem.page.path);
+              }}
+            >
+              {tabItem.page.labels?.[currentLanguage]}
+            </div>
+          ),
+        })),
+      }}
       trigger={["click"]}
       align={{ targetOffset: [-5, 0] }}
       open={visible}

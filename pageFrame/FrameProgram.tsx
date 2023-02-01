@@ -40,6 +40,7 @@ const PageFrameContainer = styled.div`
   width: 100vw;
   flex: 1;
   overflow: hidden;
+  background: ${(p) => p.theme.body_background};
 `;
 const PageFrameNav = styled.div<StyleProps>`
   ${SMixinFlexRow("stretch", "stretch")};

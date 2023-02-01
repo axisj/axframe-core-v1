@@ -145,7 +145,7 @@ export function SearchParams({
         </DefaultWrap>
         {children && showChildren && <FormBox>{children}</FormBox>}
       </Container>
-      <Button htmlType={"submit"} hidden />
+      <button type='submit' style={{ display: "none" }} />
     </Form>
   );
 }

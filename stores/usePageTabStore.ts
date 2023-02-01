@@ -46,7 +46,7 @@ export interface TabsStore extends PagesGroup, TabsActions {}
 
 const initialUuid = "home-tab";
 
-const initialPage: Page = { labels: { en: "", ko: "" }, path: "/", fixed: true, isHome: true };
+const initialPage: Page = { labels: { en: "HOME", ko: "홈" }, path: "/", fixed: true, isHome: true };
 export const tabsInitialState: PagesGroup = {
   loaded: false,
   pages: new Map<string, Page>([[initialUuid, initialPage]]),
