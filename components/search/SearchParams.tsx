@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Button, Form, FormInstance, Input } from "antd";
+import { Form, FormInstance, Input, Space } from "antd";
 import { AXFIArrowDown, AXFIArrowUp } from "@axframe/icon";
 import { IconText } from "@core/components/common";
 import { SMixinFlexRow } from "@core/styles/emotion";
@@ -9,11 +9,12 @@ import { SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
 import { getMomentRangeValue } from "../../utils/object";
 
 export interface IParam {
-  title: React.ReactNode;
   name: string;
+  placeholder?: string;
   type: SearchParamType;
   options?: SearchParamOption[];
   label?: string;
+  width?: number;
   checkAllItem?: boolean;
 }
 
@@ -34,6 +35,7 @@ interface Props {
   filterWidth?: number;
   extraButtons?: React.FC;
   filterLabel?: string;
+  disableFilter?: boolean;
 }
 
 export function SearchParams({
@@ -49,6 +51,7 @@ export function SearchParams({
   filterWidth,
   extraButtons: ExtraButtons,
   filterLabel,
+  disableFilter = false,
 }: Props) {
   const [showChildren, setShowChildren] = React.useState(false);
 
@@ -105,39 +108,51 @@ export function SearchParams({
   }, [form, params, paramsValue, expand]);
 
   return (
-    <Form layout='horizontal' form={form} onValuesChange={onValuesChange} onFinish={handleSearch} scrollToFirstError>
+    <Form
+      layout='horizontal'
+      colon={false}
+      form={form}
+      onValuesChange={onValuesChange}
+      onFinish={handleSearch}
+      scrollToFirstError
+    >
       <Container>
         <DefaultWrap>
           {params && params?.length > 0 && (
-            <Input.Group compact style={{ width: "auto" }}>
-              {params.map((filter, idx) => (
+            <Space wrap>
+              {params.map((param, idx) => (
                 <SearchParam
                   key={idx}
-                  name={filter.name}
-                  title={filter.title}
-                  type={filter.type}
-                  value={paramsValue?.[filter.name]}
-                  options={filter.options}
+                  name={param.name}
+                  placeholder={param.placeholder}
+                  type={param.type}
+                  value={paramsValue?.[param.name]}
+                  options={param.options}
                   onClickExtraButton={onClickExtraButton}
-                  label={filter.label}
-                  checkAllItem={filter.checkAllItem}
+                  label={param.label}
+                  checkAllItem={param.checkAllItem}
+                  width={param.width}
                   onChangedCheckAllItem={onChangedCheckAllItem}
                 />
               ))}
-            </Input.Group>
+            </Space>
           )}
 
-          <SearchInput>
-            <Form.Item name={"filter"} {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
-              <Input.Search
-                loading={spinning}
-                placeholder={"search"}
-                allowClear
-                onSearch={handleSearch}
-                style={{ width: filterWidth }}
-              />
-            </Form.Item>
-          </SearchInput>
+          {disableFilter ? (
+            <SearchInput />
+          ) : (
+            <SearchInput>
+              <Form.Item name={"filter"} {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
+                <Input.Search
+                  loading={spinning}
+                  placeholder={"search"}
+                  allowClear
+                  onSearch={handleSearch}
+                  style={{ width: filterWidth }}
+                />
+              </Form.Item>
+            </SearchInput>
+          )}
 
           {ExtraButtons && (
             <Buttons>
