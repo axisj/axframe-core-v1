@@ -8,7 +8,7 @@ import { useDidMountEffect, useI18n } from "@core/hooks";
 import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$_store";
 import { ListDataSet } from "./ListDataSet";
 import { FormSet } from "./FormSet";
-import { SearchParams, SearchParamType } from "../../components/search";
+import { SearchParams, SearchParamType } from "@core/components/search";
 
 interface Props {}
 
