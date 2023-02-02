@@ -1,11 +1,11 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { ColResizer, ProgramTitle } from "@core/components/common";
+import { ProgramTitle, RowResizer } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
 import { Button, Form } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect, useI18n } from "@core/hooks";
-import { use$LIST_WITH_FORM_ROW$Store } from "./use$LIST_WITH_FORM_ROW$_store";
+import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$_store";
 import { ListDataSet } from "./ListDataSet";
 import { FormSet } from "./FormSet";
 import { SearchParams, SearchParamType } from "../../components/search";
@@ -15,17 +15,17 @@ interface Props {}
 function App({}: Props) {
   const { t } = useI18n();
 
-  const init = use$LIST_WITH_FORM_ROW$Store((s) => s.init);
-  const reset = use$LIST_WITH_FORM_ROW$Store((s) => s.reset);
-  const callListApi = use$LIST_WITH_FORM_ROW$Store((s) => s.callListApi);
-  const setFlexGrow = use$LIST_WITH_FORM_ROW$Store((s) => s.setFlexGrow);
+  const init = use$LIST_WITH_FORM2$Store((s) => s.init);
+  const reset = use$LIST_WITH_FORM2$Store((s) => s.reset);
+  const callListApi = use$LIST_WITH_FORM2$Store((s) => s.callListApi);
+  const setFlexGrow = use$LIST_WITH_FORM2$Store((s) => s.setFlexGrow);
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const listRequestValue = use$LIST_WITH_FORM_ROW$Store((s) => s.listRequestValue);
-  const setListRequestValue = use$LIST_WITH_FORM_ROW$Store((s) => s.setListRequestValue);
-  const listSpinning = use$LIST_WITH_FORM_ROW$Store((s) => s.listSpinning);
-  const cancelFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.cancelFormActive);
-  const setFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.setFormActive);
+  const listRequestValue = use$LIST_WITH_FORM2$Store((s) => s.listRequestValue);
+  const setListRequestValue = use$LIST_WITH_FORM2$Store((s) => s.setListRequestValue);
+  const listSpinning = use$LIST_WITH_FORM2$Store((s) => s.listSpinning);
+  const cancelFormActive = use$LIST_WITH_FORM2$Store((s) => s.cancelFormActive);
+  const setFormActive = use$LIST_WITH_FORM2$Store((s) => s.setFormActive);
 
   const [searchForm] = Form.useForm();
 
@@ -69,7 +69,7 @@ function App({}: Props) {
   return (
     <Container stretch role={"page-container"}>
       <Header>
-        <ProgramTitle title={t.pages.example.listWithForm.title}>
+        <ProgramTitle title={t.pages.example.listWithFormRow.title}>
           <Button icon={<AXFIRevert />} onClick={handleReset} size='small' type={"ghost"}>
             {t.button.reset}
           </Button>
@@ -108,7 +108,7 @@ function App({}: Props) {
 
       <Body ref={resizerContainerRef}>
         <ListDataSet />
-        <ColResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
+        <RowResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
         <FormSet />
       </Body>
     </Container>
@@ -118,7 +118,7 @@ function App({}: Props) {
 const Container = styled(PageLayout)``;
 const Header = styled(PageLayout.Header)``;
 const PageSearchBar = styled(PageLayout.PageSearchBar)``;
-const Body = styled(PageLayout.FrameRow)`
+const Body = styled(PageLayout.FrameColumn)`
   padding: 0;
 `;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
