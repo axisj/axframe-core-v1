@@ -4,22 +4,22 @@ import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { DataGrid } from "@core/components/DataGrid";
 import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
-import { use$LIST_WITH_FORM_ROW$Store } from "./use$LIST_WITH_FORM_ROW$_store";
+import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$Store";
 
 interface Props {
   onClick: AXFDGProps<ExampleItem>["onClick"];
 }
 
 function ListDataGrid({ onClick }: Props) {
-  const listColWidths = use$LIST_WITH_FORM_ROW$Store((s) => s.listColWidths);
-  const listSortParams = use$LIST_WITH_FORM_ROW$Store((s) => s.listSortParams);
-  const listData = use$LIST_WITH_FORM_ROW$Store((s) => s.listData);
-  const listPage = use$LIST_WITH_FORM_ROW$Store((s) => s.listPage);
-  const listSpinning = use$LIST_WITH_FORM_ROW$Store((s) => s.listSpinning);
-  const setListColWidths = use$LIST_WITH_FORM_ROW$Store((s) => s.setListColWidths);
-  const setListSortParams = use$LIST_WITH_FORM_ROW$Store((s) => s.setListSortParams);
-  const changeListPage = use$LIST_WITH_FORM_ROW$Store((s) => s.changeListPage);
-  const listSelectedRowKey = use$LIST_WITH_FORM_ROW$Store((s) => s.listSelectedRowKey);
+  const listColWidths = use$LIST_WITH_FORM2$Store((s) => s.listColWidths);
+  const listSortParams = use$LIST_WITH_FORM2$Store((s) => s.listSortParams);
+  const listData = use$LIST_WITH_FORM2$Store((s) => s.listData);
+  const listPage = use$LIST_WITH_FORM2$Store((s) => s.listPage);
+  const listSpinning = use$LIST_WITH_FORM2$Store((s) => s.listSpinning);
+  const setListColWidths = use$LIST_WITH_FORM2$Store((s) => s.setListColWidths);
+  const setListSortParams = use$LIST_WITH_FORM2$Store((s) => s.setListSortParams);
+  const changeListPage = use$LIST_WITH_FORM2$Store((s) => s.changeListPage);
+  const listSelectedRowKey = use$LIST_WITH_FORM2$Store((s) => s.listSelectedRowKey);
 
   const { t } = useI18n();
   const containerRef = React.useRef<HTMLDivElement>(null);

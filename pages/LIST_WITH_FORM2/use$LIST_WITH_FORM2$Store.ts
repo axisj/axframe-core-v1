@@ -212,7 +212,7 @@ use$LIST_WITH_FORM2$Store.subscribe(
     detail,
     formActive,
   ]) => {
-    console.log(`Save metaData '${createState.routePath}', Store : use$LIST_WITH_FORM$Store`);
+    console.log(`Save metaData '${createState.routePath}', Store : use$LIST_WITH_FORM2$Store`);
 
     setMetaDataByPath<MetaData>(createState.routePath, {
       listSortParams,

@@ -5,7 +5,7 @@ import { AXFIRevert } from "@axframe/icon";
 import { Button, Form } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect, useI18n } from "@core/hooks";
-import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$_store";
+import { use$LIST_WITH_FORM_ROW$Store } from "./use$LIST_WITH_FORM_ROW$Store";
 import { ListDataSet } from "./ListDataSet";
 import { FormSet } from "./FormSet";
 import { SearchParams, SearchParamType } from "@core/components/search";
@@ -15,17 +15,17 @@ interface Props {}
 function App({}: Props) {
   const { t } = useI18n();
 
-  const init = use$LIST_WITH_FORM2$Store((s) => s.init);
-  const reset = use$LIST_WITH_FORM2$Store((s) => s.reset);
-  const callListApi = use$LIST_WITH_FORM2$Store((s) => s.callListApi);
-  const setFlexGrow = use$LIST_WITH_FORM2$Store((s) => s.setFlexGrow);
+  const init = use$LIST_WITH_FORM_ROW$Store((s) => s.init);
+  const reset = use$LIST_WITH_FORM_ROW$Store((s) => s.reset);
+  const callListApi = use$LIST_WITH_FORM_ROW$Store((s) => s.callListApi);
+  const setFlexGrow = use$LIST_WITH_FORM_ROW$Store((s) => s.setFlexGrow);
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const listRequestValue = use$LIST_WITH_FORM2$Store((s) => s.listRequestValue);
-  const setListRequestValue = use$LIST_WITH_FORM2$Store((s) => s.setListRequestValue);
-  const listSpinning = use$LIST_WITH_FORM2$Store((s) => s.listSpinning);
-  const cancelFormActive = use$LIST_WITH_FORM2$Store((s) => s.cancelFormActive);
-  const setFormActive = use$LIST_WITH_FORM2$Store((s) => s.setFormActive);
+  const listRequestValue = use$LIST_WITH_FORM_ROW$Store((s) => s.listRequestValue);
+  const setListRequestValue = use$LIST_WITH_FORM_ROW$Store((s) => s.setListRequestValue);
+  const listSpinning = use$LIST_WITH_FORM_ROW$Store((s) => s.listSpinning);
+  const cancelFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.cancelFormActive);
+  const setFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.setFormActive);
 
   const [searchForm] = Form.useForm();
 

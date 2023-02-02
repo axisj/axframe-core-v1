@@ -7,22 +7,22 @@ import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { useI18n } from "@core/hooks";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
-import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$_store";
+import { use$LIST_WITH_FORM_ROW$Store } from "./use$LIST_WITH_FORM_ROW$Store";
 import { EmptyMsg } from "@core/components/common";
 
 interface Props {}
 interface FormField extends ExampleItem {}
 
 function FormSet({}: Props) {
-  const saveRequestValue = use$LIST_WITH_FORM2$Store((s) => s.saveRequestValue);
-  const setSaveRequestValue = use$LIST_WITH_FORM2$Store((s) => s.setSaveRequestValue);
-  const callSaveApi = use$LIST_WITH_FORM2$Store((s) => s.callSaveApi);
-  const saveSpinning = use$LIST_WITH_FORM2$Store((s) => s.saveSpinning);
-  const flexGrow = use$LIST_WITH_FORM2$Store((s) => s.flexGrow);
-  const listSelectedRowKey = use$LIST_WITH_FORM2$Store((s) => s.listSelectedRowKey);
-  const formActive = use$LIST_WITH_FORM2$Store((s) => s.formActive);
-  const cancelFormActive = use$LIST_WITH_FORM2$Store((s) => s.cancelFormActive);
-  const setFormActive = use$LIST_WITH_FORM2$Store((s) => s.setFormActive);
+  const saveRequestValue = use$LIST_WITH_FORM_ROW$Store((s) => s.saveRequestValue);
+  const setSaveRequestValue = use$LIST_WITH_FORM_ROW$Store((s) => s.setSaveRequestValue);
+  const callSaveApi = use$LIST_WITH_FORM_ROW$Store((s) => s.callSaveApi);
+  const saveSpinning = use$LIST_WITH_FORM_ROW$Store((s) => s.saveSpinning);
+  const flexGrow = use$LIST_WITH_FORM_ROW$Store((s) => s.flexGrow);
+  const listSelectedRowKey = use$LIST_WITH_FORM_ROW$Store((s) => s.listSelectedRowKey);
+  const formActive = use$LIST_WITH_FORM_ROW$Store((s) => s.formActive);
+  const cancelFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.cancelFormActive);
+  const setFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.setFormActive);
 
   const { t } = useI18n();
   const [form] = Form.useForm();
