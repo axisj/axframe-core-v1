@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { SearchParams, SearchParamType } from "@core/components/search";
+import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { useI18n } from "@core/hooks";
 import { Form } from "antd";
 import { ListDataGrid } from "./ListDataGrid";
@@ -36,25 +36,26 @@ function ListDataSet({}: Props) {
   );
 
   const params = React.useMemo(
-    () => [
-      {
-        title: t.formItem.counseling.area.label,
-        name: "select1",
-        type: SearchParamType.SELECT,
-        options: t.formItem.counseling.area.options,
-      },
-      {
-        title: t.formItem.counseling.cnsltHow.label,
-        name: "select2",
-        type: SearchParamType.SELECT,
-        options: t.formItem.counseling.cnsltHow.options,
-      },
-      {
-        title: t.formItem.counseling.cnsltDt.label,
-        name: "timeRange",
-        type: SearchParamType.TIME_RANGE,
-      },
-    ],
+    () =>
+      [
+        {
+          placeholder: t.formItem.counseling.area.label,
+          name: "select1",
+          type: SearchParamType.SELECT,
+          options: t.formItem.counseling.area.options,
+        },
+        {
+          placeholder: t.formItem.counseling.cnsltHow.label,
+          name: "select2",
+          type: SearchParamType.SELECT,
+          options: t.formItem.counseling.cnsltHow.options,
+        },
+        {
+          placeholder: t.formItem.counseling.cnsltDt.label,
+          name: "timeRange",
+          type: SearchParamType.TIME_RANGE,
+        },
+      ] as IParam[],
     [t]
   );
 

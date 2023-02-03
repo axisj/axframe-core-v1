@@ -8,7 +8,7 @@ import { useDidMountEffect, useI18n } from "@core/hooks";
 import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$Store";
 import { ListDataSet } from "./ListDataSet";
 import { FormSet } from "./FormSet";
-import { SearchParams, SearchParamType } from "@core/components/search";
+import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 
 interface Props {}
 
@@ -34,25 +34,26 @@ function App({}: Props) {
   }, [callListApi]);
 
   const params = React.useMemo(
-    () => [
-      {
-        title: t.formItem.counseling.area.label,
-        name: "select1",
-        type: SearchParamType.SELECT,
-        options: t.formItem.counseling.area.options,
-      },
-      {
-        title: t.formItem.counseling.cnsltHow.label,
-        name: "select2",
-        type: SearchParamType.SELECT,
-        options: t.formItem.counseling.cnsltHow.options,
-      },
-      {
-        title: t.formItem.counseling.cnsltDt.label,
-        name: "timeRange",
-        type: SearchParamType.TIME_RANGE,
-      },
-    ],
+    () =>
+      [
+        {
+          placeholder: t.formItem.counseling.area.label,
+          name: "select1",
+          type: SearchParamType.SELECT,
+          options: t.formItem.counseling.area.options,
+        },
+        {
+          placeholder: t.formItem.counseling.cnsltHow.label,
+          name: "select2",
+          type: SearchParamType.SELECT,
+          options: t.formItem.counseling.cnsltHow.options,
+        },
+        {
+          placeholder: t.formItem.counseling.cnsltDt.label,
+          name: "timeRange",
+          type: SearchParamType.TIME_RANGE,
+        },
+      ] as IParam[],
     [t]
   );
 
