@@ -6,6 +6,8 @@ import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { PageLayout } from "styles/pageStyled";
 
+interface DtoItem extends ExampleItem {}
+
 interface Props {}
 
 function ListDataSet({}: Props) {
@@ -13,7 +15,7 @@ function ListDataSet({}: Props) {
   const flexGrow = use$LIST_WITH_FORM2$Store((s) => s.flexGrow);
 
   const onClickItem = React.useCallback(
-    (params: AXFDGClickParams<ExampleItem>) => {
+    (params: AXFDGClickParams<DtoItem>) => {
       setListSelectedRowKey(params.item.id);
     },
     [setListSelectedRowKey]

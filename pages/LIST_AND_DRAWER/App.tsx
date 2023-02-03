@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Button } from "antd";
-import { IconText, ProgramTitle } from "@core/components/common";
+import { ProgramTitle } from "@core/components/common";
 import * as React from "react";
 import { AXFIListSearch, AXFIRevert } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";

@@ -11,7 +11,7 @@ import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 
 interface Props {}
-interface FormField extends ExampleItem {}
+interface DtoItem extends ExampleItem {}
 
 function FormSet({}: Props) {
   const saveRequestValue = use$FORM$Store((s) => s.saveRequestValue);
@@ -72,7 +72,7 @@ function FormSet({}: Props) {
   });
 
   return (
-    <Form<FormField>
+    <Form<DtoItem>
       form={form}
       layout={"vertical"}
       colon={false}

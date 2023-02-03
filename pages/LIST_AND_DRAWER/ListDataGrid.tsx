@@ -6,8 +6,10 @@ import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
 import { use$LIST_AND_DRAWER$Store } from "./use$LIST_AND_DRAWER$Store";
 
+interface DtoItem extends ExampleItem {}
+
 interface Props {
-  onClick: AXFDGProps<ExampleItem>["onClick"];
+  onClick: AXFDGProps<DtoItem>["onClick"];
 }
 
 function ListDataGrid({ onClick }: Props) {
@@ -25,7 +27,7 @@ function ListDataGrid({ onClick }: Props) {
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   const handleColumnsChange = React.useCallback(
-    (columnIndex: number, width: number, columns: AXFDGColumn<ExampleItem>[]) => {
+    (columnIndex: number, width: number, columns: AXFDGColumn<DtoItem>[]) => {
       setListColWidths(columns.map((column) => column.width));
     },
     [setListColWidths]
@@ -62,7 +64,7 @@ function ListDataGrid({ onClick }: Props) {
 
   return (
     <Container ref={containerRef}>
-      <DataGrid<ExampleItem>
+      <DataGrid<DtoItem>
         frozenColumnIndex={0}
         width={containerWidth}
         height={containerHeight}

@@ -10,6 +10,7 @@ import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { ROUTES } from "router/Routes";
 import { PageLayout } from "styles/pageStyled";
 
+interface DtoItem extends ExampleItem {}
 interface Props {}
 
 function ListDataSet({}: Props) {
@@ -27,7 +28,7 @@ function ListDataSet({}: Props) {
   }, [callApi]);
 
   const onClickItem = React.useCallback(
-    (params: AXFDGClickParams<ExampleItem>) => {
+    (params: AXFDGClickParams<DtoItem>) => {
       linkByRoute(ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL, { id: params.item.id });
     },
     [linkByRoute]

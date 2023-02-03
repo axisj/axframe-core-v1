@@ -6,13 +6,15 @@ import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { SubListDataGrid } from "./SubListDataGrid";
 import { PageLayout } from "styles/pageStyled";
 
+interface DtoItem extends ExampleItem {}
+
 interface Props {}
 
 function SubListDataSet({}: Props) {
   // const setListSelectedRowKey = useLIST_WITH_LISTStore((s) => s.setListSelectedRowKey);
   const flexGrow = use$LIST_WITH_LIST$Store((s) => s.flexGrow);
 
-  const onClickItem = React.useCallback((_params: AXFDGClickParams<ExampleItem>) => {
+  const onClickItem = React.useCallback((_params: AXFDGClickParams<DtoItem>) => {
     // setListSelectedRowKey(params.item.id);
   }, []);
 

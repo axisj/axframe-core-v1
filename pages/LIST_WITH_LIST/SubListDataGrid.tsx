@@ -6,8 +6,10 @@ import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
 import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
 
+interface DtoItem extends ExampleItem {}
+
 interface Props {
-  onClick: AXFDGProps<ExampleItem>["onClick"];
+  onClick: AXFDGProps<DtoItem>["onClick"];
 }
 
 function SubListDataGrid({ onClick }: Props) {

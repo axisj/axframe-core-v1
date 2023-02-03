@@ -10,6 +10,8 @@ import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { openDetailModal } from "./DetailModal";
 import { PageLayout } from "styles/pageStyled";
 
+interface DtoItem extends ExampleItem {}
+
 interface Props {}
 
 function ListDataSet({}: Props) {
@@ -26,7 +28,7 @@ function ListDataSet({}: Props) {
     await callListApi();
   }, [callListApi]);
 
-  const onClickItem = React.useCallback(async (params: AXFDGClickParams<ExampleItem>) => {
+  const onClickItem = React.useCallback(async (params: AXFDGClickParams<DtoItem>) => {
     try {
       const data = await openDetailModal({
         query: params.item,

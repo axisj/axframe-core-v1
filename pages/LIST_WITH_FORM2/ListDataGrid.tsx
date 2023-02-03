@@ -6,8 +6,10 @@ import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
 import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$Store";
 
+interface DtoItem extends ExampleItem {}
+
 interface Props {
-  onClick: AXFDGProps<ExampleItem>["onClick"];
+  onClick: AXFDGProps<DtoItem>["onClick"];
 }
 
 function ListDataGrid({ onClick }: Props) {
@@ -26,7 +28,7 @@ function ListDataGrid({ onClick }: Props) {
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   const handleColumnsChange = React.useCallback(
-    (columnIndex: number, width: number, columns: AXFDGColumn<ExampleItem>[]) => {
+    (columnIndex: number, width: number, columns: AXFDGColumn<DtoItem>[]) => {
       setListColWidths(columns.map((column) => column.width));
     },
     [setListColWidths]
@@ -49,7 +51,7 @@ function ListDataGrid({ onClick }: Props) {
           { key: "fldA", label: t.datagrid.수급, align: "left", width: 100 },
           { key: "hopePoint", label: t.datagrid.주요욕구, align: "left", width: 150 },
           { key: "updatedByNm", label: t.datagrid.상담원, align: "left", width: 120 },
-        ] as AXFDGColumn<ExampleItem>[]
+        ] as AXFDGColumn<DtoItem>[]
       ).map((column, colIndex) => {
         if (listColWidths.length > 0) {
           column.width = listColWidths[colIndex];
@@ -63,7 +65,7 @@ function ListDataGrid({ onClick }: Props) {
 
   return (
     <Container ref={containerRef}>
-      <DataGrid<ExampleItem>
+      <DataGrid<DtoItem>
         frozenColumnIndex={0}
         width={containerWidth}
         height={containerHeight}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { ColResizer, IconText, ProgramTitle } from "@core/components/common";
-import { AXFIDefaultProgram, AXFIListSearch, AXFIRevert } from "@axframe/icon";
+import { ColResizer, ProgramTitle } from "@core/components/common";
+import { AXFIRevert } from "@axframe/icon";
 import { Button } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect, useI18n } from "@core/hooks";

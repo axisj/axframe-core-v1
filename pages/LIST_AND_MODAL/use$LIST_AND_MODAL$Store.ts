@@ -17,6 +17,7 @@ import { pick } from "lodash";
 
 interface ListRequest extends ExampleListRequest {}
 interface DetailRequest extends ExampleDetailRequest {}
+interface DtoItem extends ExampleItem {}
 
 interface MetaData {
   listRequestValue: ListRequest;
@@ -27,10 +28,10 @@ interface MetaData {
 interface States extends MetaData {
   routePath: string; // initialized Store;
   listSpinning: boolean;
-  listData: AXFDGDataItem<ExampleItem>[];
+  listData: AXFDGDataItem<DtoItem>[];
   listPage: AXFDGPage;
   detailSpinning: boolean;
-  detail?: ExampleItem;
+  detail?: DtoItem;
 }
 
 interface Actions extends PageStoreActions<States> {

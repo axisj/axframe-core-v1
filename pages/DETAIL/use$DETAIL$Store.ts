@@ -16,6 +16,7 @@ import { pick } from "lodash";
 
 interface SaveRequest extends ExampleSaveRequest {}
 interface APIDetailRequest extends ExampleDetailRequest {}
+interface DtoItem extends ExampleItem {}
 
 interface MetaData {
   saveRequestValue: SaveRequest;
@@ -24,7 +25,7 @@ interface MetaData {
 interface States extends MetaData {
   routePath: string; // initialized Store;
   detailSpinning: boolean;
-  detail?: ExampleItem;
+  detail?: DtoItem;
 }
 
 interface Actions extends PageStoreActions<States> {

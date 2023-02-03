@@ -11,7 +11,7 @@ import { use$LIST_WITH_FORM2$Store } from "./use$LIST_WITH_FORM2$Store";
 import { EmptyMsg } from "@core/components/common";
 
 interface Props {}
-interface FormField extends ExampleItem {}
+interface DtoItem extends ExampleItem {}
 
 function FormSet({}: Props) {
   const saveRequestValue = use$LIST_WITH_FORM2$Store((s) => s.saveRequestValue);
@@ -86,7 +86,7 @@ function FormSet({}: Props) {
     <Frame style={{ flex: 2 - flexGrow }}>
       <Header>Form</Header>
       <Body>
-        <Form<FormField>
+        <Form<DtoItem>
           form={form}
           layout={"vertical"}
           colon={false}

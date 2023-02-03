@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { Button } from "antd";
-import { IconText, ProgramTitle } from "@core/components/common";
+import { ProgramTitle } from "@core/components/common";
 import * as React from "react";
-import { AXFIListSearch, AXFIRevert } from "@axframe/icon";
+import { AXFIRevert } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks/useI18n";
 import { ListDataSet } from "./ListDataSet";
@@ -10,6 +10,7 @@ import { use$LIST$Store } from "./use$LIST$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 
 interface Props {}
+
 function App({}: Props) {
   const { t } = useI18n();
   const init = use$LIST$Store((s) => s.init);
