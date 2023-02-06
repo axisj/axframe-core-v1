@@ -16,6 +16,7 @@ export interface IParam {
   label?: string;
   width?: number;
   checkAllItem?: boolean;
+  loading?: boolean;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -133,6 +134,7 @@ export function SearchParams({
                   checkAllItem={param.checkAllItem}
                   width={param.width}
                   onChangedCheckAllItem={onChangedCheckAllItem}
+                  loading={param.loading}
                 />
               ))}
             </Space>

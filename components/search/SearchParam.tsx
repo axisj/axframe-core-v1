@@ -27,6 +27,7 @@ interface Props {
   checkAllItem?: boolean;
   onChangedCheckAllItem?: () => void;
   width?: number;
+  loading?: boolean;
 }
 
 export type SearchParamComponentProp<R> = {
