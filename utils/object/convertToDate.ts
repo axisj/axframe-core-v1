@@ -4,7 +4,7 @@ export function convertToDate(target: Record<string, any> = {}, keys: string[]) 
   if (!target) return target;
 
   keys.forEach((key) => {
-    if (dayjs(dayjs(target[key]).toISOString()).isValid()) {
+    if (target[key] && dayjs(dayjs(target[key]).toISOString()).isValid()) {
       target[key] = dayjs(target[key]);
     }
   });
