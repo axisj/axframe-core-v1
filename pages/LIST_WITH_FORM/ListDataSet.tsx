@@ -39,19 +39,19 @@ function ListDataSet({}: Props) {
     () =>
       [
         {
-          placeholder: t.formItem.counseling.area.label,
+          placeholder: t.formItem.example.area.label,
           name: "select1",
           type: SearchParamType.SELECT,
-          options: t.formItem.counseling.area.options,
+          options: t.formItem.example.area.options,
         },
         {
-          placeholder: t.formItem.counseling.cnsltHow.label,
+          placeholder: t.formItem.example.cnsltHow.label,
           name: "select2",
           type: SearchParamType.SELECT,
-          options: t.formItem.counseling.cnsltHow.options,
+          options: t.formItem.example.cnsltHow.options,
         },
         {
-          placeholder: t.formItem.counseling.cnsltDt.label,
+          placeholder: t.formItem.example.cnsltDt.label,
           name: "timeRange",
           type: SearchParamType.TIME_RANGE,
         },

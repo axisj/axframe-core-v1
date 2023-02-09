@@ -88,13 +88,13 @@ function FormSet({}: Props) {
         <FormBox>
           <Row gutter={20}>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.area.label} name={"area"} rules={[{ required: true }]}>
-                <Select options={t.formItem.counseling.area.options} />
+              <Form.Item label={t.formItem.example.area.label} name={"area"} rules={[{ required: true }]}>
+                <Select options={t.formItem.example.area.options} />
               </Form.Item>
             </Col>
             <Col xs={24} sm={8}>
               <Form.Item
-                label={t.formItem.counseling.cnsltUserCd.label}
+                label={t.formItem.example.cnsltUserCd.label}
                 name={"cnsltUserCd"}
                 rules={[{ required: true }]}
               >
@@ -104,17 +104,17 @@ function FormSet({}: Props) {
               </Form.Item>
             </Col>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.cnsltDt.label} name={"cnsltDt"}>
+              <Form.Item label={t.formItem.example.cnsltDt.label} name={"cnsltDt"}>
                 <DatePicker />
               </Form.Item>
             </Col>
           </Row>
 
-          <Form.Item label={t.formItem.counseling.cnsltHow.label} rules={[{ required: true }]}>
+          <Form.Item label={t.formItem.example.cnsltHow.label} rules={[{ required: true }]}>
             <Space size={[8, 16]} wrap>
               <Form.Item noStyle name={"cnsltHow"}>
                 <Radio.Group>
-                  {t.formItem.counseling.cnsltHow.options.map((o, i) => (
+                  {t.formItem.example.cnsltHow.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
                       {o.label}
                     </Radio>
@@ -128,13 +128,13 @@ function FormSet({}: Props) {
           </Form.Item>
 
           <Form.Item
-            label={t.formItem.counseling.cnsltPath.label}
+            label={t.formItem.example.cnsltPath.label}
             required
             name={"cnsltPath"}
             style={{ marginBottom: 5 }}
           >
             <Radio.Group>
-              {t.formItem.counseling.cnsltPath.options.map((o, i) => (
+              {t.formItem.example.cnsltPath.options.map((o, i) => (
                 <Radio value={o.value} key={i}>
                   {o.label}
                 </Radio>
@@ -145,7 +145,7 @@ function FormSet({}: Props) {
           {cnsltPath === "관련기관" && (
             <Form.Item noStyle name={"cnsltPathDtl"}>
               <Radio.Group>
-                {t.formItem.counseling.cnsltPathDtl.options.map((o, i) => (
+                {t.formItem.example.cnsltPathDtl.options.map((o, i) => (
                   <Radio value={o.value} key={i}>
                     {o.label}
                   </Radio>
@@ -155,39 +155,39 @@ function FormSet({}: Props) {
           )}
           {cnsltPath === "개인소개" && (
             <Form.Item noStyle name={"cnsltPathPerson"}>
-              <Input placeholder={t.formItem.counseling.cnsltPathPerson.placeholder} style={{ maxWidth: 300 }} />
+              <Input placeholder={t.formItem.example.cnsltPathPerson.placeholder} style={{ maxWidth: 300 }} />
             </Form.Item>
           )}
           {cnsltPath === "본인직접" && (
             <Form.Item noStyle name={"cnsltPathDirect"}>
-              <Input placeholder={t.formItem.counseling.cnsltPathDirect.placeholder} style={{ maxWidth: 300 }} />
+              <Input placeholder={t.formItem.example.cnsltPathDirect.placeholder} style={{ maxWidth: 300 }} />
             </Form.Item>
           )}
           {cnsltPath === "기타기관" && (
             <Space size={20} wrap>
               <Form.Item noStyle name={"cnsltPathOrg"}>
-                <Input placeholder={t.formItem.counseling.cnsltPathOrg.placeholder} />
+                <Input placeholder={t.formItem.example.cnsltPathOrg.placeholder} />
               </Form.Item>
               <Form.Item noStyle name={"cnsltPathOrgPerson"}>
-                <Input placeholder={t.formItem.counseling.cnsltPathOrgPerson.placeholder} />
+                <Input placeholder={t.formItem.example.cnsltPathOrgPerson.placeholder} />
               </Form.Item>
               <Form.Item noStyle name={"cnsltPathOrgPhone"}>
-                <Input placeholder={t.formItem.counseling.cnsltPathOrgPhone.placeholder} />
+                <Input placeholder={t.formItem.example.cnsltPathOrgPhone.placeholder} />
               </Form.Item>
             </Space>
           )}
         </FormBox>
 
-        <FormBoxHeader>{t.formItem.counseling.title1}</FormBoxHeader>
+        <FormBoxHeader>{t.formItem.example.title1}</FormBoxHeader>
         <FormBox>
           <Row gutter={20}>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.name.label} name={"name"} rules={[{ required: true }]}>
+              <Form.Item label={t.formItem.example.name.label} name={"name"} rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.birthDt.label}>
+              <Form.Item label={t.formItem.example.birthDt.label}>
                 <Input.Group compact>
                   <Form.Item name={"birthDt"} noStyle rules={[{ required: true }]}>
                     <DatePicker picker={"date"} />
@@ -196,17 +196,17 @@ function FormSet({}: Props) {
                     <Input
                       readOnly
                       style={{ width: 80 }}
-                      prefix={t.formItem.counseling.age.prefix}
-                      suffix={t.formItem.counseling.age.suffix}
+                      prefix={t.formItem.example.age.prefix}
+                      suffix={t.formItem.example.age.suffix}
                     />
                   </Form.Item>
                 </Input.Group>
               </Form.Item>
             </Col>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.sex.label} name={"sex"}>
+              <Form.Item label={t.formItem.example.sex.label} name={"sex"}>
                 <Radio.Group>
-                  {t.formItem.counseling.sex.options.map((o, i) => (
+                  {t.formItem.example.sex.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
                       {o.label}
                     </Radio>
@@ -217,21 +217,21 @@ function FormSet({}: Props) {
           </Row>
           <Row gutter={20}>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.phone1.label} name={"phone1"} rules={[{ required: true }]}>
+              <Form.Item label={t.formItem.example.phone1.label} name={"phone1"} rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
             </Col>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.phone2.label} name={"phone2"} rules={[{ required: true }]}>
+              <Form.Item label={t.formItem.example.phone2.label} name={"phone2"} rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={20}>
             <Col xs={24} sm={8}>
-              <Form.Item label={t.formItem.counseling.hndcapYn.label} name={"hndcapYn"} rules={[{ required: true }]}>
+              <Form.Item label={t.formItem.example.hndcapYn.label} name={"hndcapYn"} rules={[{ required: true }]}>
                 <Radio.Group>
-                  {t.formItem.counseling.hndcapYn.options.map((o, i) => (
+                  {t.formItem.example.hndcapYn.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
                       {o.label}
                     </Radio>
@@ -241,12 +241,12 @@ function FormSet({}: Props) {
             </Col>
             <Col xs={24} sm={16}>
               <Form.Item
-                label={t.formItem.counseling.hndcapGrade.label}
+                label={t.formItem.example.hndcapGrade.label}
                 name={"hndcapGrade"}
                 rules={[{ required: true }]}
               >
                 <Radio.Group>
-                  {t.formItem.counseling.hndcapGrade.options.map((o, i) => (
+                  {t.formItem.example.hndcapGrade.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
                       {o.label}
                     </Radio>
@@ -256,9 +256,9 @@ function FormSet({}: Props) {
             </Col>
           </Row>
 
-          <Form.Item label={t.formItem.counseling.hndcapTyp.label} name={"hndcapTyp"} rules={[{ required: true }]}>
+          <Form.Item label={t.formItem.example.hndcapTyp.label} name={"hndcapTyp"} rules={[{ required: true }]}>
             <Radio.Group>
-              {t.formItem.counseling.hndcapTyp.options.map((o, i) => (
+              {t.formItem.example.hndcapTyp.options.map((o, i) => (
                 <Radio value={o.value} key={i}>
                   {o.label}
                 </Radio>
@@ -266,7 +266,7 @@ function FormSet({}: Props) {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item label={t.formItem.counseling.addr.label}>
+          <Form.Item label={t.formItem.example.addr.label}>
             <Row gutter={[10, 10]}>
               <Col xs={12} sm={3}>
                 <Form.Item noStyle name={"zipNum"}>
@@ -292,11 +292,11 @@ function FormSet({}: Props) {
           </Form.Item>
         </FormBox>
 
-        <FormBoxHeader>{t.formItem.counseling.title2}</FormBoxHeader>
+        <FormBoxHeader>{t.formItem.example.title2}</FormBoxHeader>
         <FormBox>
           <FormGroupTitle>
             <Form.Item name={["hopePoint", "직접지원"]} noStyle valuePropName={"checked"}>
-              <Checkbox>{t.formItem.counseling.hopePoint.직접지원}</Checkbox>
+              <Checkbox>{t.formItem.example.hopePoint.직접지원}</Checkbox>
             </Form.Item>
           </FormGroupTitle>
 
@@ -304,7 +304,7 @@ function FormSet({}: Props) {
             <Space size={[8, 8]} wrap>
               <Form.Item noStyle name={"hopePoint1"}>
                 <Radio.Group disabled={!hopePoint?.["직접지원"]}>
-                  {t.formItem.counseling.hopePoint1.options.map((o, i) => (
+                  {t.formItem.example.hopePoint1.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
                       {o.label}
                     </Radio>
@@ -319,7 +319,7 @@ function FormSet({}: Props) {
 
           <FormGroupTitle>
             <Form.Item name={["hopePoint", "주거정보자원"]} noStyle valuePropName={"checked"}>
-              <Checkbox>{t.formItem.counseling.hopePoint.주거정보자원}</Checkbox>
+              <Checkbox>{t.formItem.example.hopePoint.주거정보자원}</Checkbox>
             </Form.Item>
           </FormGroupTitle>
 
@@ -327,7 +327,7 @@ function FormSet({}: Props) {
             <Space size={[8, 8]} wrap>
               <Form.Item noStyle name={"hopePoint2"}>
                 <Radio.Group disabled={!hopePoint?.["주거정보자원"]}>
-                  {t.formItem.counseling.hopePoint2.options.map((o, i) => (
+                  {t.formItem.example.hopePoint2.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
                       {o.label}
                     </Radio>
@@ -342,7 +342,7 @@ function FormSet({}: Props) {
 
           <FormGroupTitle>
             <Form.Item name={["hopePoint", "내부자원"]} noStyle valuePropName={"checked"}>
-              <Checkbox>{t.formItem.counseling.hopePoint.내부자원}</Checkbox>
+              <Checkbox>{t.formItem.example.hopePoint.내부자원}</Checkbox>
             </Form.Item>
           </FormGroupTitle>
 
@@ -350,7 +350,7 @@ function FormSet({}: Props) {
             <Space size={[8, 8]} wrap>
               <Form.Item noStyle name={"hopePoint3"}>
                 <Radio.Group disabled={!hopePoint?.["내부자원"]}>
-                  {t.formItem.counseling.hopePoint3.options.map((o, i) => (
+                  {t.formItem.example.hopePoint3.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
                       {o.label}
                     </Radio>
@@ -365,7 +365,7 @@ function FormSet({}: Props) {
 
           <FormGroupTitle>
             <Form.Item name={["hopePoint", "기타"]} noStyle valuePropName={"checked"}>
-              <Checkbox>{t.formItem.counseling.hopePoint.기타}</Checkbox>
+              <Checkbox>{t.formItem.example.hopePoint.기타}</Checkbox>
             </Form.Item>
           </FormGroupTitle>
 
@@ -375,7 +375,7 @@ function FormSet({}: Props) {
 
           <FormGroupTitle>
             <Form.Item name={["hopePoint", "세부내용"]} noStyle valuePropName={"checked"}>
-              <Checkbox> {t.formItem.counseling.hopePoint.세부내용}</Checkbox>
+              <Checkbox> {t.formItem.example.hopePoint.세부내용}</Checkbox>
             </Form.Item>
           </FormGroupTitle>
 
@@ -383,7 +383,7 @@ function FormSet({}: Props) {
             <Input.TextArea disabled={!hopePoint?.["세부내용"]} showCount maxLength={200} />
           </Form.Item>
 
-          <Form.Item label={t.formItem.counseling.fldT.label} name={"fldT"} rules={[{ required: true }]}>
+          <Form.Item label={t.formItem.example.fldT.label} name={"fldT"} rules={[{ required: true }]}>
             <Input.TextArea rows={4} showCount maxLength={200} />
           </Form.Item>
         </FormBox>
