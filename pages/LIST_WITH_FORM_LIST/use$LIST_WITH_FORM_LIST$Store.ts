@@ -191,7 +191,8 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set({
       formActive: true,
       detail: undefined,
-      saveRequestValue: undefined,
+      saveRequestValue: {},
+      subListData: [],
       subListCheckedIndexes: [],
       subListSelectedRowKey: undefined,
     });
@@ -206,7 +207,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set({ subListCheckedIndexes: indexes });
   },
   addSubList: (list) => {
-    const subList = get().subListData;
+    const subList = get().subListData ?? [];
 
     if (!subList) return;
     const _list = list.map((n) => ({
