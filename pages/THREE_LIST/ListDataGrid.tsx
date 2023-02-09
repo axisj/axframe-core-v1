@@ -8,7 +8,7 @@ import { use$THREE_LIST$Store } from "./use$THREE_LIST$Store";
 
 interface DtoItem extends ExampleItem {}
 interface Props {
-  onClick: AXFDGProps<DtoItem>["onClick"];
+  onClick?: AXFDGProps<DtoItem>["onClick"];
 }
 
 function ListDataGrid({ onClick }: Props) {
