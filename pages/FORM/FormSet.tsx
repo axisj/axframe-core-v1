@@ -93,11 +93,7 @@ function FormSet({}: Props) {
               </Form.Item>
             </Col>
             <Col xs={24} sm={8}>
-              <Form.Item
-                label={t.formItem.example.cnsltUserCd.label}
-                name={"cnsltUserCd"}
-                rules={[{ required: true }]}
-              >
+              <Form.Item label={t.formItem.example.cnsltUserCd.label} name={"cnsltUserCd"} rules={[{ required: true }]}>
                 <Select>
                   <Select.Option value={"system"}>시스템관리자</Select.Option>
                 </Select>
@@ -127,12 +123,7 @@ function FormSet({}: Props) {
             </Space>
           </Form.Item>
 
-          <Form.Item
-            label={t.formItem.example.cnsltPath.label}
-            required
-            name={"cnsltPath"}
-            style={{ marginBottom: 5 }}
-          >
+          <Form.Item label={t.formItem.example.cnsltPath.label} required name={"cnsltPath"} style={{ marginBottom: 5 }}>
             <Radio.Group>
               {t.formItem.example.cnsltPath.options.map((o, i) => (
                 <Radio value={o.value} key={i}>
@@ -240,11 +231,7 @@ function FormSet({}: Props) {
               </Form.Item>
             </Col>
             <Col xs={24} sm={16}>
-              <Form.Item
-                label={t.formItem.example.hndcapGrade.label}
-                name={"hndcapGrade"}
-                rules={[{ required: true }]}
-              >
+              <Form.Item label={t.formItem.example.hndcapGrade.label} name={"hndcapGrade"} rules={[{ required: true }]}>
                 <Radio.Group>
                   {t.formItem.example.hndcapGrade.options.map((o, i) => (
                     <Radio value={o.value} key={i}>
@@ -389,7 +376,7 @@ function FormSet({}: Props) {
         </FormBox>
         <ButtonGroup>
           <Button type={"primary"} htmlType={"submit"} loading={saveSpinning}>
-            저장히기
+            저장하기
           </Button>
           <Button onClick={reset}>{t.button.reset}</Button>
         </ButtonGroup>

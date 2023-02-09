@@ -18,6 +18,7 @@ export function DataGrid<T>({
   rowKey,
   selectedRowKey,
   rowChecked,
+  editable,
 }: Props<T>) {
   // console.log("data", data, selectedRowKey);
 
@@ -41,6 +42,7 @@ export function DataGrid<T>({
           rowKey,
           selectedRowKey,
           rowChecked,
+          editable,
         }}
       />
     </Container>

@@ -310,7 +310,7 @@ function FormSet({}: Props) {
           </FormBox>
           <ButtonGroup>
             <Button type={"primary"} htmlType={"submit"} loading={saveSpinning}>
-              저장히기
+              저장하기
             </Button>
             <Button onClick={() => cancelFormActive()}>{t.button.cancel}</Button>
           </ButtonGroup>

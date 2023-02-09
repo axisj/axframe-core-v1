@@ -1,6 +1,12 @@
 import { AXFDGSortParam } from "@axframe/datagrid";
 import { ApiPageResponse } from "../../../@types";
 
+export interface ExampleSubItem {
+  status?: string;
+  code?: string;
+  type?: string;
+  useYn?: string;
+}
 export interface ExampleItem {
   id?: number;
   cntrCd?: string;
@@ -46,6 +52,7 @@ export interface ExampleItem {
   updatedAt?: string;
   updatedBy?: string;
   updatedByNm?: string;
+  subList?: ExampleSubItem[];
 }
 
 export interface ExampleListRequest {
