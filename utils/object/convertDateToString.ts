@@ -2,8 +2,8 @@ import dayjs from "dayjs";
 
 export function convertDateToString(
   target: Record<string, any> = {},
-  keys?: string[],
-  formatString: string = "YYYY-MM-DD"
+  formatString: string = "YYYY-MM-DDTHH:mm:ssZ[Z]",
+  keys?: string[]
 ) {
   if (!target) return target;
 
