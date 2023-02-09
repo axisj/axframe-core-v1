@@ -88,19 +88,19 @@ function DetailDrawer({ open, onOk, onCancel, params, afterOpenChange }: Props) 
     >
       TEST {params.query?.id}
       <Descriptions bordered size={"small"}>
-        <Descriptions.Item label={t.formItem.counseling.name.label}>{detail?.name}</Descriptions.Item>
-        <Descriptions.Item label={t.formItem.counseling.birthDt.label}>{detail?.birthDt}</Descriptions.Item>
-        <Descriptions.Item label={t.formItem.counseling.sex.label}>{detail?.sex}</Descriptions.Item>
-        <Descriptions.Item label={t.formItem.counseling.phone1.label}>{detail?.phone1}</Descriptions.Item>
-        <Descriptions.Item label={t.formItem.counseling.phone2.label} span={2}>
+        <Descriptions.Item label={t.formItem.example.name.label}>{detail?.name}</Descriptions.Item>
+        <Descriptions.Item label={t.formItem.example.birthDt.label}>{detail?.birthDt}</Descriptions.Item>
+        <Descriptions.Item label={t.formItem.example.sex.label}>{detail?.sex}</Descriptions.Item>
+        <Descriptions.Item label={t.formItem.example.phone1.label}>{detail?.phone1}</Descriptions.Item>
+        <Descriptions.Item label={t.formItem.example.phone2.label} span={2}>
           {detail?.phone2}
         </Descriptions.Item>
         <Descriptions.Item label='Status' span={3}>
           <Badge status='processing' text='Running' />
         </Descriptions.Item>
-        <Descriptions.Item label={t.formItem.counseling.hndcapYn.label}>{detail?.hndcapYn}</Descriptions.Item>
-        <Descriptions.Item label={t.formItem.counseling.hndcapGrade.label}>{detail?.hndcapGrade}</Descriptions.Item>
-        <Descriptions.Item label={t.formItem.counseling.hndcapTyp.label}>{detail?.hndcapTyp}</Descriptions.Item>
+        <Descriptions.Item label={t.formItem.example.hndcapYn.label}>{detail?.hndcapYn}</Descriptions.Item>
+        <Descriptions.Item label={t.formItem.example.hndcapGrade.label}>{detail?.hndcapGrade}</Descriptions.Item>
+        <Descriptions.Item label={t.formItem.example.hndcapTyp.label}>{detail?.hndcapTyp}</Descriptions.Item>
       </Descriptions>
       <Loading active={detailSpinning} />
     </Drawer>
