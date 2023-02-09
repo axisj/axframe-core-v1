@@ -140,8 +140,6 @@ export const use$LIST_AND_MODAL$Store = create(
 use$LIST_AND_MODAL$Store.subscribe(
   (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
   ([listSortParams, listRequestValue, listColWidths]) => {
-    console.log(`Save metaData '${createState.routePath}', Store : use$LIST_AND_MODAL$Store`);
-
     setMetaDataByPath<MetaData>(createState.routePath, {
       listSortParams,
       listRequestValue,

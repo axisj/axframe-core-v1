@@ -9,6 +9,7 @@ import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
+import { convertDateToString } from "@core/utils/object";
 
 interface SaveRequest extends ExampleSaveRequest {}
 
@@ -45,7 +46,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
     try {
       const apiParam = request ?? get().saveRequestValue;
-      const response = await ExampleService.save(apiParam);
+      const response = await ExampleService.save(convertDateToString(apiParam));
 
       console.log(response);
     } catch (e) {
@@ -74,8 +75,6 @@ export const use$FORM$Store = create(
 use$FORM$Store.subscribe(
   (s) => [s.saveRequestValue],
   ([saveRequestValue]) => {
-    console.log(`Save metaData '${createState.routePath}', Store : use$FORM$Store`);
-
     setMetaDataByPath<MetaData>(createState.routePath, {
       saveRequestValue: saveRequestValue,
     });

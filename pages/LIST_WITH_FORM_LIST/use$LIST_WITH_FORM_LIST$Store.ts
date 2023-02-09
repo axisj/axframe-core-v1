@@ -11,6 +11,7 @@ import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
 import { omit, pick } from "lodash";
+import { convertDateToString } from "@core/utils/object";
 
 interface ListRequest extends ExampleListRequest {}
 interface SaveRequest extends ExampleItem {}
@@ -170,9 +171,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         }),
       };
 
-      const response = await ExampleService.save(apiParam);
-
-      console.log(response);
+      await ExampleService.save(convertDateToString(apiParam));
     } catch (e) {
       await errorDialog(e as any);
     } finally {
@@ -301,8 +300,6 @@ use$LIST_WITH_FORM_LIST$Store.subscribe(
     subListColWidths,
     subListData,
   ]) => {
-    console.log(`Save metaData '${createState.routePath}', Store : use$LIST_WITH_FORM_LIST$Store`);
-
     setMetaDataByPath<MetaData>(createState.routePath, {
       listSortParams,
       listRequestValue,

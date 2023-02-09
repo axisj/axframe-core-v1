@@ -190,7 +190,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST_WITH_LIST$Store extends States, Actions, PageStoreActions<States> {}
-export const use$LIST_WITH_LIST$Store = create(
+export const use$THREE_LIST$Store = create(
   subscribeWithSelector<$LIST_WITH_LIST$Store>((set, get) => ({
     ...createState,
     ...createActions(set, get),
@@ -198,7 +198,7 @@ export const use$LIST_WITH_LIST$Store = create(
 );
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
-use$LIST_WITH_LIST$Store.subscribe(
+use$THREE_LIST$Store.subscribe(
   (s) => [
     s.listSortParams,
     s.listRequestValue,
@@ -233,11 +233,11 @@ use$LIST_WITH_LIST$Store.subscribe(
   { equalityFn: shallow }
 );
 
-use$LIST_WITH_LIST$Store.subscribe(
+use$THREE_LIST$Store.subscribe(
   (s) => [s.listSelectedRowKey],
   ([listSelectedRowKey]) => {
     if (listSelectedRowKey) {
-      use$LIST_WITH_LIST$Store.getState().callSubListApi();
+      use$THREE_LIST$Store.getState().callSubListApi();
     } else {
       // clear
     }

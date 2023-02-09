@@ -115,8 +115,6 @@ export const use$LIST$Store = create(
 use$LIST$Store.subscribe(
   (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
   ([listSortParams, listRequestValue, listColWidths]) => {
-    console.log(`Save metaData '${createState.routePath}', Store : use$LIST$Store`);
-
     setMetaDataByPath<MetaData>(createState.routePath, {
       listSortParams,
       listRequestValue,

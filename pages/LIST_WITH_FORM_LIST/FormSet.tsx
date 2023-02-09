@@ -30,9 +30,6 @@ function FormSet({}: Props) {
 
   const onValuesChange = React.useCallback(
     (changedValues: any, values: Record<string, any>) => {
-      // if ("birthDt" in changedValues) {
-      //   values["age"] = dayjs().diff(dayjs(changedValues.birthDt), "years");
-      // }
       setSaveRequestValue(values);
     },
     [setSaveRequestValue]
