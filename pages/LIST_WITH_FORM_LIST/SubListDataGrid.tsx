@@ -28,6 +28,7 @@ function SubListDataGrid({}: Props) {
 
   const addSubList = use$LIST_WITH_FORM_LIST$Store((s) => s.addSubList);
   const delSubList = use$LIST_WITH_FORM_LIST$Store((s) => s.delSubList);
+  const setSubListData = use$LIST_WITH_FORM_LIST$Store((s) => s.setSubListData);
   const subListCheckedIndexes = use$LIST_WITH_FORM_LIST$Store((s) => s.subListCheckedIndexes);
   const setSubListCheckedIndexes = use$LIST_WITH_FORM_LIST$Store((s) => s.setSubListCheckedIndexes);
 
@@ -45,7 +46,6 @@ function SubListDataGrid({}: Props) {
   const handleAddSubItem = React.useCallback(() => {
     addSubList([
       {
-        code: "",
         type: "",
         useYn: "Y",
       },
@@ -55,6 +55,13 @@ function SubListDataGrid({}: Props) {
   const handleDelSubItem = React.useCallback(() => {
     if (subListCheckedIndexes) delSubList(subListCheckedIndexes);
   }, [delSubList, subListCheckedIndexes]);
+
+  const handleChangeData = React.useCallback(
+    (ri, ci, item) => {
+      setSubListData([...subListData]);
+    },
+    [setSubListData, subListData]
+  );
 
   const columns = React.useMemo(
     () =>
@@ -112,6 +119,7 @@ function SubListDataGrid({}: Props) {
           data={subListData}
           spinning={subListSpinning}
           onChangeColumns={handleColumnsChange}
+          onChangeData={handleChangeData}
           rowKey={"code"}
           selectedRowKey={subListSelectedRowKey ?? ""}
           rowChecked={{
