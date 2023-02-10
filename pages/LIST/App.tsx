@@ -1,26 +1,74 @@
 import styled from "@emotion/styled";
-import { Button } from "antd";
+import { Button, Form } from "antd";
 import { ProgramTitle } from "@core/components/common";
 import * as React from "react";
 import { AXFIRevert } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n } from "@core/hooks/useI18n";
-import { ListDataSet } from "./ListDataSet";
 import { use$LIST$Store } from "./use$LIST$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
+import { IParam, SearchParams, SearchParamType } from "@core/components/search";
+import { ListDataGrid } from "./ListDataGrid";
+import { useLink } from "../../hooks";
+import { AXFDGClickParams } from "@axframe/datagrid";
+import { ROUTES } from "router";
+import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 
+interface DtoItem extends ExampleItem {}
 interface Props {}
 
 function App({}: Props) {
   const { t } = useI18n();
+  const { linkByRoute } = useLink();
   const init = use$LIST$Store((s) => s.init);
   const reset = use$LIST$Store((s) => s.reset);
   const callListApi = use$LIST$Store((s) => s.callListApi);
+  const listRequestValue = use$LIST$Store((s) => s.listRequestValue);
+  const setListRequestValue = use$LIST$Store((s) => s.setListRequestValue);
+  const callApi = use$LIST$Store((s) => s.callListApi);
+  const spinning = use$LIST$Store((s) => s.listSpinning);
+
+  const [searchForm] = Form.useForm();
+
+  const handleSearch = React.useCallback(async () => {
+    await callApi();
+  }, [callApi]);
+
+  const onClickItem = React.useCallback(
+    (params: AXFDGClickParams<DtoItem>) => {
+      linkByRoute(ROUTES.EXAMPLES.children.LIST_DETAIL.children.DETAIL, { id: params.item.id });
+    },
+    [linkByRoute]
+  );
 
   const handleReset = React.useCallback(async () => {
     reset();
     await callListApi();
   }, [callListApi, reset]);
+
+  const params = React.useMemo(
+    () =>
+      [
+        {
+          placeholder: t.formItem.example.area.label,
+          name: "select1",
+          type: SearchParamType.SELECT,
+          options: t.formItem.example.area.options,
+        },
+        {
+          placeholder: t.formItem.example.cnsltHow.label,
+          name: "select2",
+          type: SearchParamType.SELECT,
+          options: t.formItem.example.cnsltHow.options,
+        },
+        {
+          placeholder: t.formItem.example.cnsltDt.label,
+          name: "timeRange",
+          type: SearchParamType.TIME_RANGE,
+        },
+      ] as IParam[],
+    [t]
+  );
 
   useDidMountEffect(() => {
     init();
@@ -39,7 +87,18 @@ function App({}: Props) {
         <ButtonGroup compact></ButtonGroup>
       </Header>
 
-      <ListDataSet />
+      <Body>
+        <SearchParams
+          form={searchForm}
+          params={params}
+          paramsValue={listRequestValue}
+          onChangeParamsValue={(value) => setListRequestValue(value)}
+          onSearch={handleSearch}
+          spinning={spinning}
+        />
+
+        <ListDataGrid onClick={onClickItem} />
+      </Body>
     </Container>
   );
 }
@@ -47,5 +106,6 @@ function App({}: Props) {
 const Container = styled(PageLayout)``;
 const Header = styled(PageLayout.Header)``;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
+const Body = styled(PageLayout.Body)``;
 
 export default App;

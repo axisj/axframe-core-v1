@@ -79,9 +79,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
           values,
         })),
         listPage: {
-          currentPage: response.rs.pageNumber ?? 1,
-          pageSize: response.rs.pageSize ?? 0,
-          totalPages: response.rs.pgCount ?? 0,
+          currentPage: response.page.pageNumber ?? 1,
+          pageSize: response.page.pageSize ?? 0,
+          totalPages: response.page.pgCount ?? 0,
           totalElements: response.ds.length,
         },
       });

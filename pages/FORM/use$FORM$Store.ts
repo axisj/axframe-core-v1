@@ -46,6 +46,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
     try {
       const apiParam = request ?? get().saveRequestValue;
+      if (!apiParam) return;
+      apiParam.__status__ = "C";
+
       const response = await ExampleService.save(convertDateToString(apiParam));
 
       console.log(response);

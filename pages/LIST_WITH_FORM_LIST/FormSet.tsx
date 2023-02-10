@@ -6,7 +6,7 @@ import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { useI18n } from "@core/hooks";
 import { use$LIST_WITH_FORM_LIST$Store } from "./use$LIST_WITH_FORM_LIST$Store";
 import { EmptyMsg } from "@core/components/common";
-import { convertToDate } from "../../utils/object";
+import { convertToDate } from "@core/utils/object";
 import { SubListDataGrid } from "./SubListDataGrid";
 
 interface Props {}
@@ -26,7 +26,7 @@ function FormSet({}: Props) {
   const { t } = useI18n();
   const [form] = Form.useForm();
 
-  const formInitialValues = {}; // form 의 초기값 reset해도 이값 으로 리셋됨
+  const formInitialValues = React.useRef({}).current; // form 의 초기값 reset해도 이값 으로 리셋됨
 
   const onValuesChange = React.useCallback(
     (changedValues: any, values: Record<string, any>) => {
@@ -39,9 +39,9 @@ function FormSet({}: Props) {
     if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
       form.resetFields();
     } else {
-      form.setFieldsValue(convertToDate({ ...saveRequestValue }, ["cnsltDt"]));
+      form.setFieldsValue(convertToDate({ ...formInitialValues, ...saveRequestValue }, ["cnsltDt"]));
     }
-  }, [saveRequestValue, form]);
+  }, [saveRequestValue, form, formInitialValues]);
 
   if (!formActive && !listSelectedRowKey) {
     return (

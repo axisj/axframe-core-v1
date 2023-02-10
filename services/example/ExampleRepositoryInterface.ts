@@ -1,7 +1,7 @@
 import { AXFDGSortParam } from "@axframe/datagrid";
-import { ApiPageResponse } from "../../../@types";
+import { DataGridPageResponse, DefaultDto } from "@types";
 
-export interface ExampleSubItem {
+export interface ExampleSubItem extends DefaultDto {
   status?: string;
   pid?: string;
   id?: string;
@@ -10,7 +10,7 @@ export interface ExampleSubItem {
   type?: string;
   useYn?: string;
 }
-export interface ExampleItem {
+export interface ExampleItem extends DefaultDto {
   id?: number;
   cntrCd?: string;
   cntrNm?: string;
@@ -70,7 +70,7 @@ export interface ExampleListRequest {
 
 export interface ExampleListResponse {
   ds: ExampleItem[];
-  rs: ApiPageResponse;
+  page: DataGridPageResponse;
 }
 
 export interface ExampleSaveRequest extends ExampleItem {}
@@ -97,9 +97,16 @@ export interface ExampleChildListResponse {
   ds: ExampleSubItem[];
 }
 
+export interface ExampleChildSaveRequest {
+  list: any[];
+}
+
+export interface ExampleChildSaveResponse {}
+
 export abstract class ExampleRepositoryInterface {
   abstract list(params: ExampleListRequest): Promise<ExampleListResponse>;
   abstract save(params: ExampleSaveRequest): Promise<ExampleSaveResponse>;
   abstract detail(params: ExampleDetailRequest): Promise<ExampleDetailResponse>;
   abstract childList(params: ExampleChildListRequest): Promise<ExampleChildListResponse>;
+  abstract childListSave(params: ExampleChildSaveRequest): Promise<ExampleChildSaveResponse>;
 }

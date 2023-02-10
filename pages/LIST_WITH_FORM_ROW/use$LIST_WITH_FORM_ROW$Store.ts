@@ -1,9 +1,5 @@
 import create from "zustand";
-import {
-  ExampleDetailRequest,
-  ExampleItem,
-  ExampleListRequest,
-} from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleItem, ExampleListRequest, ExampleSaveRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
@@ -18,8 +14,7 @@ import { pick } from "lodash";
 import { convertDateToString } from "@core/utils/object";
 
 interface ListRequest extends ExampleListRequest {}
-interface SaveRequest {}
-interface DetailRequest extends ExampleDetailRequest {}
+interface SaveRequest extends ExampleSaveRequest {}
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
@@ -47,7 +42,7 @@ interface Actions extends PageStoreActions<States> {
   setListColWidths: (colWidths: number[]) => void;
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  setListSelectedRowKey: (key?: React.Key) => void;
+  setListSelectedRowKey: (key?: React.Key, detail?: DtoItem) => void;
   callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
   setFlexGrow: (flexGlow: number) => void;
@@ -55,14 +50,13 @@ interface Actions extends PageStoreActions<States> {
   setSaveRequestValue: (exampleSaveRequestValue: SaveRequest) => void;
   setSaveSpinning: (exampleSaveSpinning: boolean) => void;
   callSaveApi: (request?: SaveRequest) => Promise<void>;
-  callDetailApi: (request?: DetailRequest) => Promise<void>;
   cancelFormActive: () => void;
   setFormActive: () => void;
 }
 
 // create states
 const createState: States = {
-  routePath: ROUTES.EXAMPLES.children.LIST_WITH_FORM2.path,
+  routePath: ROUTES.EXAMPLES.children.LIST_WITH_FORM_ROW.path,
   listRequestValue: { pageNumber: 1, pageSize: 100 },
   listColWidths: [],
   listSpinning: false,
@@ -89,9 +83,8 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setListSpinning: (spinning) => set({ listSpinning: spinning }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
-  setListSelectedRowKey: async (key) => {
-    set({ listSelectedRowKey: key });
-    await get().callDetailApi();
+  setListSelectedRowKey: async (key, detail) => {
+    set({ listSelectedRowKey: key, saveRequestValue: { ...detail }, detail });
   },
   callListApi: async (request) => {
     await set({ listSpinning: true });
@@ -105,9 +98,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
           values,
         })),
         listPage: {
-          currentPage: response.rs.pageNumber ?? 1,
-          pageSize: response.rs.pageSize ?? 0,
-          totalPages: response.rs.pgCount ?? 0,
+          currentPage: response.page.pageNumber ?? 1,
+          pageSize: response.page.pageSize ?? 0,
+          totalPages: response.page.pgCount ?? 0,
           totalElements: response.ds.length,
         },
       });
@@ -138,6 +131,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
     try {
       const apiParam = request ?? get().saveRequestValue;
+      if (!apiParam) return;
+      apiParam.__status__ = get().listSelectedRowKey ? "U" : "C";
+
       const response = await ExampleService.save(convertDateToString(apiParam));
 
       console.log(response);
@@ -145,19 +141,6 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       await errorDialog(e as any);
     } finally {
       await set({ saveSpinning: false });
-    }
-  },
-  callDetailApi: async (request) => {
-    await set({ detailSpinning: true });
-
-    try {
-      const data = await ExampleService.detail(request ?? { id: get().listSelectedRowKey });
-      console.log(data);
-      set({ detail: data.rs, saveRequestValue: data.rs });
-    } catch (err) {
-      await errorDialog(err as any);
-    } finally {
-      await set({ detailSpinning: false });
     }
   },
   cancelFormActive: () => {

@@ -134,13 +134,13 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     };
 
     try {
-      await ExampleService.save({
+      await ExampleService.childListSave({
         list: get().listAData.map(listDataCollector),
       });
-      await ExampleService.save({
+      await ExampleService.childListSave({
         list: get().listBData.map(listDataCollector),
       });
-      await ExampleService.save({
+      await ExampleService.childListSave({
         list: get().listCData.map(listDataCollector),
       });
     } catch (e) {

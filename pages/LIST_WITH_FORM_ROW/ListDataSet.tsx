@@ -15,7 +15,7 @@ function ListDataSet({}: Props) {
 
   const onClickItem = React.useCallback(
     (params: AXFDGClickParams<DtoItem>) => {
-      setListSelectedRowKey(params.item.id);
+      setListSelectedRowKey(params.item.id, params.item);
     },
     [setListSelectedRowKey]
   );

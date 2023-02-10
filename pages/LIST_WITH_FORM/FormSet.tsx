@@ -31,7 +31,7 @@ function FormSet({}: Props) {
   const cnsltHow = Form.useWatch("cnsltHow", form);
   const cnsltPath = Form.useWatch("cnsltPath", form);
 
-  const formInitialValues = {}; // form 의 초기값 reset해도 이값 으로 리셋됨
+  const formInitialValues = React.useRef({}).current; // form 의 초기값 reset해도 이값 으로 리셋됨
 
   const handleFindZipCode = React.useCallback(async () => {
     await openZipCodeFinder({
@@ -59,9 +59,9 @@ function FormSet({}: Props) {
     if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
       form.resetFields();
     } else {
-      form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
+      form.setFieldsValue(convertToDate({ ...formInitialValues, ...saveRequestValue }, ["cnsltDt", "birthDt"]));
     }
-  }, [saveRequestValue, form]);
+  }, [saveRequestValue, form, formInitialValues]);
 
   if (!formActive && !listSelectedRowKey) {
     return (
@@ -208,7 +208,7 @@ function FormSet({}: Props) {
                 <Form.Item label={t.formItem.example.birthDt.label}>
                   <Input.Group compact>
                     <Form.Item name={"birthDt"} noStyle rules={[{ required: true }]}>
-                      <DatePicker picker={"date"} />
+                      <DatePicker />
                     </Form.Item>
                     <Form.Item name={"age"} noStyle>
                       <Input

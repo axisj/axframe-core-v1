@@ -1,5 +1,10 @@
 import create from "zustand";
-import { ExampleItem, ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
+import {
+  ExampleItem,
+  ExampleListRequest,
+  ExampleSaveRequest,
+  ExampleSubItem,
+} from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGDataItemStatus, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
@@ -15,7 +20,7 @@ import { convertDateToString } from "@core/utils/object";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
 
 interface ListRequest extends ExampleListRequest {}
-interface SaveRequest extends ExampleItem {}
+interface SaveRequest extends ExampleSaveRequest {}
 interface DtoItem extends ExampleItem {}
 interface DtoSubItem extends ExampleSubItem {}
 
@@ -127,9 +132,9 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
           values,
         })),
         listPage: {
-          currentPage: response.rs.pageNumber ?? 1,
-          pageSize: response.rs.pageSize ?? 0,
-          totalPages: response.rs.pgCount ?? 0,
+          currentPage: response.page.pageNumber ?? 1,
+          pageSize: response.page.pageSize ?? 0,
+          totalPages: response.page.pgCount ?? 0,
           totalElements: response.ds.length,
         },
       });
@@ -170,6 +175,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
           };
           return { ...item.values, status: ITEM_STAT[item.status ?? AXFDGDataItemStatus.edit] };
         }),
+        __status__: get().listSelectedRowKey ? "U" : "C",
       };
 
       await ExampleService.save(convertDateToString(apiParam));
