@@ -66,6 +66,7 @@ interface Actions extends PageStoreActions<States> {
   setSubListCheckedIndexes: (indexes?: number[]) => void;
   addSubList: (list: DtoSubItem[]) => void;
   delSubList: (indexes: number[]) => void;
+  setSubListData: (list: AXFDGDataItem<DtoSubItem>[], reset?: boolean) => void;
 }
 
 // create states
@@ -102,17 +103,16 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
   setListSelectedRowKey: async (key, detail) => {
     const saveRequestValue = { ...omit(detail, ["subList"]) };
-    const subListData = detail?.subList?.map((values) => ({
-      values,
-    }));
+    const subListData =
+      detail?.subList?.map((values) => ({
+        values,
+      })) ?? [];
     set({
       listSelectedRowKey: key,
       saveRequestValue,
       detail,
-      subListData,
-      subListCheckedIndexes: [],
-      subListSelectedRowKey: undefined,
     });
+    get().setSubListData(subListData, true);
   },
   callListApi: async (request) => {
     await set({ listSpinning: true });
@@ -239,6 +239,17 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       .filter(Boolean) as AXFDGDataItem<ExampleSubItem>[];
 
     set({ subListData, subListCheckedIndexes: [] });
+  },
+  setSubListData: (list, reset) => {
+    if (reset) {
+      set({
+        subListCheckedIndexes: [],
+        subListSelectedRowKey: undefined,
+        subListData: list,
+      });
+    } else {
+      set({ subListData: list });
+    }
   },
 
   syncMetadata: (metaData) => {

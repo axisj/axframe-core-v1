@@ -48,7 +48,6 @@ function FormSet({}: Props) {
       <Frame style={{ flex: 2 - flexGrow }}>
         <EmptyMsg>
           <Button
-            size='small'
             onClick={() => {
               cancelFormActive();
               setFormActive();
