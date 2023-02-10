@@ -1,16 +1,24 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { ColResizer, ProgramTitle } from "@core/components/common";
+import { ProgramTitle } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
-import { Button, Form } from "antd";
+import { Button, Form, Tag } from "antd";
 
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { useI18n } from "@core/hooks";
 import { use$THREE_LIST$Store } from "./use$THREE_LIST$Store";
-import { IParam, SearchParams, SearchParamType } from "../../components/search";
-import { ListDataGrid } from "./ListDataGrid";
-import { SubListDataGrid } from "./SubListDataGrid";
+import { IParam, SearchParams, SearchParamType } from "@core/components/search";
+import { ListDataGridA } from "./ListDataGridA";
+import { ListDataGridB } from "./ListDataGridB";
+import { ListDataGridC } from "./ListDataGridC";
+import { AXFDGDataItemStatus } from "@axframe/datagrid";
+
+export const ITEM_STAT = {
+  [AXFDGDataItemStatus.new]: <Tag color='processing'>C</Tag>,
+  [AXFDGDataItemStatus.edit]: <Tag color='warning'>U</Tag>,
+  [AXFDGDataItemStatus.remove]: <Tag color='error'>D</Tag>,
+};
 
 interface Props {}
 
@@ -19,12 +27,10 @@ function App({}: Props) {
 
   const init = use$THREE_LIST$Store((s) => s.init);
   const reset = use$THREE_LIST$Store((s) => s.reset);
-  const setFlexGrow = use$THREE_LIST$Store((s) => s.setFlexGrow);
-  const listRequestValue = use$THREE_LIST$Store((s) => s.listRequestValue);
-  const setListRequestValue = use$THREE_LIST$Store((s) => s.setListRequestValue);
+  const requestValue = use$THREE_LIST$Store((s) => s.requestValue);
+  const setRequestValue = use$THREE_LIST$Store((s) => s.setRequestValue);
   const callListApi = use$THREE_LIST$Store((s) => s.callListApi);
-  const listSpinning = use$THREE_LIST$Store((s) => s.listSpinning);
-  const flexGrow = use$THREE_LIST$Store((s) => s.flexGrow);
+  const spinning = use$THREE_LIST$Store((s) => s.spinning);
 
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -95,20 +101,22 @@ function App({}: Props) {
         <SearchParams
           form={searchForm}
           params={params}
-          paramsValue={listRequestValue}
-          onChangeParamsValue={(value) => setListRequestValue(value)}
+          paramsValue={requestValue}
+          onChangeParamsValue={(value) => setRequestValue(value)}
           onSearch={handleSearch}
-          spinning={listSpinning}
+          spinning={spinning}
         />
       </PageSearchBar>
 
       <Body ref={resizerContainerRef}>
-        <Frame style={{ flex: flexGrow }}>
-          <ListDataGrid />
+        <Frame>
+          <ListDataGridA />
         </Frame>
-        <ColResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
-        <Frame style={{ flex: 2 - flexGrow }}>
-          <SubListDataGrid />
+        <Frame>
+          <ListDataGridB />
+        </Frame>
+        <Frame>
+          <ListDataGridC />
         </Frame>
       </Body>
     </Container>

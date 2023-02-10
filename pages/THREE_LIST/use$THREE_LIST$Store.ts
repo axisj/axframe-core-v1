@@ -1,8 +1,6 @@
 import create from "zustand";
-import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
-import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
-import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs/errorDialog";
+import { ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
+import { AXFDGDataItem } from "@axframe/datagrid";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -11,176 +9,225 @@ import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
+import { ExampleService } from "services";
+import { errorDialog } from "@core/components/dialogs";
+import { addDataGridList } from "../../utils/array/addDataGridList";
+import { delDataGridList } from "../../utils/array/delDataGridList";
 
-interface ListRequest extends ExampleListRequest {}
-interface SubListRequest {}
-interface DtoItem extends ExampleItem {}
+interface Request extends ExampleListRequest {}
+
+interface DtoItem extends ExampleSubItem {}
+
+export type ListType = "A" | "B" | "C";
 
 interface MetaData {
-  listRequestValue: ListRequest;
-  listColWidths: number[];
-  listSortParams: AXFDGSortParam[];
-  listSelectedRowKey?: React.Key;
-  flexGrow: number;
-  subListRequestValue: SubListRequest;
-  subListColWidths: number[];
-  subListSortParams: AXFDGSortParam[];
+  requestValue: Request;
+
+  listAColWidths: number[];
+  listASelectedRowKey?: React.Key;
+  listACheckedIndexes?: number[];
+
+  listBColWidths: number[];
+  listBSelectedRowKey?: React.Key;
+  listBCheckedIndexes?: number[];
+
+  listCColWidths: number[];
+  listCSelectedRowKey?: React.Key;
+  listCCheckedIndexes?: number[];
 }
 
 interface States extends MetaData {
   routePath: string; // initialized Store;
-  listSpinning: boolean;
-  listData: AXFDGDataItem<DtoItem>[];
-  listPage: AXFDGPage;
-  subListSpinning: boolean;
-  subListData: AXFDGDataItem<DtoItem>[];
-  subListPage: AXFDGPage;
+  spinning: boolean;
+
+  listAData: AXFDGDataItem<DtoItem>[];
+  listBData: AXFDGDataItem<DtoItem>[];
+  listCData: AXFDGDataItem<DtoItem>[];
 }
 
 interface Actions extends PageStoreActions<States> {
-  setListRequestValue: (requestValue: ListRequest) => void;
-  setListColWidths: (colWidths: number[]) => void;
-  setListSpinning: (spinning: boolean) => void;
-  setListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  setListSelectedRowKey: (key?: React.Key) => void;
-  callListApi: (request?: ListRequest) => Promise<void>;
-  changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
-  setFlexGrow: (flexGlow: number) => void;
+  setRequestValue: (requestValue: Request) => void;
+  callListApi: (request?: Request) => Promise<void>;
+  callSaveApi: () => Promise<void>;
+  setSpinning: (spinning: boolean) => void;
 
-  setSubListRequestValue: (requestValue: ListRequest) => void;
-  setSubListColWidths: (colWidths: number[]) => void;
-  setSubListSpinning: (spinning: boolean) => void;
-  setSubListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  callSubListApi: (request?: ListRequest) => Promise<void>;
-  changeSubListPage: (currentPage: number, pageSize?: number) => Promise<void>;
+  setListAColWidths: (colWidths: number[]) => void;
+  setListASelectedRowKey: (key?: React.Key) => void;
+  setListACheckedIndexes: (indexes?: number[]) => void;
+  setListBColWidths: (colWidths: number[]) => void;
+  setListBSelectedRowKey: (key?: React.Key) => void;
+  setListBCheckedIndexes: (indexes?: number[]) => void;
+  setListCColWidths: (colWidths: number[]) => void;
+  setListCSelectedRowKey: (key?: React.Key) => void;
+  setListCCheckedIndexes: (indexes?: number[]) => void;
+
+  addListAData: (list: DtoItem[]) => void;
+  delListAData: (indexes: number[]) => void;
+  setListAData: (list: AXFDGDataItem<DtoItem>[], reset?: boolean) => void;
+  addListBData: (list: DtoItem[]) => void;
+  delListBData: (indexes: number[]) => void;
+  setListBData: (list: AXFDGDataItem<DtoItem>[], reset?: boolean) => void;
+  addListCData: (list: DtoItem[]) => void;
+  delListCData: (indexes: number[]) => void;
+  setListCData: (list: AXFDGDataItem<DtoItem>[], reset?: boolean) => void;
 }
 
 // create states
 const createState: States = {
-  routePath: ROUTES.EXAMPLES.children.LIST_WITH_LIST.path,
-  listRequestValue: {
-    pageNumber: 1,
-    pageSize: 100,
-  },
-  listColWidths: [],
-  listSpinning: false,
-  listData: [],
-  listPage: {
-    currentPage: 0,
-    totalPages: 0,
-  },
-  listSortParams: [],
-  listSelectedRowKey: "",
-  flexGrow: 1,
-  subListRequestValue: { pageNumber: 1, pageSize: 100 },
-  subListColWidths: [],
-  subListSpinning: false,
-  subListData: [],
-  subListPage: {
-    currentPage: 0,
-    totalPages: 0,
-  },
-  subListSortParams: [],
+  routePath: ROUTES.EXAMPLES.children.THREE_LIST.path,
+  requestValue: {},
+  spinning: false,
+
+  listAColWidths: [],
+  listASelectedRowKey: "",
+  listACheckedIndexes: [],
+  listAData: [],
+  listBColWidths: [],
+  listBSelectedRowKey: "",
+  listBCheckedIndexes: [],
+  listBData: [],
+  listCColWidths: [],
+  listCSelectedRowKey: "",
+  listCCheckedIndexes: [],
+  listCData: [],
 };
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
-  setListRequestValue: (requestValues) => {
-    set({ listRequestValue: requestValues });
+  setRequestValue: (requestValue) => {
+    set({ requestValue: requestValue });
   },
-  setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
-  setListSpinning: (spinning) => set({ listSpinning: spinning }),
-  setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
-  setListSelectedRowKey: (key) => {
-    set({ listSelectedRowKey: key, subListRequestValue: { ...get().subListRequestValue, pid: key } });
+  setSpinning: (spinning) => {
+    set({ spinning: spinning });
   },
-  callListApi: async (request) => {
-    await set({ listSpinning: true });
+  callListApi: async () => {
+    await set({ spinning: true });
 
     try {
-      const apiParam = request ?? get().listRequestValue;
+      const apiParam = get().requestValue;
       const response = await ExampleService.list(apiParam);
 
       set({
-        listData: response.ds.map((values) => ({
+        listAData: response.ds.map((values) => ({
           values,
         })),
-        listPage: {
-          currentPage: response.rs.pageNumber ?? 1,
-          pageSize: response.rs.pageSize ?? 0,
-          totalPages: response.rs.pgCount ?? 0,
-          totalElements: response.ds.length,
-        },
       });
     } catch (e) {
       await errorDialog(e as any);
     } finally {
-      await set({ listSpinning: false });
+      await set({ spinning: false });
     }
   },
-  changeListPage: async (pageNumber, pageSize) => {
-    const requestValues = {
-      ...get().listRequestValue,
-      pageNumber,
-      pageSize,
-    };
-    set({ listRequestValue: requestValues });
-    await get().callListApi();
-  },
-  setFlexGrow: (flexGlow) => {
-    set({ flexGrow: flexGlow });
-  },
-
-  setSubListRequestValue: (requestValues) => {
-    set({ subListRequestValue: requestValues });
-  },
-  setSubListColWidths: (colWidths) => set({ subListColWidths: colWidths }),
-  setSubListSpinning: (spinning) => set({ subListSpinning: spinning }),
-  setSubListSortParams: (sortParams) => set({ subListSortParams: sortParams }),
-  callSubListApi: async (request) => {
-    await set({ subListSpinning: true });
+  callSaveApi: async () => {
+    await set({ spinning: true });
 
     try {
-      const apiParam = request ?? get().subListRequestValue;
-      const response = await ExampleService.subList(apiParam);
-
-      set({
-        subListData: response.ds.map((values) => ({
-          values,
-        })),
-        subListPage: {
-          currentPage: response.rs.pageNumber ?? 1,
-          pageSize: response.rs.pageSize ?? 0,
-          totalPages: response.rs.pgCount ?? 0,
-          totalElements: response.ds.length,
-        },
-      });
+      await ExampleService.save({});
     } catch (e) {
       await errorDialog(e as any);
     } finally {
-      await set({ subListSpinning: false });
+      await set({ spinning: false });
     }
   },
-  changeSubListPage: async (pageNumber, pageSize) => {
-    const requestValues = {
-      ...get().subListRequestValue,
-      pageNumber,
-      pageSize,
-    };
-    set({ subListRequestValue: requestValues });
-    await get().callSubListApi();
+
+  setListAColWidths: (colWidths) => {
+    set({ listAColWidths: colWidths });
+  },
+  setListASelectedRowKey: (key) => {
+    set({ listASelectedRowKey: key });
+  },
+  setListACheckedIndexes: (indexes) => {
+    set({ listACheckedIndexes: indexes });
+  },
+  setListBColWidths: (colWidths) => {
+    set({ listBColWidths: colWidths });
+  },
+  setListBSelectedRowKey: (key) => {
+    set({ listBSelectedRowKey: key });
+  },
+  setListBCheckedIndexes: (indexes) => {
+    set({ listBCheckedIndexes: indexes });
+  },
+  setListCColWidths: (colWidths) => {
+    set({ listCColWidths: colWidths });
+  },
+  setListCSelectedRowKey: (key) => {
+    set({ listCSelectedRowKey: key });
+  },
+  setListCCheckedIndexes: (indexes) => {
+    set({ listCCheckedIndexes: indexes });
+  },
+
+  addListAData: (list) => {
+    const listAData = addDataGridList<DtoItem>(get().listAData ?? [], list);
+    set({ listAData: [...listAData] });
+  },
+  delListAData: (indexes) => {
+    const listAData = delDataGridList(get().listAData ?? [], indexes);
+    set({ listAData: [...listAData], listACheckedIndexes: [] });
+  },
+  setListAData: (list, reset) => {
+    if (reset) {
+      set({
+        listACheckedIndexes: [],
+        listASelectedRowKey: undefined,
+        listAData: list,
+      });
+    } else {
+      set({ listAData: list });
+    }
+  },
+  addListBData: (list) => {
+    const listBData = addDataGridList<DtoItem>(get().listBData ?? [], list);
+    set({ listBData: [...listBData] });
+  },
+  delListBData: (indexes) => {
+    const listBData = delDataGridList(get().listBData ?? [], indexes);
+    set({ listBData: [...listBData], listBCheckedIndexes: [] });
+  },
+  setListBData: (list, reset) => {
+    if (reset) {
+      set({
+        listBCheckedIndexes: [],
+        listBSelectedRowKey: undefined,
+        listBData: list,
+      });
+    } else {
+      set({ listBData: list });
+    }
+  },
+  addListCData: (list) => {
+    const listCData = addDataGridList<DtoItem>(get().listCData ?? [], list);
+    set({ listCData: [...listCData] });
+  },
+  delListCData: (indexes) => {
+    const listCData = delDataGridList(get().listCData ?? [], indexes);
+    set({ listCData: [...listCData], listCCheckedIndexes: [] });
+  },
+  setListCData: (list, reset) => {
+    if (reset) {
+      set({
+        listCCheckedIndexes: [],
+        listCSelectedRowKey: undefined,
+        listCData: list,
+      });
+    } else {
+      set({ listCData: list });
+    }
   },
 
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
-      "listSortParams",
-      "listRequestValue",
-      "listColWidths",
-      "flexGrow",
-      "subListRequestValue",
-      "listSelectedRowKey",
-      "subListSortParams",
-      "subListColWidths",
+      "requestValue",
+      "listAColWidths",
+      "listASelectedRowKey",
+      "listACheckedIndexes",
+      "listBColWidths",
+      "listBSelectedRowKey",
+      "listBCheckedIndexes",
+      "listCColWidths",
+      "listCSelectedRowKey",
+      "listCCheckedIndexes",
     ];
     set(pick(metaData ?? createState, metaDataKeys));
   },
@@ -200,47 +247,41 @@ export const use$THREE_LIST$Store = create(
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$THREE_LIST$Store.subscribe(
   (s) => [
-    s.listSortParams,
-    s.listRequestValue,
-    s.listColWidths,
-    s.flexGrow,
-    s.subListSortParams,
-    s.subListRequestValue,
-    s.subListColWidths,
-    s.listSelectedRowKey,
+    s.requestValue,
+    s.listAColWidths,
+    s.listASelectedRowKey,
+    s.listACheckedIndexes,
+    s.listBColWidths,
+    s.listBSelectedRowKey,
+    s.listBCheckedIndexes,
+    s.listCColWidths,
+    s.listCSelectedRowKey,
+    s.listCCheckedIndexes,
   ],
   ([
-    listSortParams,
-    listRequestValue,
-    listColWidths,
-    flexGrow,
-    subListSortParams,
-    subListRequestValue,
-    subListColWidths,
-    listSelectedRowKey,
+    requestValue,
+    listAColWidths,
+    listASelectedRowKey,
+    listACheckedIndexes,
+    listBColWidths,
+    listBSelectedRowKey,
+    listBCheckedIndexes,
+    listCColWidths,
+    listCSelectedRowKey,
+    listCCheckedIndexes,
   ]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
-      listSortParams,
-      listRequestValue,
-      listColWidths,
-      flexGrow,
-      subListSortParams,
-      subListRequestValue,
-      subListColWidths,
-      listSelectedRowKey,
+      requestValue,
+      listAColWidths,
+      listASelectedRowKey,
+      listACheckedIndexes,
+      listBColWidths,
+      listBSelectedRowKey,
+      listBCheckedIndexes,
+      listCColWidths,
+      listCSelectedRowKey,
+      listCCheckedIndexes,
     });
-  },
-  { equalityFn: shallow }
-);
-
-use$THREE_LIST$Store.subscribe(
-  (s) => [s.listSelectedRowKey],
-  ([listSelectedRowKey]) => {
-    if (listSelectedRowKey) {
-      use$THREE_LIST$Store.getState().callSubListApi();
-    } else {
-      // clear
-    }
   },
   { equalityFn: shallow }
 );

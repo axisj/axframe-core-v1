@@ -12,6 +12,8 @@ import React from "react";
 import { ROUTES } from "router/Routes";
 import { omit, pick } from "lodash";
 import { convertDateToString } from "@core/utils/object";
+import { addDataGridList } from "../../utils/array/addDataGridList";
+import { delDataGridList } from "../../utils/array/delDataGridList";
 
 interface ListRequest extends ExampleListRequest {}
 interface SaveRequest extends ExampleItem {}
@@ -206,39 +208,12 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set({ subListCheckedIndexes: indexes });
   },
   addSubList: (list) => {
-    const subList = get().subListData ?? [];
-
-    if (!subList) return;
-    const _list = list.map((n) => ({
-      status: AXFDGDataItemStatus.new,
-      values: n,
-    }));
-
-    subList.push(..._list);
-
-    set({ subListData: [...subList] });
+    const listData = addDataGridList<DtoItem>(get().subListData ?? [], list);
+    set({ subListData: [...listData] });
   },
   delSubList: (indexes) => {
-    const subList = get().subListData;
-
-    if (!subList) return;
-    const subListData = subList
-      .map((item, index) => {
-        if (indexes.includes(index)) {
-          if (item.status === AXFDGDataItemStatus.new) {
-            return false;
-          }
-          return {
-            ...item,
-            status: AXFDGDataItemStatus.remove,
-          };
-        }
-
-        return item;
-      })
-      .filter(Boolean) as AXFDGDataItem<ExampleSubItem>[];
-
-    set({ subListData, subListCheckedIndexes: [] });
+    const listData = delDataGridList(get().subListData ?? [], indexes);
+    set({ subListData: [...listData], subListCheckedIndexes: [] });
   },
   setSubListData: (list, reset) => {
     if (reset) {
