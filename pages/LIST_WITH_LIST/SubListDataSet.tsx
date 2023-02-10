@@ -2,11 +2,11 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
 import { AXFDGClickParams } from "@axframe/datagrid";
-import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
 import { SubListDataGrid } from "./SubListDataGrid";
 import { PageLayout } from "styles/pageStyled";
 
-interface DtoItem extends ExampleItem {}
+interface DtoItem extends ExampleSubItem {}
 
 interface Props {}
 

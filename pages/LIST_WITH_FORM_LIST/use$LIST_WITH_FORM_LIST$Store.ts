@@ -12,8 +12,7 @@ import React from "react";
 import { ROUTES } from "router/Routes";
 import { omit, pick } from "lodash";
 import { convertDateToString } from "@core/utils/object";
-import { addDataGridList } from "../../utils/array/addDataGridList";
-import { delDataGridList } from "../../utils/array/delDataGridList";
+import { addDataGridList, delDataGridList } from "@core/utils/array";
 
 interface ListRequest extends ExampleListRequest {}
 interface SaveRequest extends ExampleItem {}
@@ -208,7 +207,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set({ subListCheckedIndexes: indexes });
   },
   addSubList: (list) => {
-    const listData = addDataGridList<DtoItem>(get().subListData ?? [], list);
+    const listData = addDataGridList<DtoSubItem>(get().subListData ?? [], list);
     set({ subListData: [...listData] });
   },
   delSubList: (indexes) => {

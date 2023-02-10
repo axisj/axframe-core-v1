@@ -1,12 +1,12 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { ExampleItem, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
 import { DataGrid } from "@core/components/DataGrid";
 import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
 import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
 
-interface DtoItem extends ExampleItem {}
+interface DtoItem extends ExampleSubItem {}
 
 interface Props {
   onClick: AXFDGProps<DtoItem>["onClick"];
@@ -16,11 +16,9 @@ function SubListDataGrid({ onClick }: Props) {
   const listColWidths = use$LIST_WITH_LIST$Store((s) => s.subListColWidths);
   const listSortParams = use$LIST_WITH_LIST$Store((s) => s.subListSortParams);
   const listData = use$LIST_WITH_LIST$Store((s) => s.subListData);
-  const listPage = use$LIST_WITH_LIST$Store((s) => s.subListPage);
   const listSpinning = use$LIST_WITH_LIST$Store((s) => s.subListSpinning);
   const setListColWidths = use$LIST_WITH_LIST$Store((s) => s.setSubListColWidths);
   const setListSortParams = use$LIST_WITH_LIST$Store((s) => s.setSubListSortParams);
-  const changeListPage = use$LIST_WITH_LIST$Store((s) => s.changeSubListPage);
 
   const { t } = useI18n();
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -63,13 +61,6 @@ function SubListDataGrid({ onClick }: Props) {
         data={listData}
         spinning={listSpinning}
         onClick={onClick}
-        page={{
-          ...listPage,
-          loading: false,
-          onChange: async (currentPage, pageSize) => {
-            await changeListPage(currentPage, pageSize);
-          },
-        }}
         sort={{
           sortParams: listSortParams,
           onChange: setListSortParams,

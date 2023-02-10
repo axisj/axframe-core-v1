@@ -8,7 +8,7 @@ import { use$THREE_LIST$Store } from "./use$THREE_LIST$Store";
 import { Button } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { getSelectEditor, InputEditor } from "components/dataGridEditor";
-import { ITEM_STAT } from "./App";
+import { ITEM_STAT } from "./Types";
 
 interface DtoItem extends ExampleSubItem {}
 interface Props {

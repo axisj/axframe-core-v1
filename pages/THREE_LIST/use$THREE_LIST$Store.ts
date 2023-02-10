@@ -1,6 +1,6 @@
 import create from "zustand";
 import { ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
-import { AXFDGDataItem } from "@axframe/datagrid";
+import { AXFDGDataItem, AXFDGDataItemStatus } from "@axframe/datagrid";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -11,14 +11,11 @@ import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs";
-import { addDataGridList } from "../../utils/array/addDataGridList";
-import { delDataGridList } from "../../utils/array/delDataGridList";
+import { addDataGridList, delDataGridList } from "@core/utils/array";
 
 interface Request extends ExampleListRequest {}
 
 interface DtoItem extends ExampleSubItem {}
-
-export type ListType = "A" | "B" | "C";
 
 interface MetaData {
   requestValue: Request;
@@ -105,10 +102,16 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
     try {
       const apiParam = get().requestValue;
-      const response = await ExampleService.list(apiParam);
+      const response = await ExampleService.childList(apiParam);
 
       set({
         listAData: response.ds.map((values) => ({
+          values,
+        })),
+        listBData: response.ds.map((values) => ({
+          values,
+        })),
+        listCData: response.ds.map((values) => ({
           values,
         })),
       });
@@ -121,8 +124,25 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   callSaveApi: async () => {
     await set({ spinning: true });
 
+    const listDataCollector = (item) => {
+      const ITEM_STAT = {
+        [AXFDGDataItemStatus.new]: "C",
+        [AXFDGDataItemStatus.edit]: "U",
+        [AXFDGDataItemStatus.remove]: "D",
+      };
+      return { ...item.values, status: ITEM_STAT[item.status ?? AXFDGDataItemStatus.edit] };
+    };
+
     try {
-      await ExampleService.save({});
+      await ExampleService.save({
+        list: get().listAData.map(listDataCollector),
+      });
+      await ExampleService.save({
+        list: get().listBData.map(listDataCollector),
+      });
+      await ExampleService.save({
+        list: get().listCData.map(listDataCollector),
+      });
     } catch (e) {
       await errorDialog(e as any);
     } finally {

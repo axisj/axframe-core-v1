@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { ExampleItem, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { DataGrid } from "@core/components/DataGrid";
 import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
@@ -50,7 +50,7 @@ function ListDataGrid({ onClick }: Props) {
           { key: "fldA", label: t.datagrid.수급, align: "left", width: 100 },
           { key: "hopePoint", label: t.datagrid.주요욕구, align: "left", width: 150 },
           { key: "updatedByNm", label: t.datagrid.상담원, align: "left", width: 120 },
-        ] as AXFDGColumn<ExampleSubItem>[]
+        ] as AXFDGColumn<DtoItem>[]
       ).map((column, colIndex) => {
         if (listColWidths.length > 0) {
           column.width = listColWidths[colIndex];

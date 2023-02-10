@@ -1,5 +1,5 @@
 import { delay } from "@core/utils/thread/timing";
-import { ExampleRepositoryInterface } from "./ExampleRepositoryInterface";
+import { ExampleChildListResponse, ExampleRepositoryInterface } from "./ExampleRepositoryInterface";
 
 export class ExampleRepositoryMock extends ExampleRepositoryInterface {
   async list(params) {
@@ -5584,32 +5584,26 @@ export class ExampleRepositoryMock extends ExampleRepositoryInterface {
     };
   }
 
-  async subList(params) {
+  async childList(params): Promise<ExampleChildListResponse> {
     console.log("SubListRequest", params);
     await delay(300);
     return {
-      result: "00",
-      msg: "",
       ds: [
         {
           pid: params.pid,
-          id: 1,
+          code: "CODE1",
           name: "*TEM 1",
           type: "NORMAL",
+          useYn: "Y",
         },
         {
           pid: params.pid,
-          id: 2,
+          code: "CODE2",
           name: "*TEM 2",
           type: "NORMAL",
+          useYn: "Y",
         },
       ],
-      rs: {
-        pgCount: 3,
-        total: 100,
-        pageNumber: params.pageNumber ?? 0,
-        pageSize: params.pageSize ?? 0,
-      },
     };
   }
 }

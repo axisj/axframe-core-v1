@@ -1,5 +1,5 @@
 import create from "zustand";
-import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleItem, ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
@@ -15,6 +15,7 @@ import { pick } from "lodash";
 interface ListRequest extends ExampleListRequest {}
 interface SubListRequest {}
 interface DtoItem extends ExampleItem {}
+interface SubDtoItem extends ExampleSubItem {}
 
 interface MetaData {
   listRequestValue: ListRequest;
@@ -33,8 +34,7 @@ interface States extends MetaData {
   listData: AXFDGDataItem<DtoItem>[];
   listPage: AXFDGPage;
   subListSpinning: boolean;
-  subListData: AXFDGDataItem<DtoItem>[];
-  subListPage: AXFDGPage;
+  subListData: AXFDGDataItem<SubDtoItem>[];
 }
 
 interface Actions extends PageStoreActions<States> {
@@ -52,7 +52,6 @@ interface Actions extends PageStoreActions<States> {
   setSubListSpinning: (spinning: boolean) => void;
   setSubListSortParams: (sortParams: AXFDGSortParam[]) => void;
   callSubListApi: (request?: ListRequest) => Promise<void>;
-  changeSubListPage: (currentPage: number, pageSize?: number) => Promise<void>;
 }
 
 // create states
@@ -76,10 +75,6 @@ const createState: States = {
   subListColWidths: [],
   subListSpinning: false,
   subListData: [],
-  subListPage: {
-    currentPage: 0,
-    totalPages: 0,
-  },
   subListSortParams: [],
 };
 
@@ -142,18 +137,12 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
     try {
       const apiParam = request ?? get().subListRequestValue;
-      const response = await ExampleService.subList(apiParam);
+      const response = await ExampleService.childList(apiParam);
 
       set({
         subListData: response.ds.map((values) => ({
           values,
         })),
-        subListPage: {
-          currentPage: response.rs.pageNumber ?? 1,
-          pageSize: response.rs.pageSize ?? 0,
-          totalPages: response.rs.pgCount ?? 0,
-          totalElements: response.ds.length,
-        },
       });
     } catch (e) {
       await errorDialog(e as any);

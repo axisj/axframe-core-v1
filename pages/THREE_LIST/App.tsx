@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import { ProgramTitle } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
-import { Button, Form, Tag } from "antd";
+import { Button, Form } from "antd";
 
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
@@ -12,13 +12,6 @@ import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGridA } from "./ListDataGridA";
 import { ListDataGridB } from "./ListDataGridB";
 import { ListDataGridC } from "./ListDataGridC";
-import { AXFDGDataItemStatus } from "@axframe/datagrid";
-
-export const ITEM_STAT = {
-  [AXFDGDataItemStatus.new]: <Tag color='processing'>C</Tag>,
-  [AXFDGDataItemStatus.edit]: <Tag color='warning'>U</Tag>,
-  [AXFDGDataItemStatus.remove]: <Tag color='error'>D</Tag>,
-};
 
 interface Props {}
 
@@ -30,6 +23,7 @@ function App({}: Props) {
   const requestValue = use$THREE_LIST$Store((s) => s.requestValue);
   const setRequestValue = use$THREE_LIST$Store((s) => s.setRequestValue);
   const callListApi = use$THREE_LIST$Store((s) => s.callListApi);
+  const callSaveApi = use$THREE_LIST$Store((s) => s.callSaveApi);
   const spinning = use$THREE_LIST$Store((s) => s.spinning);
 
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
@@ -91,7 +85,12 @@ function App({}: Props) {
           >
             {t.button.search}
           </Button>
-          <Button type={"primary"} onClick={() => {}}>
+          <Button
+            type={"primary"}
+            onClick={() => {
+              callSaveApi();
+            }}
+          >
             {t.button.save}
           </Button>
         </ButtonGroup>

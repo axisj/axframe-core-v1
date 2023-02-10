@@ -3,7 +3,10 @@ import { ApiPageResponse } from "../../../@types";
 
 export interface ExampleSubItem {
   status?: string;
+  pid?: string;
+  id?: string;
   code?: string;
+  name?: string;
   type?: string;
   useYn?: string;
 }
@@ -86,27 +89,17 @@ export interface ExampleDetailResponse {
   rs: ExampleItem;
 }
 
-export interface ExampleSubItem {
+export interface ExampleChildListRequest {
   pid?: number;
-  id?: number;
-  name?: string;
-  type?: string;
 }
 
-export interface ExampleSubListRequest {
-  pid?: number;
-  pageSize?: number;
-  pageNumber?: number;
-}
-
-export interface ExampleSubListResponse {
+export interface ExampleChildListResponse {
   ds: ExampleSubItem[];
-  rs: ApiPageResponse;
 }
 
 export abstract class ExampleRepositoryInterface {
   abstract list(params: ExampleListRequest): Promise<ExampleListResponse>;
   abstract save(params: ExampleSaveRequest): Promise<ExampleSaveResponse>;
   abstract detail(params: ExampleDetailRequest): Promise<ExampleDetailResponse>;
-  abstract subList(params: ExampleSubListRequest): Promise<ExampleSubListResponse>;
+  abstract childList(params: ExampleChildListRequest): Promise<ExampleChildListResponse>;
 }
