@@ -98,13 +98,13 @@ function ListDataGridA({ onClick }: Props) {
 
   return (
     <>
-      <FormBoxHeader>
+      <Header>
         <div>LIST</div>
         <ButtonGroup compact>
           <Button onClick={handleAddSubItem}>{t.button.addNew}</Button>
           <Button onClick={handleDelSubItem}>{t.button.del}</Button>
         </ButtonGroup>
-      </FormBoxHeader>
+      </Header>
 
       <Container ref={containerRef}>
         <DataGrid<DtoItem>
@@ -135,7 +135,7 @@ function ListDataGridA({ onClick }: Props) {
 const Container = styled.div`
   flex: 1;
 `;
-const FormBoxHeader = styled(PageLayout.ContentBoxHeader)``;
+const Header = styled(PageLayout.FrameHeader)``;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
 
 export { ListDataGridA };

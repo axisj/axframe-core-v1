@@ -1,6 +1,6 @@
 import create from "zustand";
 import { ExampleItem, ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
-import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
+import { AXFDGDataItem, AXFDGDataItemStatus, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
@@ -11,89 +11,84 @@ import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
+import { addDataGridList, delDataGridList } from "@core/utils/array";
 
 interface ListRequest extends ExampleListRequest {}
-interface SubListRequest {}
 interface DtoItem extends ExampleItem {}
 interface SubDtoItem extends ExampleSubItem {}
 
 interface MetaData {
-  listRequestValue: ListRequest;
+  requestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
   listSelectedRowKey?: React.Key;
   flexGrow: number;
-  subListRequestValue: SubListRequest;
-  subListColWidths: number[];
-  subListSortParams: AXFDGSortParam[];
+  childListColWidths: number[];
+  childListSelectedRowKey?: React.Key;
+  childListCheckedIndexes?: number[];
+  childListData: AXFDGDataItem<SubDtoItem>[];
 }
 
 interface States extends MetaData {
   routePath: string; // initialized Store;
-  listSpinning: boolean;
+  spinning: boolean;
   listData: AXFDGDataItem<DtoItem>[];
   listPage: AXFDGPage;
-  subListSpinning: boolean;
-  subListData: AXFDGDataItem<SubDtoItem>[];
 }
 
 interface Actions extends PageStoreActions<States> {
-  setListRequestValue: (requestValue: ListRequest) => void;
-  setListColWidths: (colWidths: number[]) => void;
-  setListSpinning: (spinning: boolean) => void;
-  setListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  setListSelectedRowKey: (key?: React.Key) => void;
   callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
+  callSaveApi: () => Promise<void>;
+  setSpinning: (spinning: boolean) => void;
+
+  setRequestValue: (requestValue: ListRequest) => void;
+  setListColWidths: (colWidths: number[]) => void;
+  setListSortParams: (sortParams: AXFDGSortParam[]) => void;
+  setListSelectedRowKey: (key: React.Key, detail: DtoItem) => void;
   setFlexGrow: (flexGlow: number) => void;
 
-  setSubListRequestValue: (requestValue: ListRequest) => void;
-  setSubListColWidths: (colWidths: number[]) => void;
-  setSubListSpinning: (spinning: boolean) => void;
-  setSubListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  callSubListApi: (request?: ListRequest) => Promise<void>;
+  setChildListColWidths: (colWidths: number[]) => void;
+  setChildListSelectedRowKey: (key?: React.Key) => void;
+  setChildListCheckedIndexes: (indexes?: number[]) => void;
+
+  addChildListData: (list: SubDtoItem[]) => void;
+  delChildListData: (indexes: number[]) => void;
+  setChildListData: (list: AXFDGDataItem<SubDtoItem>[], reset?: boolean) => void;
 }
 
 // create states
 const createState: States = {
   routePath: ROUTES.EXAMPLES.children.LIST_WITH_LIST.path,
-  listRequestValue: {
+  requestValue: {
     pageNumber: 1,
     pageSize: 100,
   },
   listColWidths: [],
-  listSpinning: false,
+  listSortParams: [],
+  listSelectedRowKey: undefined,
+  flexGrow: 1,
+
+  spinning: false,
   listData: [],
   listPage: {
     currentPage: 0,
     totalPages: 0,
   },
-  listSortParams: [],
-  listSelectedRowKey: "",
-  flexGrow: 1,
-  subListRequestValue: { pageNumber: 1, pageSize: 100 },
-  subListColWidths: [],
-  subListSpinning: false,
-  subListData: [],
-  subListSortParams: [],
+
+  childListColWidths: [],
+  childListSelectedRowKey: undefined,
+  childListCheckedIndexes: [],
+  childListData: [],
 };
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
-  setListRequestValue: (requestValues) => {
-    set({ listRequestValue: requestValues });
-  },
-  setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
-  setListSpinning: (spinning) => set({ listSpinning: spinning }),
-  setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
-  setListSelectedRowKey: (key) => {
-    set({ listSelectedRowKey: key, subListRequestValue: { ...get().subListRequestValue, pid: key } });
-  },
   callListApi: async (request) => {
-    await set({ listSpinning: true });
+    await set({ spinning: true });
 
     try {
-      const apiParam = request ?? get().listRequestValue;
+      const apiParam = request ?? get().requestValue;
       const response = await ExampleService.list(apiParam);
 
       set({
@@ -110,66 +105,96 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     } catch (e) {
       await errorDialog(e as any);
     } finally {
-      await set({ listSpinning: false });
+      await set({ spinning: false });
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
     const requestValues = {
-      ...get().listRequestValue,
+      ...get().requestValue,
       pageNumber,
       pageSize,
     };
-    set({ listRequestValue: requestValues });
+    set({ requestValue: requestValues });
     await get().callListApi();
   },
-  setFlexGrow: (flexGlow) => {
-    set({ flexGrow: flexGlow });
-  },
+  callSaveApi: async () => {
+    await set({ spinning: true });
 
-  setSubListRequestValue: (requestValues) => {
-    set({ subListRequestValue: requestValues });
-  },
-  setSubListColWidths: (colWidths) => set({ subListColWidths: colWidths }),
-  setSubListSpinning: (spinning) => set({ subListSpinning: spinning }),
-  setSubListSortParams: (sortParams) => set({ subListSortParams: sortParams }),
-  callSubListApi: async (request) => {
-    await set({ subListSpinning: true });
+    const listDataCollector = (item) => {
+      const ITEM_STAT = {
+        [AXFDGDataItemStatus.new]: "C",
+        [AXFDGDataItemStatus.edit]: "U",
+        [AXFDGDataItemStatus.remove]: "D",
+      };
+      return { ...item.values, status: ITEM_STAT[item.status ?? AXFDGDataItemStatus.edit] };
+    };
 
     try {
-      const apiParam = request ?? get().subListRequestValue;
-      const response = await ExampleService.childList(apiParam);
+      await ExampleService.childListSave({
+        list: get().childListData.map(listDataCollector),
+      });
+      await get().callListApi();
 
+      // 저장된 새로운 데이터를 받는 과정 연결 필요. 샘플에서는 childListData 를 다시 초기화 하는 것을 예시로 보여줌
       set({
-        subListData: response.ds.map((values) => ({
-          values,
+        childListData: get().childListData.map((item) => ({
+          values: item.values,
         })),
       });
     } catch (e) {
       await errorDialog(e as any);
     } finally {
-      await set({ subListSpinning: false });
+      await set({ spinning: false });
     }
   },
-  changeSubListPage: async (pageNumber, pageSize) => {
-    const requestValues = {
-      ...get().subListRequestValue,
-      pageNumber,
-      pageSize,
-    };
-    set({ subListRequestValue: requestValues });
-    await get().callSubListApi();
+  setSpinning: (spinning) => set({ spinning }),
+  setRequestValue: (requestValues) => set({ requestValue: requestValues }),
+  setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
+  setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
+  setListSelectedRowKey: (key, detail) => {
+    const childListData =
+      detail.subList?.map((values) => ({
+        values,
+      })) ?? [];
+
+    set({ listSelectedRowKey: key, childListData, childListSelectedRowKey: "", childListCheckedIndexes: [] });
+  },
+  setFlexGrow: (flexGlow) => set({ flexGrow: flexGlow }),
+
+  setChildListColWidths: (colWidths) => set({ childListColWidths: colWidths }),
+  setChildListSelectedRowKey: (key) => set({ childListSelectedRowKey: key }),
+  setChildListCheckedIndexes: (indexes) => set({ childListCheckedIndexes: indexes }),
+  addChildListData: (list) => {
+    const listAData = addDataGridList<SubDtoItem>(get().childListData ?? [], list);
+    set({ childListData: [...listAData] });
+  },
+  delChildListData: (indexes) => {
+    const listData = delDataGridList(get().childListData ?? [], indexes);
+    set({ childListData: [...listData], childListCheckedIndexes: [] });
+  },
+  setChildListData: (list, reset) => {
+    if (reset) {
+      set({
+        childListCheckedIndexes: [],
+        childListSelectedRowKey: undefined,
+        childListData: list,
+      });
+    } else {
+      set({ childListData: list });
+    }
   },
 
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
-      "listSortParams",
-      "listRequestValue",
+      "requestValue",
       "listColWidths",
-      "flexGrow",
-      "subListRequestValue",
+      "listSortParams",
       "listSelectedRowKey",
-      "subListSortParams",
-      "subListColWidths",
+      "flexGrow",
+      "childListColWidths",
+      "childListSelectedRowKey",
+      "childListCheckedIndexes",
+      "childListData",
     ];
     set(pick(metaData ?? createState, metaDataKeys));
   },
@@ -189,47 +214,38 @@ export const use$LIST_WITH_LIST$Store = create(
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST_WITH_LIST$Store.subscribe(
   (s) => [
-    s.listSortParams,
-    s.listRequestValue,
+    s.requestValue,
     s.listColWidths,
-    s.flexGrow,
-    s.subListSortParams,
-    s.subListRequestValue,
-    s.subListColWidths,
+    s.listSortParams,
     s.listSelectedRowKey,
+    s.flexGrow,
+    s.childListColWidths,
+    s.childListSelectedRowKey,
+    s.childListCheckedIndexes,
+    s.childListData,
   ],
   ([
-    listSortParams,
-    listRequestValue,
+    requestValue,
     listColWidths,
-    flexGrow,
-    subListSortParams,
-    subListRequestValue,
-    subListColWidths,
+    listSortParams,
     listSelectedRowKey,
+    flexGrow,
+    childListColWidths,
+    childListSelectedRowKey,
+    childListCheckedIndexes,
+    childListData,
   ]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
-      listSortParams,
-      listRequestValue,
+      requestValue,
       listColWidths,
-      flexGrow,
-      subListSortParams,
-      subListRequestValue,
-      subListColWidths,
+      listSortParams,
       listSelectedRowKey,
+      flexGrow,
+      childListColWidths,
+      childListSelectedRowKey,
+      childListCheckedIndexes,
+      childListData,
     });
-  },
-  { equalityFn: shallow }
-);
-
-use$LIST_WITH_LIST$Store.subscribe(
-  (s) => [s.listSelectedRowKey],
-  ([listSelectedRowKey]) => {
-    if (listSelectedRowKey) {
-      use$LIST_WITH_LIST$Store.getState().callSubListApi();
-    } else {
-      // clear
-    }
   },
   { equalityFn: shallow }
 );

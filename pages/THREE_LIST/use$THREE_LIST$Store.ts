@@ -179,12 +179,12 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   },
 
   addListAData: (list) => {
-    const listAData = addDataGridList<DtoItem>(get().listAData ?? [], list);
-    set({ listAData: [...listAData] });
+    const listData = addDataGridList<DtoItem>(get().listAData ?? [], list);
+    set({ listAData: [...listData] });
   },
   delListAData: (indexes) => {
-    const listAData = delDataGridList(get().listAData ?? [], indexes);
-    set({ listAData: [...listAData], listACheckedIndexes: [] });
+    const listData = delDataGridList(get().listAData ?? [], indexes);
+    set({ listAData: [...listData], listACheckedIndexes: [] });
   },
   setListAData: (list, reset) => {
     if (reset) {
@@ -198,12 +198,12 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   addListBData: (list) => {
-    const listBData = addDataGridList<DtoItem>(get().listBData ?? [], list);
-    set({ listBData: [...listBData] });
+    const listData = addDataGridList<DtoItem>(get().listBData ?? [], list);
+    set({ listBData: [...listData] });
   },
   delListBData: (indexes) => {
-    const listBData = delDataGridList(get().listBData ?? [], indexes);
-    set({ listBData: [...listBData], listBCheckedIndexes: [] });
+    const listData = delDataGridList(get().listBData ?? [], indexes);
+    set({ listBData: [...listData], listBCheckedIndexes: [] });
   },
   setListBData: (list, reset) => {
     if (reset) {
@@ -217,12 +217,12 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   addListCData: (list) => {
-    const listCData = addDataGridList<DtoItem>(get().listCData ?? [], list);
-    set({ listCData: [...listCData] });
+    const listData = addDataGridList<DtoItem>(get().listCData ?? [], list);
+    set({ listCData: [...listData] });
   },
   delListCData: (indexes) => {
-    const listCData = delDataGridList(get().listCData ?? [], indexes);
-    set({ listCData: [...listCData], listCCheckedIndexes: [] });
+    const listData = delDataGridList(get().listCData ?? [], indexes);
+    set({ listCData: [...listData], listCCheckedIndexes: [] });
   },
   setListCData: (list, reset) => {
     if (reset) {

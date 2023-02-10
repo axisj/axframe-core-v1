@@ -5,6 +5,7 @@ import { DataGrid } from "@core/components/DataGrid";
 import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
 import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
+import { PageLayout } from "styles/pageStyled";
 
 interface DtoItem extends ExampleItem {}
 interface Props {
@@ -16,7 +17,7 @@ function ListDataGrid({ onClick }: Props) {
   const listSortParams = use$LIST_WITH_LIST$Store((s) => s.listSortParams);
   const listData = use$LIST_WITH_LIST$Store((s) => s.listData);
   const listPage = use$LIST_WITH_LIST$Store((s) => s.listPage);
-  const listSpinning = use$LIST_WITH_LIST$Store((s) => s.listSpinning);
+  const spinning = use$LIST_WITH_LIST$Store((s) => s.spinning);
   const setListColWidths = use$LIST_WITH_LIST$Store((s) => s.setListColWidths);
   const setListSortParams = use$LIST_WITH_LIST$Store((s) => s.setListSortParams);
   const changeListPage = use$LIST_WITH_LIST$Store((s) => s.changeListPage);
@@ -63,36 +64,44 @@ function ListDataGrid({ onClick }: Props) {
   );
 
   return (
-    <Container ref={containerRef}>
-      <DataGrid<DtoItem>
-        frozenColumnIndex={0}
-        width={containerWidth}
-        height={containerHeight}
-        columns={columns}
-        data={listData}
-        spinning={listSpinning}
-        onClick={onClick}
-        page={{
-          ...listPage,
-          loading: false,
-          onChange: async (currentPage, pageSize) => {
-            await changeListPage(currentPage, pageSize);
-          },
-        }}
-        sort={{
-          sortParams: listSortParams,
-          onChange: setListSortParams,
-        }}
-        onChangeColumns={handleColumnsChange}
-        rowKey={"id"}
-        selectedRowKey={listSelectedRowKey ?? ""}
-      />
-    </Container>
+    <>
+      <Header>
+        <div>LIST</div>
+        <ButtonGroup compact></ButtonGroup>
+      </Header>
+      <Container ref={containerRef}>
+        <DataGrid<DtoItem>
+          frozenColumnIndex={0}
+          width={containerWidth}
+          height={containerHeight}
+          columns={columns}
+          data={listData}
+          spinning={spinning}
+          onClick={onClick}
+          page={{
+            ...listPage,
+            loading: false,
+            onChange: async (currentPage, pageSize) => {
+              await changeListPage(currentPage, pageSize);
+            },
+          }}
+          sort={{
+            sortParams: listSortParams,
+            onChange: setListSortParams,
+          }}
+          onChangeColumns={handleColumnsChange}
+          rowKey={"id"}
+          selectedRowKey={listSelectedRowKey ?? ""}
+        />
+      </Container>
+    </>
   );
 }
 
 const Container = styled.div`
   flex: 1;
 `;
+const ButtonGroup = styled(PageLayout.ButtonGroup)``;
+const Header = styled(PageLayout.FrameHeader)``;
 
 export { ListDataGrid };

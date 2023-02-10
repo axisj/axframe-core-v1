@@ -4,59 +4,60 @@ import { ExampleSubItem } from "@core/services/example/ExampleRepositoryInterfac
 import { DataGrid } from "@core/components/DataGrid";
 import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
-import { use$THREE_LIST$Store } from "./use$THREE_LIST$Store";
+import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
 import { Button } from "antd";
-import { PageLayout } from "styles/pageStyled";
-import { getSelectEditor, InputEditor } from "components/dataGridEditor";
-import { ITEM_STAT } from "./Types";
+import { PageLayout } from "../../../styles/pageStyled";
+import { ITEM_STAT } from "../THREE_LIST/Types";
+import { getSelectEditor, InputEditor } from "../../../components/dataGridEditor";
 
 interface DtoItem extends ExampleSubItem {}
+
 interface Props {
   onClick?: AXFDGProps<DtoItem>["onClick"];
 }
 
-function ListDataGridC({ onClick }: Props) {
-  const listCColWidths = use$THREE_LIST$Store((s) => s.listCColWidths);
-  const setListCColWidths = use$THREE_LIST$Store((s) => s.setListCColWidths);
-  const listCSelectedRowKey = use$THREE_LIST$Store((s) => s.listCSelectedRowKey);
-  const listCCheckedIndexes = use$THREE_LIST$Store((s) => s.listCCheckedIndexes);
-  const setListCCheckedIndexes = use$THREE_LIST$Store((s) => s.setListCCheckedIndexes);
-  const listCData = use$THREE_LIST$Store((s) => s.listCData);
-  const spinning = use$THREE_LIST$Store((s) => s.spinning);
+function ChildListDataGrid({ onClick }: Props) {
+  const childListColWidths = use$LIST_WITH_LIST$Store((s) => s.childListColWidths);
+  const childListSelectedRowKey = use$LIST_WITH_LIST$Store((s) => s.childListSelectedRowKey);
+  const childListCheckedIndexes = use$LIST_WITH_LIST$Store((s) => s.childListCheckedIndexes);
+  const childListData = use$LIST_WITH_LIST$Store((s) => s.childListData);
+  const spinning = use$LIST_WITH_LIST$Store((s) => s.spinning);
 
-  const addListCData = use$THREE_LIST$Store((s) => s.addListCData);
-  const delListCData = use$THREE_LIST$Store((s) => s.delListCData);
-  const setListCData = use$THREE_LIST$Store((s) => s.setListCData);
+  const setChildListColWidths = use$LIST_WITH_LIST$Store((s) => s.setChildListColWidths);
+  const setChildListCheckedIndexes = use$LIST_WITH_LIST$Store((s) => s.setChildListCheckedIndexes);
+  const addChildListData = use$LIST_WITH_LIST$Store((s) => s.addChildListData);
+  const delChildListData = use$LIST_WITH_LIST$Store((s) => s.delChildListData);
+  const setChildListData = use$LIST_WITH_LIST$Store((s) => s.setChildListData);
 
   const { t } = useI18n();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   const handleColumnsChange = React.useCallback(
-    (columnIndex: number, width: number, columns: AXFDGColumn<DtoItem>[]) => {
-      setListCColWidths(columns.map((column) => column.width));
+    (columnIndex: number, width: number, columns: AXFDGColumn<ExampleSubItem>[]) => {
+      setChildListColWidths(columns.map((column) => column.width));
     },
-    [setListCColWidths]
+    [setChildListColWidths]
   );
 
   const handleAddSubItem = React.useCallback(() => {
-    addListCData([
+    addChildListData([
       {
         type: "",
         useYn: "Y",
       },
     ]);
-  }, [addListCData]);
+  }, [addChildListData]);
 
   const handleDelSubItem = React.useCallback(() => {
-    if (listCCheckedIndexes) delListCData(listCCheckedIndexes);
-  }, [delListCData, listCCheckedIndexes]);
+    if (childListCheckedIndexes) delChildListData(childListCheckedIndexes);
+  }, [delChildListData, childListCheckedIndexes]);
 
   const handleChangeData = React.useCallback(
     (ri, ci, item) => {
-      setListCData([...listCData]);
+      setChildListData([...childListData]);
     },
-    [listCData, setListCData]
+    [childListData, setChildListData]
   );
 
   const columns = React.useMemo(
@@ -84,16 +85,16 @@ function ListDataGridC({ onClick }: Props) {
               { value: "N", label: "사용안함" },
             ]),
           },
-        ] as AXFDGColumn<DtoItem>[]
+        ] as AXFDGColumn<ExampleSubItem>[]
       ).map((column, colIndex) => {
-        if (listCColWidths.length > 0) {
-          column.width = listCColWidths[colIndex];
+        if (childListColWidths.length > 0) {
+          column.width = childListColWidths[colIndex];
           return column;
         }
 
         return column;
       }),
-    [t, listCColWidths]
+    [childListColWidths]
   );
 
   return (
@@ -105,24 +106,23 @@ function ListDataGridC({ onClick }: Props) {
           <Button onClick={handleDelSubItem}>{t.button.del}</Button>
         </ButtonGroup>
       </Header>
-
       <Container ref={containerRef}>
-        <DataGrid<DtoItem>
+        <DataGrid<ExampleSubItem>
           frozenColumnIndex={0}
           width={containerWidth}
           height={containerHeight}
           columns={columns}
-          data={listCData}
+          data={childListData}
           spinning={spinning}
           onClick={onClick}
           onChangeColumns={handleColumnsChange}
           onChangeData={handleChangeData}
           rowKey={"id"}
-          selectedRowKey={listCSelectedRowKey ?? ""}
+          selectedRowKey={childListSelectedRowKey ?? ""}
           rowChecked={{
-            checkedIndexes: listCCheckedIndexes,
+            checkedIndexes: childListCheckedIndexes,
             onChange: (ids, selectedAll) => {
-              setListCCheckedIndexes(ids);
+              setChildListCheckedIndexes(ids);
             },
           }}
           editable
@@ -135,7 +135,7 @@ function ListDataGridC({ onClick }: Props) {
 const Container = styled.div`
   flex: 1;
 `;
-const Header = styled(PageLayout.FrameHeader)``;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
+const Header = styled(PageLayout.FrameHeader)``;
 
-export { ListDataGridC };
+export { ChildListDataGrid };
