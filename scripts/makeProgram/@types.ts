@@ -5,8 +5,10 @@ enum ProgramType {
   LIST_AND_DRAWER,
   LIST_AND_MODAL,
   LIST_WITH_FORM,
-  LIST_WITH_FORM2,
+  LIST_WITH_FORM_LIST,
   LIST_WITH_FORM_ROW,
+  LIST_WITH_LIST,
+  THREE_LIST,
 }
 
 interface Program {
