@@ -4,7 +4,7 @@ import { ProgramTitle, RowResizer } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
 import { Button, Form } from "antd";
 import { PageLayout } from "styles/pageStyled";
-import { useDidMountEffect, useI18n } from "@core/hooks";
+import { useDidMountEffect, useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_WITH_FORM_ROW$Store } from "./use$LIST_WITH_FORM_ROW$Store";
 import { ListDataSet } from "./ListDataSet";
 import { FormSet } from "./FormSet";
@@ -17,6 +17,7 @@ function App({}: Props) {
 
   const init = use$LIST_WITH_FORM_ROW$Store((s) => s.init);
   const reset = use$LIST_WITH_FORM_ROW$Store((s) => s.reset);
+  const destroy = use$LIST_WITH_FORM_ROW$Store((s) => s.destroy);
   const callListApi = use$LIST_WITH_FORM_ROW$Store((s) => s.callListApi);
   const setFlexGrow = use$LIST_WITH_FORM_ROW$Store((s) => s.setFlexGrow);
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
@@ -65,6 +66,10 @@ function App({}: Props) {
   useDidMountEffect(() => {
     init();
     callListApi();
+  });
+
+  useUnmountEffect(() => {
+    destroy();
   });
 
   return (

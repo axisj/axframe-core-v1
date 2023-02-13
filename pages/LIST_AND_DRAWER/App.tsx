@@ -4,7 +4,7 @@ import { ProgramTitle } from "@core/components/common";
 import * as React from "react";
 import { AXFIListSearch, AXFIRevert } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
-import { useI18n } from "@core/hooks";
+import { useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_AND_DRAWER$Store } from "./use$LIST_AND_DRAWER$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { IParam, SearchParams, SearchParamType } from "../../components/search";
@@ -20,6 +20,7 @@ function App({}: Props) {
   const { t } = useI18n();
   const init = use$LIST_AND_DRAWER$Store((s) => s.init);
   const reset = use$LIST_AND_DRAWER$Store((s) => s.reset);
+  const destroy = use$LIST_AND_DRAWER$Store((s) => s.destroy);
   const callListApi = use$LIST_AND_DRAWER$Store((s) => s.callListApi);
   const listRequestValue = use$LIST_AND_DRAWER$Store((s) => s.listRequestValue);
   const setListRequestValue = use$LIST_AND_DRAWER$Store((s) => s.setListRequestValue);
@@ -72,6 +73,10 @@ function App({}: Props) {
   useDidMountEffect(() => {
     init();
     callListApi();
+  });
+
+  useUnmountEffect(() => {
+    destroy();
   });
 
   return (

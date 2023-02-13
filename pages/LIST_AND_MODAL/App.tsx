@@ -4,7 +4,7 @@ import { ProgramTitle } from "@core/components/common";
 import * as React from "react";
 import { AXFIListSearch, AXFIRevert } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
-import { useI18n } from "@core/hooks";
+import { useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_AND_MODAL$Store } from "./use$LIST_AND_MODAL$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { AXFDGClickParams } from "@axframe/datagrid";
@@ -21,6 +21,7 @@ function App({}: Props) {
   const { t } = useI18n();
   const init = use$LIST_AND_MODAL$Store((s) => s.init);
   const reset = use$LIST_AND_MODAL$Store((s) => s.reset);
+  const destroy = use$LIST_AND_MODAL$Store((s) => s.destroy);
   const callListApi = use$LIST_AND_MODAL$Store((s) => s.callListApi);
   const listRequestValue = use$LIST_AND_MODAL$Store((s) => s.listRequestValue);
   const setListRequestValue = use$LIST_AND_MODAL$Store((s) => s.setListRequestValue);
@@ -76,6 +77,10 @@ function App({}: Props) {
   useDidMountEffect(() => {
     init();
     callListApi();
+  });
+
+  useUnmountEffect(() => {
+    destroy();
   });
 
   return (

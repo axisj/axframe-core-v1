@@ -6,7 +6,7 @@ import { Button, Form } from "antd";
 
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
-import { useI18n } from "@core/hooks";
+import { useI18n, useUnmountEffect } from "@core/hooks";
 import { use$THREE_LIST$Store } from "./use$THREE_LIST$Store";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGridA } from "./ListDataGridA";
@@ -20,6 +20,7 @@ function App({}: Props) {
 
   const init = use$THREE_LIST$Store((s) => s.init);
   const reset = use$THREE_LIST$Store((s) => s.reset);
+  const destroy = use$THREE_LIST$Store((s) => s.destroy);
   const requestValue = use$THREE_LIST$Store((s) => s.requestValue);
   const setRequestValue = use$THREE_LIST$Store((s) => s.setRequestValue);
   const callListApi = use$THREE_LIST$Store((s) => s.callListApi);
@@ -66,6 +67,10 @@ function App({}: Props) {
   useDidMountEffect(() => {
     init();
     callListApi();
+  });
+
+  useUnmountEffect(() => {
+    destroy();
   });
 
   return (

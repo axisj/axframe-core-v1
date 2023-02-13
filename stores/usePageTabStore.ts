@@ -71,7 +71,8 @@ export const usePageTabStore = buildStore<TabsStore>(
       }
 
       const tabUuid = uuidv4();
-      pages.set(tabUuid, page);
+      pages.set(tabUuid, { ...page, metaData: undefined });
+
       set({ pages: new Map([...pages]) });
       return tabUuid;
     },
@@ -85,7 +86,9 @@ export const usePageTabStore = buildStore<TabsStore>(
     },
     removeTabs: (tabUuids) => {
       const pages = get().pages;
-      tabUuids.forEach((tabUuid) => pages.delete(tabUuid));
+      tabUuids.forEach((tabUuid) => {
+        pages.delete(tabUuid);
+      });
 
       set({ pages: new Map([...pages]) });
       return get().getActiveTabPage();

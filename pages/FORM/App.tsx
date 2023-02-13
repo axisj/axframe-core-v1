@@ -4,7 +4,7 @@ import { Loading, ProgramTitle } from "@core/components/common";
 import * as React from "react";
 import { AXFIRevert, AXFIWriteForm } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
-import { useI18n } from "@core/hooks";
+import { useI18n, useUnmountEffect } from "@core/hooks";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { FormSet } from "./FormSet";
 import { use$FORM$Store } from "./use$FORM$Store";
@@ -14,10 +14,15 @@ function App({}: Props) {
   const { t } = useI18n();
   const init = use$FORM$Store((s) => s.init);
   const reset = use$FORM$Store((s) => s.reset);
+  const destroy = use$FORM$Store((s) => s.destroy);
   const saveSpinning = use$FORM$Store((s) => s.saveSpinning);
 
   useDidMountEffect(() => {
     init();
+  });
+
+  useUnmountEffect(() => {
+    destroy();
   });
 
   return (

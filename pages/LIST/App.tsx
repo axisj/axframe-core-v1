@@ -9,7 +9,7 @@ import { use$LIST$Store } from "./use$LIST$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGrid } from "./ListDataGrid";
-import { useLink } from "../../hooks";
+import { useLink, useUnmountEffect } from "../../hooks";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ROUTES } from "router";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
@@ -22,6 +22,7 @@ function App({}: Props) {
   const { linkByRoute } = useLink();
   const init = use$LIST$Store((s) => s.init);
   const reset = use$LIST$Store((s) => s.reset);
+  const destroy = use$LIST$Store((s) => s.destroy);
   const callListApi = use$LIST$Store((s) => s.callListApi);
   const listRequestValue = use$LIST$Store((s) => s.listRequestValue);
   const setListRequestValue = use$LIST$Store((s) => s.setListRequestValue);
@@ -73,6 +74,10 @@ function App({}: Props) {
   useDidMountEffect(() => {
     init();
     callListApi();
+  });
+
+  useUnmountEffect(() => {
+    destroy();
   });
 
   return (

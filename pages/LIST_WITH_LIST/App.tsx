@@ -6,7 +6,7 @@ import { Button, Form } from "antd";
 
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
-import { useI18n } from "@core/hooks";
+import { useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
 import { IParam, SearchParams, SearchParamType } from "../../components/search";
 import { AXFDGClickParams } from "@axframe/datagrid";
@@ -23,6 +23,7 @@ function App({}: Props) {
 
   const init = use$LIST_WITH_LIST$Store((s) => s.init);
   const reset = use$LIST_WITH_LIST$Store((s) => s.reset);
+  const destroy = use$LIST_WITH_LIST$Store((s) => s.destroy);
   const callListApi = use$LIST_WITH_LIST$Store((s) => s.callListApi);
   const callSaveApi = use$LIST_WITH_LIST$Store((s) => s.callSaveApi);
   const setFlexGrow = use$LIST_WITH_LIST$Store((s) => s.setFlexGrow);
@@ -78,6 +79,10 @@ function App({}: Props) {
   useDidMountEffect(() => {
     init();
     callListApi();
+  });
+
+  useUnmountEffect(() => {
+    destroy();
   });
 
   return (
