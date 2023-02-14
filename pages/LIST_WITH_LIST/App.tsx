@@ -8,9 +8,9 @@ import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
-import { IParam, SearchParams, SearchParamType } from "../../components/search";
+import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { AXFDGClickParams } from "@axframe/datagrid";
-import { ExampleItem } from "../../services/example/ExampleRepositoryInterface";
+import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { ListDataGrid } from "./ListDataGrid";
 import { ChildListDataGrid } from "./ChildListDataGrid";
 

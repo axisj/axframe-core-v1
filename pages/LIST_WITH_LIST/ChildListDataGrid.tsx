@@ -6,9 +6,9 @@ import { useContainerSize, useI18n } from "@core/hooks";
 import { AXFDGColumn, AXFDGProps } from "@axframe/datagrid";
 import { use$LIST_WITH_LIST$Store } from "./use$LIST_WITH_LIST$Store";
 import { Button } from "antd";
-import { PageLayout } from "../../../styles/pageStyled";
-import { ITEM_STAT } from "../THREE_LIST/Types";
-import { getSelectEditor, InputEditor } from "../../../components/dataGridEditor";
+import { PageLayout } from "styles/pageStyled";
+import { ITEM_STAT } from "./Types";
+import { getSelectEditor, InputEditor } from "components/dataGridEditor";
 
 interface DtoItem extends ExampleSubItem {}
 
