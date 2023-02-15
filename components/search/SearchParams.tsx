@@ -120,7 +120,7 @@ export function SearchParams({
       <Container>
         <DefaultWrap>
           {params && params?.length > 0 && (
-            <Space wrap>
+            <Space wrap align={"center"}>
               {params.map((param, idx) => (
                 <SearchParam
                   key={idx}

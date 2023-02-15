@@ -3,7 +3,6 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import i18n from "i18n";
 import { useAppStore } from "stores";
-import EN from "../../../i18n/en";
 
 export interface IErrorDialogOptions {
   icon?: React.ReactNode;
