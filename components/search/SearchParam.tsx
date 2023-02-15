@@ -3,13 +3,16 @@ import { SearchParamSelect } from "./SearchParamSelect";
 import { SearchParamTimeRange } from "./SearchParamTimeRange";
 import { SearchParamCheckbox } from "./SearchParamCheckbox";
 import { SearchParamInput } from "./SearchParamInput";
+import { SearchParamDate } from "./SearchParamDate";
 
 export enum SearchParamType {
   INPUT,
   TIME_RANGE,
   SELECT,
   CHECKBOX,
+  DATE,
 }
+export type DateType = "date" | "week" | "month" | "quarter" | "year";
 
 export interface SearchParamOption {
   value: string;
@@ -28,6 +31,7 @@ interface Props {
   onChangedCheckAllItem?: () => void;
   width?: number;
   loading?: boolean;
+  picker?: DateType;
 }
 
 export type SearchParamComponentProp<R> = {
@@ -41,6 +45,7 @@ const SearchParamComponents: SearchParamComponentProp<SearchParamComponent> = {
   [SearchParamType.TIME_RANGE]: SearchParamTimeRange,
   [SearchParamType.SELECT]: SearchParamSelect,
   [SearchParamType.CHECKBOX]: SearchParamCheckbox,
+  [SearchParamType.DATE]: SearchParamDate,
 };
 
 const SearchParam: SearchParamComponent = (props) => {
