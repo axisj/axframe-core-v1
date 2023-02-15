@@ -76,19 +76,19 @@ function DetailModal({ open, onOk, onCancel, afterClose, params }: Props) {
         </ModalLayout.Header>
         <Body>
           <Descriptions bordered size={"small"}>
-            <Descriptions.Item label={t.formItem.example.name.label}>{detail?.name}</Descriptions.Item>
-            <Descriptions.Item label={t.formItem.example.birthDt.label}>{detail?.birthDt}</Descriptions.Item>
-            <Descriptions.Item label={t.formItem.example.sex.label}>{detail?.sex}</Descriptions.Item>
-            <Descriptions.Item label={t.formItem.example.phone1.label}>{detail?.phone1}</Descriptions.Item>
-            <Descriptions.Item label={t.formItem.example.phone2.label} span={2}>
+            <Descriptions.Item label={t.pages.example.form.name.label}>{detail?.name}</Descriptions.Item>
+            <Descriptions.Item label={t.pages.example.form.birthDt.label}>{detail?.birthDt}</Descriptions.Item>
+            <Descriptions.Item label={t.pages.example.form.sex.label}>{detail?.sex}</Descriptions.Item>
+            <Descriptions.Item label={t.pages.example.form.phone1.label}>{detail?.phone1}</Descriptions.Item>
+            <Descriptions.Item label={t.pages.example.form.phone2.label} span={2}>
               {detail?.phone2}
             </Descriptions.Item>
             <Descriptions.Item label='Status' span={3}>
               <Badge status='processing' text='Running' />
             </Descriptions.Item>
-            <Descriptions.Item label={t.formItem.example.hndcapYn.label}>{detail?.hndcapYn}</Descriptions.Item>
-            <Descriptions.Item label={t.formItem.example.hndcapGrade.label}>{detail?.hndcapGrade}</Descriptions.Item>
-            <Descriptions.Item label={t.formItem.example.hndcapTyp.label}>{detail?.hndcapTyp}</Descriptions.Item>
+            <Descriptions.Item label={t.pages.example.form.hndcapYn.label}>{detail?.hndcapYn}</Descriptions.Item>
+            <Descriptions.Item label={t.pages.example.form.hndcapGrade.label}>{detail?.hndcapGrade}</Descriptions.Item>
+            <Descriptions.Item label={t.pages.example.form.hndcapTyp.label}>{detail?.hndcapTyp}</Descriptions.Item>
           </Descriptions>
 
           <Loading active={detailSpinning} />

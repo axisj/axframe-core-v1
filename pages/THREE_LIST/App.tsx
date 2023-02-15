@@ -44,19 +44,19 @@ function App({}: Props) {
     () =>
       [
         {
-          placeholder: t.formItem.example.area.label,
+          placeholder: t.pages.example.form.area.label,
           name: "select1",
           type: SearchParamType.SELECT,
-          options: t.formItem.example.area.options,
+          options: t.pages.example.form.area.options,
         },
         {
-          placeholder: t.formItem.example.cnsltHow.label,
+          placeholder: t.pages.example.form.cnsltHow.label,
           name: "select2",
           type: SearchParamType.SELECT,
-          options: t.formItem.example.cnsltHow.options,
+          options: t.pages.example.form.cnsltHow.options,
         },
         {
-          placeholder: t.formItem.example.cnsltDt.label,
+          placeholder: t.pages.example.form.cnsltDt.label,
           name: "timeRange",
           type: SearchParamType.TIME_RANGE,
         },

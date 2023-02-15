@@ -88,16 +88,16 @@ function FormSet({}: Props) {
             <Row gutter={[20, 0]}>
               <Col xs={24} sm={8}>
                 <Form.Item
-                  label={t.formItem.example.area.label}
+                  label={t.pages.example.form.area.label}
                   name={"area"}
                   rules={[{ required: true, message: "커스텀 메세지 사용 가능" }]}
                 >
-                  <Select options={t.formItem.example.area.options} />
+                  <Select options={t.pages.example.form.area.options} />
                 </Form.Item>
               </Col>
 
               <Col xs={24} sm={8}>
-                <Form.Item label={t.formItem.example.cnsltDt.label} name={"cnsltDt"}>
+                <Form.Item label={t.pages.example.form.cnsltDt.label} name={"cnsltDt"}>
                   <DatePicker />
                 </Form.Item>
               </Col>
