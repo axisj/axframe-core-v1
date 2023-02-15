@@ -5,8 +5,9 @@ import { AXFIArrowDown, AXFIArrowUp } from "@axframe/icon";
 import { IconText } from "@core/components/common";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { PageLayout } from "styles/pageStyled";
-import { SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
-import { getMomentRangeValue } from "../../utils/object";
+import { DateType, SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
+import { getDayJsRangeValue } from "../../utils/object";
+import dayjs from "dayjs";
 
 export interface IParam {
   name: string;
@@ -17,6 +18,7 @@ export interface IParam {
   width?: number;
   checkAllItem?: boolean;
   loading?: boolean;
+  picker?: DateType;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -93,9 +95,11 @@ export function SearchParams({
 
     params?.forEach((filter) => {
       if (filter.type === SearchParamType.TIME_RANGE) {
-        formValues[filter.name] = getMomentRangeValue(paramsValue?.[filter.name]);
+        formValues[filter.name] = getDayJsRangeValue(paramsValue?.[filter.name]);
         // } else if (filter.type === SearchParamType.CHECKBOX) {
         // formValues[filter.name] = (paramsValue?.[filter.name]);
+      } else if (filter.type === SearchParamType.DATE) {
+        formValues[filter.name] = dayjs(paramsValue?.[filter.name]);
       } else {
         formValues[filter.name] = paramsValue?.[filter.name] ?? "";
       }
@@ -135,6 +139,7 @@ export function SearchParams({
                   width={param.width}
                   onChangedCheckAllItem={onChangedCheckAllItem}
                   loading={param.loading}
+                  picker={param.picker}
                 />
               ))}
             </Space>
