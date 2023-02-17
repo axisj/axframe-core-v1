@@ -50,8 +50,8 @@ export interface SMixinScrollerStyleProps {
 }
 export const SMixinScrollerStyle = ({ track_color, thumb_color }: SMixinScrollerStyleProps) => css`
   &::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
   }
 
   &::-webkit-scrollbar-thumb {
