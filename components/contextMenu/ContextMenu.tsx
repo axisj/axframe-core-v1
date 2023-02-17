@@ -13,7 +13,7 @@ export abstract class ContextMenu<T = any> {
   private _lang: LanguageType;
 
   public constructor() {
-    this.menu = new ContextMenuClass({ id: "context-menu" });
+    this.menu = new ContextMenuClass({ id: "context-menu", style: { zIndex: 100 } });
     this._lang = "en";
     this.initMenu();
   }
