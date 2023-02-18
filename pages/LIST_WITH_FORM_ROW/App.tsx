@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useCallback } from "react";
 import styled from "@emotion/styled";
 import { ProgramTitle, RowResizer } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
@@ -6,10 +7,13 @@ import { Button, Form } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect, useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_WITH_FORM_ROW$Store } from "./use$LIST_WITH_FORM_ROW$Store";
-import { ListDataSet } from "./ListDataSet";
 import { FormSet } from "./FormSet";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
+import { ListDataGrid } from "./ListDataGrid";
+import { AXFDGClickParams } from "@axframe/datagrid";
+import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 
+interface DtoItem extends ExampleItem {}
 interface Props {}
 
 function App({}: Props) {
@@ -27,12 +31,35 @@ function App({}: Props) {
   const listSpinning = use$LIST_WITH_FORM_ROW$Store((s) => s.listSpinning);
   const cancelFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.cancelFormActive);
   const setFormActive = use$LIST_WITH_FORM_ROW$Store((s) => s.setFormActive);
+  const saveSpinning = use$LIST_WITH_FORM_ROW$Store((s) => s.saveSpinning);
+  const setListSelectedRowKey = use$LIST_WITH_FORM_ROW$Store((s) => s.setListSelectedRowKey);
+  const callSaveApi = use$LIST_WITH_FORM_ROW$Store((s) => s.callSaveApi);
+  const formActive = use$LIST_WITH_FORM_ROW$Store((s) => s.formActive);
+  const listSelectedRowKey = use$LIST_WITH_FORM_ROW$Store((s) => s.listSelectedRowKey);
+  const flexGrow = use$LIST_WITH_FORM_ROW$Store((s) => s.flexGrow);
+
+  const onClickItem = React.useCallback(
+    (params: AXFDGClickParams<DtoItem>) => {
+      setListSelectedRowKey(params.item.id, params.item);
+    },
+    [setListSelectedRowKey]
+  );
 
   const [searchForm] = Form.useForm();
+
+  const handleReset = React.useCallback(async () => {
+    reset();
+    await callListApi();
+  }, [callListApi, reset]);
 
   const handleSearch = React.useCallback(async () => {
     await callListApi();
   }, [callListApi]);
+
+  const handleSave = useCallback(async () => {
+    await callSaveApi();
+    await reset();
+  }, [callSaveApi, reset]);
 
   const params = React.useMemo(
     () =>
@@ -57,11 +84,6 @@ function App({}: Props) {
       ] as IParam[],
     [t]
   );
-
-  const handleReset = React.useCallback(async () => {
-    reset();
-    await callListApi();
-  }, [callListApi, reset]);
 
   useDidMountEffect(() => {
     init();
@@ -90,13 +112,20 @@ function App({}: Props) {
             {t.button.search}
           </Button>
           <Button
-            type={"primary"}
             onClick={() => {
               cancelFormActive();
               setFormActive();
             }}
           >
             {t.button.addNew}
+          </Button>
+          <Button
+            type={"primary"}
+            loading={saveSpinning}
+            disabled={!formActive && !listSelectedRowKey}
+            onClick={handleSave}
+          >
+            {t.button.save}
           </Button>
         </ButtonGroup>
       </Header>
@@ -113,9 +142,13 @@ function App({}: Props) {
       </PageSearchBar>
 
       <Body ref={resizerContainerRef}>
-        <ListDataSet />
+        <Frame style={{ flex: flexGrow, paddingTop: 0 }}>
+          <ListDataGrid onClick={onClickItem} />
+        </Frame>
         <RowResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
-        <FormSet />
+        <Frame style={{ flex: 2 - flexGrow }}>
+          <FormSet />
+        </Frame>
       </Body>
     </Container>
   );
@@ -128,5 +161,7 @@ const Body = styled(PageLayout.FrameColumn)`
   padding: 0;
 `;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
+
+const Frame = styled(PageLayout.FrameColumn)``;
 
 export default App;

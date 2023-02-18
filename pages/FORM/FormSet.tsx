@@ -387,12 +387,6 @@ function FormSet({}: Props) {
             <Input.TextArea rows={4} showCount maxLength={200} />
           </Form.Item>
         </FormBox>
-        <ButtonGroup>
-          <Button type={"primary"} htmlType={"submit"} loading={saveSpinning}>
-            저장하기
-          </Button>
-          <Button onClick={reset}>{t.button.reset}</Button>
-        </ButtonGroup>
       </Body>
     </Form>
   );

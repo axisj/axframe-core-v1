@@ -65,7 +65,7 @@ function FormSet({}: Props) {
 
   if (!formActive && !listSelectedRowKey) {
     return (
-      <Frame style={{ flex: 2 - flexGrow }}>
+      <>
         <EmptyMsg>
           <Button
             onClick={() => {
@@ -77,13 +77,18 @@ function FormSet({}: Props) {
           </Button>
         </EmptyMsg>
         <Form form={form} />
-      </Frame>
+      </>
     );
   }
 
   return (
-    <Frame style={{ flex: 2 - flexGrow }}>
-      <Header>Form</Header>
+    <>
+      <Header>
+        Form
+        <ButtonGroup compact>
+          <Button onClick={() => cancelFormActive()}>{t.button.cancel}</Button>
+        </ButtonGroup>
+      </Header>
       <Body>
         <Form<DtoItem>
           form={form}
@@ -307,21 +312,12 @@ function FormSet({}: Props) {
               </Row>
             </Form.Item>
           </FormBox>
-          <ButtonGroup>
-            <Button type={"primary"} htmlType={"submit"} loading={saveSpinning}>
-              저장하기
-            </Button>
-            <Button onClick={() => cancelFormActive()}>{t.button.cancel}</Button>
-          </ButtonGroup>
         </Form>
       </Body>
-    </Frame>
+    </>
   );
 }
 
-const Frame = styled(PageLayout.FrameColumn)`
-  padding: 15px 30px 15px 30px;
-`;
 const Header = styled(PageLayout.FrameHeader)``;
 const Body = styled.div``;
 const FormBoxHeader = styled(PageLayout.ContentBoxHeader)``;

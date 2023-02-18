@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Button } from "antd";
 import { Loading, ProgramTitle } from "@core/components/common";
 import * as React from "react";
+import { useCallback } from "react";
 import { AXFIRevert, AXFIWriteForm } from "@axframe/icon";
 import { PageLayout } from "styles/pageStyled";
 import { useI18n, useUnmountEffect } from "@core/hooks";
@@ -16,6 +17,12 @@ function App({}: Props) {
   const reset = use$FORM$Store((s) => s.reset);
   const destroy = use$FORM$Store((s) => s.destroy);
   const saveSpinning = use$FORM$Store((s) => s.saveSpinning);
+  const callSaveApi = use$FORM$Store((s) => s.callSaveApi);
+
+  const handleSave = useCallback(async () => {
+    await callSaveApi();
+    await reset();
+  }, [callSaveApi, reset]);
 
   useDidMountEffect(() => {
     init();
@@ -33,7 +40,12 @@ function App({}: Props) {
             {t.button.reset}
           </Button>
         </ProgramTitle>
-        <ButtonGroup compact></ButtonGroup>
+        <ButtonGroup compact>
+          <Button onClick={reset}>{t.button.reset}</Button>
+          <Button type={"primary"} loading={saveSpinning} onClick={handleSave}>
+            저장하기
+          </Button>
+        </ButtonGroup>
       </Header>
 
       <FormSet />

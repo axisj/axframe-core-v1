@@ -67,7 +67,7 @@ const createState: States = {
   },
   listSortParams: [],
   listSelectedRowKey: "",
-  flexGrow: 1,
+  flexGrow: 0.7,
   saveRequestValue: {},
   detail: {},
   saveSpinning: false,

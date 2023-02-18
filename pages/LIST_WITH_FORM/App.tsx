@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useCallback } from "react";
 import styled from "@emotion/styled";
 import { ColResizer, ProgramTitle } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
@@ -31,9 +32,18 @@ function App({}: Props) {
   const flexGrow = use$LIST_WITH_FORM$Store((s) => s.flexGrow);
   const cancelFormActive = use$LIST_WITH_FORM$Store((s) => s.cancelFormActive);
   const setFormActive = use$LIST_WITH_FORM$Store((s) => s.setFormActive);
+  const saveSpinning = use$LIST_WITH_FORM$Store((s) => s.saveSpinning);
+  const callSaveApi = use$LIST_WITH_FORM$Store((s) => s.callSaveApi);
+  const formActive = use$LIST_WITH_FORM$Store((s) => s.formActive);
+  const listSelectedRowKey = use$LIST_WITH_FORM$Store((s) => s.listSelectedRowKey);
 
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
   const [searchForm] = Form.useForm();
+
+  const handleReset = React.useCallback(async () => {
+    reset();
+    await callListApi();
+  }, [callListApi, reset]);
 
   const handleSearch = React.useCallback(async () => {
     await callListApi();
@@ -45,6 +55,11 @@ function App({}: Props) {
     },
     [setListSelectedRowKey]
   );
+
+  const handleSave = useCallback(async () => {
+    await callSaveApi();
+    await reset();
+  }, [callSaveApi, reset]);
 
   const params = React.useMemo(
     () =>
@@ -69,11 +84,6 @@ function App({}: Props) {
       ] as IParam[],
     [t]
   );
-
-  const handleReset = React.useCallback(async () => {
-    reset();
-    await callListApi();
-  }, [callListApi, reset]);
 
   useDidMountEffect(() => {
     init();
@@ -102,13 +112,20 @@ function App({}: Props) {
             {t.button.search}
           </Button>
           <Button
-            type={"primary"}
             onClick={() => {
               cancelFormActive();
               setFormActive();
             }}
           >
             {t.button.addNew}
+          </Button>
+          <Button
+            type={"primary"}
+            loading={saveSpinning}
+            disabled={!formActive && !listSelectedRowKey}
+            onClick={handleSave}
+          >
+            {t.button.save}
           </Button>
         </ButtonGroup>
       </Header>
@@ -129,7 +146,9 @@ function App({}: Props) {
           <ListDataGrid onClick={onClickItem} />
         </Frame>
         <ColResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
-        <FormSet />
+        <Frame style={{ flex: 2 - flexGrow }}>
+          <FormSet />
+        </Frame>
       </Body>
     </Container>
   );
@@ -143,7 +162,7 @@ const Body = styled(PageLayout.FrameRow)`
 `;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
 const Frame = styled(PageLayout.FrameColumn)`
-  padding: 0 15px 30px 30px;
+  padding-top: 0;
 `;
 
 export default App;
