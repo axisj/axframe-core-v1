@@ -30,8 +30,9 @@ const Container = styled.div`
   position: relative;
   width: 1px;
   height: 100%;
-  background: ${(p) => p.theme.border_color_split};
+  background: ${(p) => p.theme.border_color_base};
   z-index: ${(p) => p.theme.ui_drag_zindex};
+  box-shadow: ${(p) => p.theme.box_shadow_resizer};
   &:before {
     cursor: col-resize;
     content: "";
