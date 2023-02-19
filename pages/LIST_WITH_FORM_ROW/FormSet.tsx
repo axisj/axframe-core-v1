@@ -8,7 +8,7 @@ import { useI18n } from "@core/hooks";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { use$LIST_WITH_FORM_ROW$Store } from "./use$LIST_WITH_FORM_ROW$Store";
-import { EmptyMsg } from "@core/components/common";
+import { EmptyMsg } from "components/common";
 
 interface Props {}
 interface DtoItem extends ExampleItem {}
