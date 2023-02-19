@@ -17,8 +17,6 @@ function FormSet({}: Props) {
   const saveRequestValue = use$LIST_WITH_FORM$Store((s) => s.saveRequestValue);
   const setSaveRequestValue = use$LIST_WITH_FORM$Store((s) => s.setSaveRequestValue);
   const callSaveApi = use$LIST_WITH_FORM$Store((s) => s.callSaveApi);
-  const saveSpinning = use$LIST_WITH_FORM$Store((s) => s.saveSpinning);
-  const flexGrow = use$LIST_WITH_FORM$Store((s) => s.flexGrow);
   const listSelectedRowKey = use$LIST_WITH_FORM$Store((s) => s.listSelectedRowKey);
   const formActive = use$LIST_WITH_FORM$Store((s) => s.formActive);
   const cancelFormActive = use$LIST_WITH_FORM$Store((s) => s.cancelFormActive);

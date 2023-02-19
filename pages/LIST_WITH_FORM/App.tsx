@@ -146,7 +146,7 @@ function App({}: Props) {
           <ListDataGrid onClick={onClickItem} />
         </Frame>
         <ColResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
-        <Frame style={{ flex: 2 - flexGrow }}>
+        <Frame style={{ flex: 2 - flexGrow }} scroll>
           <FormSet />
         </Frame>
       </Body>
