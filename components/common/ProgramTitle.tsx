@@ -7,10 +7,11 @@ import { MenuIcon } from "components/MenuIcon";
 interface Props {
   title: string;
   icon?: React.ReactNode;
+  disableIcon?: boolean;
   children?: React.ReactNode;
 }
 
-function ProgramTitle({ title, icon, children }: Props) {
+function ProgramTitle({ title, icon, disableIcon, children }: Props) {
   const { MENUS_LIST } = useAppMenu();
   const route = ROUTES_LIST.find((route) => route.path === location.pathname);
 
@@ -21,7 +22,9 @@ function ProgramTitle({ title, icon, children }: Props) {
 
   return (
     <Container>
-      {icon ?? <MenuIcon typeName={iconTy ?? "Default"} color={"#0281FE"} secondColor={"#0281FE"} fontSize={20} />}
+      {disableIcon
+        ? null
+        : icon ?? <MenuIcon typeName={iconTy ?? "Default"} color={"#0281FE"} secondColor={"#0281FE"} fontSize={20} />}
       <TitleWrap>{title}</TitleWrap>
       {children}
     </Container>
