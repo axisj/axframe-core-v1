@@ -1,7 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { SMixinFlexRow } from "../../styles/emotion";
-import { AXFIDefaultProgram } from "@axframe/icon";
+import { SMixinFlexRow } from "@core/styles/emotion";
+import { ROUTES_LIST, useAppMenu } from "router";
+import { MenuIcon } from "components/MenuIcon";
 
 interface Props {
   title: string;
@@ -10,9 +11,17 @@ interface Props {
 }
 
 function ProgramTitle({ title, icon, children }: Props) {
+  const { MENUS_LIST } = useAppMenu();
+  const route = ROUTES_LIST.find((route) => route.path === location.pathname);
+
+  const iconTy = React.useMemo(() => {
+    const currentMenu = MENUS_LIST.find((m) => m.progCd === route?.program_type);
+    return currentMenu?.iconTy;
+  }, [MENUS_LIST, route?.program_type]);
+
   return (
     <Container>
-      {icon ?? <AXFIDefaultProgram />}
+      {icon ?? <MenuIcon typeName={iconTy ?? "Default"} color={"#0281FE"} secondColor={"#0281FE"} fontSize={20} />}
       <TitleWrap>{title}</TitleWrap>
       {children}
     </Container>
