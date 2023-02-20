@@ -9,7 +9,7 @@ export const SearchParamCheckbox: SearchParamComponent = ({
   options = [],
   label,
   checkAllItem,
-  onChangedCheckAllItem,
+  onChangedComponentValue,
 }) => {
   const { t } = useI18n();
   const form = Form.useFormInstance();
@@ -18,7 +18,7 @@ export const SearchParamCheckbox: SearchParamComponent = ({
   const onCheckAllChange = (e: CheckboxChangeEvent) => {
     const list = e.target.checked ? options.map((opt) => opt.value) : [];
     form.setFieldValue(name, list);
-    onChangedCheckAllItem?.();
+    onChangedComponentValue?.();
   };
 
   return (

@@ -19,6 +19,7 @@ export interface IParam {
   checkAllItem?: boolean;
   loading?: boolean;
   picker?: DateType;
+  onSearch?: () => Promise<SearchParamOption[]>;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -83,7 +84,7 @@ export function SearchParams({
   }, [onChangeExpand, showChildren]);
 
   // 전체 선택 시 커스텀 처리
-  const onChangedCheckAllItem = React.useCallback(() => {
+  const onChangedComponentValue = React.useCallback(() => {
     onValuesChange(undefined, form.getFieldsValue());
   }, [form, onValuesChange]);
 
@@ -96,10 +97,10 @@ export function SearchParams({
     params?.forEach((filter) => {
       if (filter.type === SearchParamType.TIME_RANGE) {
         formValues[filter.name] = getDayJsRangeValue(paramsValue?.[filter.name]);
-        // } else if (filter.type === SearchParamType.CHECKBOX) {
-        // formValues[filter.name] = (paramsValue?.[filter.name]);
       } else if (filter.type === SearchParamType.DATE) {
         formValues[filter.name] = dayjs(paramsValue?.[filter.name]);
+      } else if (filter.type === SearchParamType.VALUES_FINDER) {
+        formValues[filter.name] = paramsValue?.[filter.name] ?? [];
       } else {
         formValues[filter.name] = paramsValue?.[filter.name] ?? "";
       }
@@ -137,9 +138,10 @@ export function SearchParams({
                   label={param.label}
                   checkAllItem={param.checkAllItem}
                   width={param.width}
-                  onChangedCheckAllItem={onChangedCheckAllItem}
+                  onChangedComponentValue={onChangedComponentValue}
                   loading={param.loading}
                   picker={param.picker}
+                  onSearch={param.onSearch}
                 />
               ))}
             </Space>

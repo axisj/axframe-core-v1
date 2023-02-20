@@ -4,6 +4,7 @@ import { SearchParamTimeRange } from "./SearchParamTimeRange";
 import { SearchParamCheckbox } from "./SearchParamCheckbox";
 import { SearchParamInput } from "./SearchParamInput";
 import { SearchParamDate } from "./SearchParamDate";
+import { SearchParamValuesFinder } from "./SearchParamValuesFinder";
 
 export enum SearchParamType {
   INPUT,
@@ -11,6 +12,7 @@ export enum SearchParamType {
   SELECT,
   CHECKBOX,
   DATE,
+  VALUES_FINDER,
 }
 export type DateType = "date" | "week" | "month" | "quarter" | "year";
 
@@ -28,10 +30,11 @@ interface Props {
   onClickExtraButton?: (params: Record<string, any>) => void;
   label?: string;
   checkAllItem?: boolean;
-  onChangedCheckAllItem?: () => void;
+  onChangedComponentValue?: () => void;
   width?: number;
   loading?: boolean;
   picker?: DateType;
+  onSearch?: () => Promise<SearchParamOption[]>;
 }
 
 export type SearchParamComponentProp<R> = {
@@ -46,6 +49,7 @@ const SearchParamComponents: SearchParamComponentProp<SearchParamComponent> = {
   [SearchParamType.SELECT]: SearchParamSelect,
   [SearchParamType.CHECKBOX]: SearchParamCheckbox,
   [SearchParamType.DATE]: SearchParamDate,
+  [SearchParamType.VALUES_FINDER]: SearchParamValuesFinder,
 };
 
 const SearchParam: SearchParamComponent = (props) => {
