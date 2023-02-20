@@ -62,6 +62,16 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
     [APP_MENUS, linkByRoute]
   );
 
+  const menuItems = React.useMemo(() => {
+    return breadCrumbs[breadCrumbs.length - 2].children.map((b, bidx) => {
+      return {
+        key: b.keyPath?.join(".") ?? bidx + "",
+        label: b.multiLanguage[currentLanguage],
+        program_type: b.progCd,
+      };
+    });
+  }, [breadCrumbs, currentLanguage]);
+
   return (
     <Container>
       {disableIcon
@@ -70,27 +80,17 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
       <TitleWrap>{title}</TitleWrap>
       <Breadcrumb>
         {breadCrumbs.map((breadCrumb, idx) => {
-          const menuItems = (() => {
-            if (idx === breadCrumbs.length - 2) {
-              return breadCrumb.children.map((b, bidx) => {
-                return {
-                  key: b.keyPath?.join(".") ?? bidx + "",
-                  label: b.multiLanguage[currentLanguage],
-                  program_type: b.progCd,
-                };
-              });
-            }
-            return [];
-          })();
-
           return (
             <Breadcrumb.Item
-              key={breadCrumb.keyPath.join()}
+              key={breadCrumb.keyPath.join(".")}
               menu={
-                menuItems.length > 0
+                breadCrumbs.length - 1 === idx
                   ? {
                       onClick: handleClickMenu,
                       items: menuItems,
+                      selectedKeys: [breadCrumb.keyPath.join(".")],
+                      className: "breadcrumb-menu",
+                      subMenuCloseDelay: 5000000,
                     }
                   : undefined
               }
