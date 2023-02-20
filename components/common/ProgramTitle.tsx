@@ -90,7 +90,6 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
                       items: menuItems,
                       selectedKeys: [breadCrumb.keyPath.join(".")],
                       className: "breadcrumb-menu",
-                      subMenuCloseDelay: 5000000,
                     }
                   : undefined
               }
