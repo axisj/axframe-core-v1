@@ -4,7 +4,8 @@ import { SMixinFlexRow } from "@core/styles/emotion";
 import { ROUTES_LIST, useAppMenu } from "router";
 import { MenuIcon } from "components/MenuIcon";
 import { Breadcrumb } from "antd";
-import { useI18n } from "../../hooks";
+import { useI18n, useLink } from "../../hooks";
+import { AppMenu } from "../../../services";
 
 interface Props {
   title: string;
@@ -17,11 +18,13 @@ interface BreadCrumb {
   iconTy: string;
   multiLanguage: { en: string; ko: string };
   keyPath: number[];
+  children: AppMenu[];
 }
 
 function ProgramTitle({ title, icon, disableIcon, children }: Props) {
   const { currentLanguage } = useI18n();
   const { APP_MENUS, MENUS_LIST } = useAppMenu();
+  const { linkByRoute, linkByTo } = useLink();
   const route = ROUTES_LIST.find((route) => route.path === location.pathname);
 
   const { iconTy, breadCrumbs } = React.useMemo(() => {
@@ -29,14 +32,14 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
 
     const breadCrumbs: BreadCrumb[] = [];
     currentMenu?.keyPath?.reduce((acc, cur) => {
-      console.log(acc[cur].iconTy, acc[cur].multiLanguage, acc[cur].keyPath);
       breadCrumbs.push({
-        iconTy: acc[cur].iconTy,
+        iconTy: acc[cur].iconTy ?? "",
         multiLanguage: acc[cur].multiLanguage,
-        keyPath: acc[cur].keyPath,
+        keyPath: acc[cur].keyPath ?? [],
+        children: acc[cur].children,
       });
       return acc[cur].children;
-    }, APP_MENUS as any);
+    }, APP_MENUS as AppMenu[]);
 
     return {
       iconTy: currentMenu?.iconTy,
@@ -44,16 +47,54 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
     };
   }, [APP_MENUS, MENUS_LIST, route?.program_type]);
 
+  const handleClickMenu = React.useCallback(
+    (m) => {
+      const mm = m.key.split(/\./g)?.reduce(
+        (acc, cur) => {
+          return acc.children[Number(cur)] as AppMenu;
+        },
+        { children: APP_MENUS as AppMenu[] }
+      ) as AppMenu;
+      const route = ROUTES_LIST.find((route) => route.program_type === mm.progCd);
+      if (!route) return;
+      linkByRoute(route, {});
+    },
+    [APP_MENUS, linkByRoute]
+  );
+
   return (
     <Container>
       {disableIcon
         ? null
         : icon ?? <MenuIcon typeName={iconTy ?? "Default"} color={"#0281FE"} secondColor={"#0281FE"} fontSize={22} />}
       <TitleWrap>{title}</TitleWrap>
-      <Breadcrumb separator='>'>
-        {breadCrumbs.map((breadCrumb) => {
+      <Breadcrumb>
+        {breadCrumbs.map((breadCrumb, idx) => {
+          const menuItems = (() => {
+            if (idx === breadCrumbs.length - 2) {
+              return breadCrumb.children.map((b, bidx) => {
+                return {
+                  key: b.keyPath?.join(".") ?? bidx + "",
+                  label: b.multiLanguage[currentLanguage],
+                  program_type: b.progCd,
+                };
+              });
+            }
+            return [];
+          })();
+
           return (
-            <Breadcrumb.Item key={breadCrumb.keyPath.join()}>
+            <Breadcrumb.Item
+              key={breadCrumb.keyPath.join()}
+              menu={
+                menuItems.length > 0
+                  ? {
+                      onClick: handleClickMenu,
+                      items: menuItems,
+                    }
+                  : undefined
+              }
+            >
               {breadCrumb.multiLanguage[currentLanguage]}
             </Breadcrumb.Item>
           );
@@ -71,7 +112,7 @@ const Container = styled.div`
   .ant-breadcrumb {
     font-weight: 400;
     .ant-breadcrumb-separator {
-      margin-inline: 4px;
+      margin-inline: 6px;
     }
   }
 `;
