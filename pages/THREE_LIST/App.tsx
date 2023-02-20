@@ -130,12 +130,8 @@ function App({}: Props) {
 const Container = styled(PageLayout)``;
 const Header = styled(PageLayout.Header)``;
 const PageSearchBar = styled(PageLayout.PageSearchBar)``;
-const Body = styled(PageLayout.FrameRow)`
-  padding-top: 0;
-`;
+const Body = styled(PageLayout.FrameRow)``;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
-const Frame = styled(PageLayout.FrameColumn)`
-  padding-top: 0;
-`;
+const Frame = styled(PageLayout.FrameColumn)``;
 
 export default App;

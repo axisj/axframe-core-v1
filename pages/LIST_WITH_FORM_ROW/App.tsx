@@ -142,7 +142,7 @@ function App({}: Props) {
       </PageSearchBar>
 
       <Body ref={resizerContainerRef}>
-        <Frame style={{ flex: flexGrow, paddingTop: 0 }}>
+        <Frame style={{ flex: flexGrow }}>
           <ListDataGrid onClick={onClickItem} />
         </Frame>
         <RowResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />

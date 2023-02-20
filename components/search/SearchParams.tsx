@@ -122,7 +122,7 @@ export function SearchParams({
       scrollToFirstError
     >
       <Container>
-        <DefaultWrap>
+        <DefaultWrap role={"page-search-bar"}>
           {params && params?.length > 0 && (
             <Space wrap align={"center"}>
               {params.map((param, idx) => (
@@ -192,6 +192,10 @@ const DefaultWrap = styled.div`
   margin-bottom: 15px;
   .ant-form-item {
     margin-bottom: 0;
+  }
+
+  .ant-form-item .ant-form-item-label > label {
+    min-width: 60px;
   }
 `;
 

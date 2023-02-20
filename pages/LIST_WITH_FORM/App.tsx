@@ -161,8 +161,6 @@ const Body = styled(PageLayout.FrameRow)`
   padding: 0;
 `;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
-const Frame = styled(PageLayout.FrameColumn)`
-  padding-top: 0;
-`;
+const Frame = styled(PageLayout.FrameColumn)``;
 
 export default App;
