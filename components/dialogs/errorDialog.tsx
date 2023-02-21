@@ -1,8 +1,9 @@
 import * as React from "react";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { Modal } from "antd";
+import { Divider, Modal } from "antd";
 import i18n from "i18n";
 import { useAppStore } from "stores";
+import { ErrorCommonMsg } from "components/common/ErrorCommonMsg";
 
 export interface IErrorDialogOptions {
   icon?: React.ReactNode;
@@ -38,7 +39,12 @@ export const errorDialog = (
       cancelText: t.button.cancel,
       transitionName: "slide-down",
       title: options.title ?? `Error ${options.code}`,
-      content: options.content || options.message || "Unknown error occurred",
+      content: (
+        <>
+          {options.content || options.message || "Unknown error occurred"} <Divider style={{ margin: "10px 0" }} />
+          <ErrorCommonMsg />
+        </>
+      ),
       width: options.width,
       bodyStyle: {
         padding: 15,
