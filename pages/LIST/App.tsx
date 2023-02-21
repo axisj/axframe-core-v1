@@ -9,7 +9,7 @@ import { use$LIST$Store } from "./use$LIST$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGrid } from "./ListDataGrid";
-import { useLink, useUnmountEffect } from "../../hooks";
+import { useLink, useUnmountEffect } from "hooks";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ROUTES } from "router";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";

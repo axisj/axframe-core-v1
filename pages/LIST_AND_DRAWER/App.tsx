@@ -7,7 +7,7 @@ import { PageLayout } from "styles/pageStyled";
 import { useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_AND_DRAWER$Store } from "./use$LIST_AND_DRAWER$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
-import { IParam, SearchParams, SearchParamType } from "../../components/search";
+import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { openDetailDrawer } from "./DetailDrawer";
 import { ListDataGrid } from "./ListDataGrid";
