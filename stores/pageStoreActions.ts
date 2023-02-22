@@ -23,8 +23,12 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
     const page = usePageTabStore.getState().getPageByPath(routePath);
     if (!page) {
       setMetaDataByPath(routePath, {});
-      // get().syncMetadata();
-      set(config?.initialState);
+
+      if (config?.initialState) {
+        set(config.initialState);
+      } else {
+        get().syncMetadata();
+      }
       config?.unSubscribe?.();
     }
   },
