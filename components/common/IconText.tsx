@@ -75,7 +75,9 @@ const IconTextContainer = styled.span<StyleProps>`
         display: inline-flex;
       `;
     }
-    return css``;
+    return css`
+      overflow: hidden;
+    `;
   }}
   ${({ onClick, disabled, theme }) => {
     if (onClick && !disabled) {
@@ -139,6 +141,9 @@ const TextContainer = styled.span<StyleProps>`
     if (block) {
       return css`
         flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       `;
     }
     return css``;
