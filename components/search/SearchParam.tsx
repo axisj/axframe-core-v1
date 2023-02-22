@@ -35,6 +35,7 @@ interface Props {
   loading?: boolean;
   picker?: DateType;
   onSearch?: () => Promise<SearchParamOption[]>;
+  config?: Record<string, any>;
 }
 
 export type SearchParamComponentProp<R> = {

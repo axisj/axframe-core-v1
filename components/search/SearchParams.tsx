@@ -20,6 +20,7 @@ export interface IParam {
   loading?: boolean;
   picker?: DateType;
   onSearch?: () => Promise<SearchParamOption[]>;
+  config?: Record<string, any>;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -30,7 +31,7 @@ interface Props {
   form: FormInstance<any>;
   params?: IParam[];
   paramsValue?: ParamsValue;
-  onChangeParamsValue?: (paramsValue: Record<string, any>) => void;
+  onChangeParamsValue?: (paramsValue: Record<string, any>, changedValues?: Record<string, any>) => void;
   onSearch?: () => void;
   children?: React.ReactNode;
   expand?: boolean;
@@ -65,7 +66,7 @@ export function SearchParams({
 
   const onValuesChange = React.useCallback(
     (changedValues: any, values: Record<string, any>) => {
-      onChangeParamsValue?.(values);
+      onChangeParamsValue?.(values, changedValues);
     },
     [onChangeParamsValue]
   );
@@ -142,6 +143,7 @@ export function SearchParams({
                   loading={param.loading}
                   picker={param.picker}
                   onSearch={param.onSearch}
+                  config={param.config}
                 />
               ))}
             </Space>
