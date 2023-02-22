@@ -1,6 +1,11 @@
 import { getMetaDataByPath, setMetaDataByPath, usePageTabStore } from "./usePageTabStore";
 
-export const pageStoreActions = (set, get, unSubscribe?: () => void) => ({
+interface PageStoreConfig {
+  unSubscribe?: () => void;
+  initialState?: Record<string, any>;
+}
+
+export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
   init: () => {
     const metaData = getMetaDataByPath(get().routePath);
     if (metaData) get().syncMetadata(metaData);
@@ -18,8 +23,9 @@ export const pageStoreActions = (set, get, unSubscribe?: () => void) => ({
     const page = usePageTabStore.getState().getPageByPath(routePath);
     if (!page) {
       setMetaDataByPath(routePath, {});
-      get().syncMetadata();
-      unSubscribe?.();
+      // get().syncMetadata();
+      set(config?.initialState);
+      config?.unSubscribe?.();
     }
   },
 });
