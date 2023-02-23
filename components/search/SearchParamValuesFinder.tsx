@@ -13,6 +13,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
   placeholder,
   onSearch,
   onChangedComponentValue,
+  config,
 }) => {
   const form = Form.useFormInstance();
 
@@ -28,7 +29,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
       <Input.Group compact>
         <Form.Item name={name} noStyle>
           <Select
-            mode={"multiple"}
+            mode={config?.single ? undefined : "multiple"}
             style={{ minWidth: 100, width }}
             placeholder={placeholder}
             options={value}
