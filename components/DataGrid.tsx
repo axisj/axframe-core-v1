@@ -23,6 +23,10 @@ export function DataGrid<T>({
 }: Props<T>) {
   // console.log("data", data, selectedRowKey);
 
+  if (width === 0 || height === 0) {
+    return null;
+  }
+
   return (
     <Container>
       <AXFDataGrid
