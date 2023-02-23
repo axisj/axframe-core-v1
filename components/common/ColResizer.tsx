@@ -4,13 +4,13 @@ import { mouseEventSubscribe } from "@core/utils/event";
 import { IMousePosition } from "@core/utils/types";
 
 interface Props {
-  containerRef: React.RefObject<HTMLDivElement>;
-  onResize: (flexGlow: number) => void;
+  containerRef?: React.RefObject<HTMLDivElement>;
+  onResize?: (flexGlow: number) => void;
 }
 
 function ColResizer({ containerRef, onResize }: Props) {
   const handleMove = React.useCallback(() => {
-    if (!containerRef.current) {
+    if (!containerRef?.current) {
       return;
     }
 
@@ -18,7 +18,7 @@ function ColResizer({ containerRef, onResize }: Props) {
 
     mouseEventSubscribe((mousePosition: IMousePosition) => {
       const dx = mousePosition.clientX - left;
-      onResize((dx * 2) / width);
+      onResize?.((dx * 2) / width);
     });
   }, [containerRef, onResize]);
 
@@ -26,7 +26,7 @@ function ColResizer({ containerRef, onResize }: Props) {
 }
 
 const Container = styled.div`
-  flex: none;
+  //flex: none;
   position: relative;
   width: 1px;
   height: 100%;
