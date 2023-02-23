@@ -63,7 +63,7 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
   );
 
   const menuItems = React.useMemo(() => {
-    return breadCrumbs[breadCrumbs.length - 2].children.map((b, bidx) => {
+    return breadCrumbs[breadCrumbs.length - 2]?.children.map((b, bidx) => {
       return {
         key: b.keyPath?.join(".") ?? bidx + "",
         label: b.multiLanguage[currentLanguage],
