@@ -99,7 +99,7 @@ export function SearchParams({
       if (filter.type === SearchParamType.TIME_RANGE) {
         formValues[filter.name] = getDayJsRangeValue(paramsValue?.[filter.name]);
       } else if (filter.type === SearchParamType.DATE) {
-        formValues[filter.name] = dayjs(paramsValue?.[filter.name]);
+        formValues[filter.name] = paramsValue?.[filter.name] ? dayjs(paramsValue?.[filter.name]) : undefined;
       } else if (filter.type === SearchParamType.VALUES_FINDER) {
         formValues[filter.name] = paramsValue?.[filter.name] ?? [];
       } else {
