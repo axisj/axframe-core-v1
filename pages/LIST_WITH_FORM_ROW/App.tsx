@@ -46,6 +46,7 @@ function App({}: Props) {
   );
 
   const [searchForm] = Form.useForm();
+  const [form] = Form.useForm();
 
   const handleReset = React.useCallback(async () => {
     reset();
@@ -57,9 +58,14 @@ function App({}: Props) {
   }, [callListApi]);
 
   const handleSave = useCallback(async () => {
-    await callSaveApi();
-    await reset();
-  }, [callSaveApi, reset]);
+    try {
+      await form.validateFields();
+      await callSaveApi();
+      await reset();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [callSaveApi, reset, form]);
 
   const params = React.useMemo(
     () =>
@@ -147,7 +153,7 @@ function App({}: Props) {
         </Frame>
         <RowResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
         <Frame style={{ flex: 2 - flexGrow }} scroll>
-          <FormSet />
+          <FormSet form={form} />
         </Frame>
       </Body>
     </Container>
