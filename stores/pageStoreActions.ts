@@ -15,7 +15,11 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
     if (!routePath) return;
 
     setMetaDataByPath(routePath, {});
-    get().syncMetadata();
+    if (config?.initialState) {
+      set(config.initialState);
+    } else {
+      get().syncMetadata();
+    }
   },
   destroy: () => {
     const routePath = get().routePath;
