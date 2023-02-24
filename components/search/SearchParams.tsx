@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Form, FormInstance, Input, Space } from "antd";
-import { AXFIArrowDown, AXFIArrowUp } from "@axframe/icon";
+import { Button, Form, FormInstance, Input, Space } from "antd";
+import { AXFIArrowDown, AXFIArrowUp, AXFISearch } from "@axframe/icon";
 import { IconText } from "@core/components/common";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { PageLayout } from "styles/pageStyled";
@@ -153,14 +153,18 @@ export function SearchParams({
             <SearchInput />
           ) : (
             <SearchInput>
-              <Form.Item name={"filter"} {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
-                <Input.Search
-                  loading={spinning}
-                  placeholder={"search"}
-                  allowClear
-                  onSearch={handleSearch}
-                  style={{ width: filterWidth }}
-                />
+              <Form.Item {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
+                <Input.Group compact>
+                  <Form.Item name={"filter"} noStyle>
+                    <Input placeholder={"search"} allowClear style={{ width: filterWidth }} />
+                  </Form.Item>
+                  <Button
+                    loading={spinning}
+                    style={{ width: 40 }}
+                    icon={<AXFISearch fontSize={14} style={{ marginTop: 3 }} />}
+                    onClick={handleSearch}
+                  />
+                </Input.Group>
               </Form.Item>
             </SearchInput>
           )}
