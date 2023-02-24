@@ -8,7 +8,7 @@ import { ErrorCommonMsg } from "components/common/ErrorCommonMsg";
 export interface IErrorDialogOptions {
   icon?: React.ReactNode;
   title?: string | React.ReactNode;
-  content: React.ReactNode;
+  content: string | React.ReactNode;
   message?: string;
   code?: number;
   className?: string;
@@ -28,7 +28,7 @@ export const errorDialog = (
     const t = i18n[currentLanguage ?? "en"];
 
     if (options.code && t.apiErrMsg[options.code]) {
-      options.content = t.apiErrMsg[options.code];
+      options.content = t.apiErrMsg[options.code] + (options.message ? ` [${options.message}]` : "");
     }
 
     Modal.error({
