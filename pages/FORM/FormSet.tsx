@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Checkbox, Col, DatePicker, Form, Input, Radio, Row, Select, Space } from "antd";
+import { Button, Checkbox, Col, DatePicker, Form, FormInstance, Input, Radio, Row, Select, Space } from "antd";
 import styled from "@emotion/styled";
 import { PageLayout } from "styles/pageStyled";
 import dayjs from "dayjs";
@@ -10,10 +10,12 @@ import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 
-interface Props {}
+interface Props {
+  form: FormInstance<DtoItem>;
+}
 interface DtoItem extends ExampleItem {}
 
-function FormSet({}: Props) {
+function FormSet({ form }: Props) {
   const saveRequestValue = use$FORM$Store((s) => s.saveRequestValue);
   const setSaveRequestValue = use$FORM$Store((s) => s.setSaveRequestValue);
   const callSaveApi = use$FORM$Store((s) => s.callSaveApi);
@@ -21,7 +23,6 @@ function FormSet({}: Props) {
   const reset = use$FORM$Store((s) => s.reset);
 
   const { t } = useI18n();
-  const [form] = Form.useForm();
   const openZipCodeFinder = useDaumPostcodePopup("//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js");
 
   const cnsltHow = Form.useWatch("cnsltHow", form);
