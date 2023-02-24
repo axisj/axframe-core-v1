@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button } from "antd";
+import { Button, Form } from "antd";
 import { Loading, ProgramTitle } from "@core/components/common";
 import * as React from "react";
 import { useCallback } from "react";
@@ -19,10 +19,17 @@ function App({}: Props) {
   const saveSpinning = use$FORM$Store((s) => s.saveSpinning);
   const callSaveApi = use$FORM$Store((s) => s.callSaveApi);
 
+  const [form] = Form.useForm();
   const handleSave = useCallback(async () => {
-    await callSaveApi();
-    await reset();
-  }, [callSaveApi, reset]);
+    try {
+      await form.validateFields();
+
+      await callSaveApi();
+      await reset();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [callSaveApi, form, reset]);
 
   useDidMountEffect(() => {
     init();
@@ -48,7 +55,7 @@ function App({}: Props) {
         </ButtonGroup>
       </Header>
 
-      <FormSet />
+      <FormSet form={form} />
 
       <Loading active={saveSpinning} />
     </Container>

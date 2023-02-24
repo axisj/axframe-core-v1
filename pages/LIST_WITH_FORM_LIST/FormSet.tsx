@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
+import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Select } from "antd";
 import styled from "@emotion/styled";
 import { PageLayout } from "styles/pageStyled";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
@@ -9,10 +9,12 @@ import { EmptyMsg } from "components/common";
 import { convertToDate } from "@core/utils/object";
 import { SubListDataGrid } from "./SubListDataGrid";
 
-interface Props {}
+interface Props {
+  form: FormInstance<DtoItem>;
+}
 interface DtoItem extends ExampleItem {}
 
-function FormSet({}: Props) {
+function FormSet({ form }: Props) {
   const saveRequestValue = use$LIST_WITH_FORM_LIST$Store((s) => s.saveRequestValue);
   const setSaveRequestValue = use$LIST_WITH_FORM_LIST$Store((s) => s.setSaveRequestValue);
   const callSaveApi = use$LIST_WITH_FORM_LIST$Store((s) => s.callSaveApi);
@@ -22,7 +24,6 @@ function FormSet({}: Props) {
   const setFormActive = use$LIST_WITH_FORM_LIST$Store((s) => s.setFormActive);
 
   const { t } = useI18n();
-  const [form] = Form.useForm();
 
   const formInitialValues = React.useRef({}).current; // form 의 초기값 reset해도 이값 으로 리셋됨
 
