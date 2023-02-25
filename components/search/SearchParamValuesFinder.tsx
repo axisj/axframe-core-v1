@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SearchParamComponent } from "./SearchParam";
-import { Form, Input, Button, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import styled from "@emotion/styled";
 import { AXFISearch } from "@axframe/icon";
 
@@ -18,10 +18,12 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
   const form = Form.useFormInstance();
 
   const handleSearch = React.useCallback(async () => {
-    const options = await onSearch?.();
+    try {
+      const options = await onSearch?.();
 
-    form.setFieldValue(name, options);
-    onChangedComponentValue?.();
+      form.setFieldValue(name, options);
+      onChangedComponentValue?.();
+    } catch (err) {}
   }, [onSearch, form, name, onChangedComponentValue]);
 
   return (

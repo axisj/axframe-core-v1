@@ -29,14 +29,14 @@ export const alertDialog = (
         options.content
       );
 
-    Modal.error({
+    Modal.info({
       autoFocusButton: "ok",
       className: options.className,
       okText: t.button.ok,
       cancelText: t.button.cancel,
       transitionName: "slide-down",
-      title: options.title ?? modalContent,
-      content: options.title ? modalContent : "",
+      title: options.title ?? "Alert",
+      content: options.content ? modalContent : "",
       bodyStyle: {
         padding: 15,
       },

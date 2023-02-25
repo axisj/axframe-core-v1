@@ -16,9 +16,7 @@ function FrameProgram({ sideMenuOpened }: Props) {
   return (
     <PageFrameContainer>
       <PageFrameNav sideMenuOpened={sideMenuOpened}>
-        <React.Suspense fallback={<></>}>
-          <NavGroup />
-        </React.Suspense>
+        <NavGroup />
       </PageFrameNav>
       <PageFrameContent>
         <TabGroup />
