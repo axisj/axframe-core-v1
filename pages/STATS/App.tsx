@@ -2,13 +2,15 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import { ProgramTitle } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
-import { Button, Form } from "antd";
+import { Button, Form, Tabs } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { useI18n, useUnmountEffect } from "@core/hooks";
 import { use$STATS$Store } from "./use$STATS$Store";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { PanelIndex } from "./PanelIndex";
+import { PanelType } from "./use$STATS$Store";
 
 interface DtoItem extends ExampleItem {}
 
@@ -21,14 +23,11 @@ function App({}: Props) {
   const reset = use$STATS$Store((s) => s.reset);
   const destroy = use$STATS$Store((s) => s.destroy);
   const callListApi = use$STATS$Store((s) => s.callListApi);
-  const callSaveApi = use$STATS$Store((s) => s.callSaveApi);
-  const setFlexGrow = use$STATS$Store((s) => s.setFlexGrow);
   const requestValue = use$STATS$Store((s) => s.requestValue);
   const setRequestValue = use$STATS$Store((s) => s.setRequestValue);
   const spinning = use$STATS$Store((s) => s.spinning);
-  const setListSelectedRowKey = use$STATS$Store((s) => s.setListSelectedRowKey);
-  const flexGrow = use$STATS$Store((s) => s.flexGrow);
-  const resizerContainerRef = React.useRef<HTMLDivElement>(null);
+  const activeTabKey = use$STATS$Store((s) => s.activeTabKey);
+  const setActiveTabKey = use$STATS$Store((s) => s.setActiveTabKey);
 
   const [searchForm] = Form.useForm();
 
@@ -77,7 +76,7 @@ function App({}: Props) {
   return (
     <Container stretch role={"page-container"}>
       <Header>
-        <ProgramTitle title={t.pages.example.listWithList.title}>
+        <ProgramTitle title={t.pages.example.stats.title}>
           <Button icon={<AXFIRevert />} onClick={handleReset} size='small' type={"ghost"}>
             {t.button.reset}
           </Button>
@@ -90,14 +89,6 @@ function App({}: Props) {
             }}
           >
             {t.button.search}
-          </Button>
-          <Button
-            type={"primary"}
-            onClick={() => {
-              callSaveApi();
-            }}
-          >
-            {t.button.save}
           </Button>
         </ButtonGroup>
       </Header>
@@ -114,8 +105,27 @@ function App({}: Props) {
         />
       </PageSearchBar>
 
-      <Body ref={resizerContainerRef}>
-        <Frame style={{ flex: flexGrow }}></Frame>
+      <PageTabBar>
+        <Tabs
+          items={[
+            {
+              key: "pg1",
+              label: t.pages.example.stats.tabs.pg1,
+            },
+            {
+              key: "pg2",
+              label: t.pages.example.stats.tabs.pg2,
+            },
+          ]}
+          onChange={(key) => setActiveTabKey(key as PanelType)}
+          activeKey={activeTabKey}
+        />
+      </PageTabBar>
+
+      <Body>
+        <Frame>
+          <PanelIndex contentType={activeTabKey} />
+        </Frame>
       </Body>
     </Container>
   );
@@ -126,6 +136,7 @@ const Header = styled(PageLayout.Header)``;
 const Body = styled(PageLayout.FrameRow)``;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
 const PageSearchBar = styled(PageLayout.PageSearchBar)``;
+const PageTabBar = styled(PageLayout.PageTabBar)``;
 const Frame = styled(PageLayout.FrameColumn)``;
 
 export default App;
