@@ -11,7 +11,7 @@ function StatTableTHead({ headColumns }: Props) {
       {headColumns.map((h, hi) => (
         <tr key={hi}>
           {h.children?.map((th, thi) => (
-            <th key={thi} colSpan={th.colspan} rowSpan={th.rowspan} align={h.align ?? "center"}>
+            <th key={thi} colSpan={th.colspan} rowSpan={th.rowspan} align={th.align ?? "center"}>
               {th.label}
             </th>
           ))}

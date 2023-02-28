@@ -68,6 +68,19 @@ export interface ExampleListRequest {
   pageNumber?: number;
 }
 
+export interface ExampleStatItem {
+  busi?: string;
+  stor?: string;
+  storCnt?: number;
+  "01-28"?: number;
+  "01-27"?: number;
+  "01-26"?: number;
+  "01-25"?: number;
+  "01-24"?: number;
+  "01-23"?: number;
+  "01-22"?: number;
+}
+
 export interface ExampleListResponse {
   ds: ExampleItem[];
   page: DataGridPageResponse;
@@ -103,10 +116,15 @@ export interface ExampleChildSaveRequest {
 
 export interface ExampleChildSaveResponse {}
 
+export interface ExampleStatResponse {
+  ds: ExampleStatItem[];
+}
+
 export abstract class ExampleRepositoryInterface {
   abstract list(params: ExampleListRequest): Promise<ExampleListResponse>;
   abstract save(params: ExampleSaveRequest): Promise<ExampleSaveResponse>;
   abstract detail(params: ExampleDetailRequest): Promise<ExampleDetailResponse>;
   abstract childList(params: ExampleChildListRequest): Promise<ExampleChildListResponse>;
   abstract childListSave(params: ExampleChildSaveRequest): Promise<ExampleChildSaveResponse>;
+  abstract stat(params: any): Promise<ExampleStatResponse>;
 }

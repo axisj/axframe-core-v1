@@ -9,6 +9,7 @@ enum ProgramType {
   LIST_WITH_FORM_ROW,
   LIST_WITH_LIST,
   THREE_LIST,
+  STATS,
 }
 
 interface Program {

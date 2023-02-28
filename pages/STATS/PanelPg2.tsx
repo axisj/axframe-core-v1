@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { StatCol, StatTable } from "../../components/statTable";
+import { StatCol, StatTable } from "@core/components/statTable";
 
 interface Props {}
 

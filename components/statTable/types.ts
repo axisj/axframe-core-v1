@@ -10,11 +10,11 @@ export interface StatHeadTd {
   colspan?: number;
   rowspan?: number;
   label: string;
+  align?: Align;
 }
 
 export interface StatHeadTr {
   children?: StatHeadTd[];
-  align?: Align;
 }
 
 export interface StatBodyTd<T> {
@@ -26,22 +26,27 @@ export interface StatBodyTd<T> {
   align?: Align;
 }
 
-export interface StatTotalTd {
+export interface ItemTotal {
+  sum: number;
+  count: number;
+}
+
+export interface StatTotalTd<T> {
   key?: string;
   label?: React.ReactNode;
   colspan?: number;
   totalType?: "sum" | "count" | "avg";
-  itemRender?: (total: { sum: number; count: number }) => React.ReactNode;
+  itemRender?: (total: ItemTotal, item: Record<keyof T, ItemTotal>) => React.ReactNode;
   align?: Align;
 }
 
 export interface StatSubTotal<T> {
   condition: (curItem: T, nextItem: T) => boolean;
-  columns: StatTotalTd[];
+  columns: StatTotalTd<T>[];
 }
 
-export interface StatTotal {
-  columns: StatTotalTd[];
+export interface StatTotal<T> {
+  columns: StatTotalTd<T>[];
 }
 
 export interface StatTableStyleProps {
@@ -49,12 +54,13 @@ export interface StatTableStyleProps {
   bodyRowHeight?: number;
 }
 export interface StatTableProps<T> extends StatTableStyleProps {
+  spinning?: boolean;
   style?: React.CSSProperties;
   className?: string;
   colGroups: StatCol[];
   headColumns: StatHeadTr[];
   bodyColumns: StatBodyTd<T>[];
   subtotal?: StatSubTotal<T>;
-  total?: StatTotal;
+  total?: StatTotal<T>;
   data: T[];
 }

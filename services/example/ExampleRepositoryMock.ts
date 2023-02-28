@@ -8,6 +8,7 @@ import {
   ExampleRepositoryInterface,
   ExampleSaveRequest,
   ExampleSaveResponse,
+  ExampleStatResponse,
 } from "./ExampleRepositoryInterface";
 import { resDs } from "./resDs";
 
@@ -123,5 +124,73 @@ export class ExampleRepositoryMock extends ExampleRepositoryInterface {
     console.log("childListSave", params);
     await delay(300);
     return {};
+  }
+
+  async stat(params: any): Promise<ExampleStatResponse> {
+    await delay(300);
+    return {
+      ds: [
+        {
+          busi: "DX",
+          stor: "수원사업장",
+          storCnt: 14,
+          "01-28": 1000,
+          "01-27": 90,
+          "01-26": 110,
+          "01-25": 80,
+          "01-24": 70,
+          "01-23": 200,
+          "01-22": 50,
+        },
+        {
+          busi: "DX",
+          stor: "수원사업장",
+          storCnt: 14,
+          "01-28": 1000,
+          "01-27": 90,
+          "01-26": 110,
+          "01-25": 80,
+          "01-24": 70,
+          "01-23": 200,
+          "01-22": 50,
+        },
+        {
+          busi: "DX",
+          stor: "구미사업장",
+          storCnt: 10,
+          "01-28": 100,
+          "01-27": 90,
+          "01-26": 110,
+          "01-25": 80,
+          "01-24": 70,
+          "01-23": 200,
+          "01-22": 50,
+        },
+        {
+          busi: "DS",
+          stor: "광주사업장",
+          storCnt: 6,
+          "01-28": 100,
+          "01-27": 90,
+          "01-26": 110,
+          "01-25": 80,
+          "01-24": 70,
+          "01-23": 200,
+          "01-22": 50,
+        },
+        {
+          busi: "DS",
+          stor: "광주사업장",
+          storCnt: 8,
+          "01-28": 100,
+          "01-27": 90,
+          "01-26": 110,
+          "01-25": 80,
+          "01-24": 70,
+          "01-23": 200,
+          "01-22": 50,
+        },
+      ],
+    };
   }
 }

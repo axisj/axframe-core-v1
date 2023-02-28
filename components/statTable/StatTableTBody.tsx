@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StatBodyTd, StatSubTotal } from "./types";
+import { ItemTotal, StatBodyTd, StatSubTotal } from "./types";
 import { toMoney } from "../../utils/number";
 
 interface Props<T> {
@@ -19,7 +19,7 @@ function StatTableTBody<T>({ cdata, subtotal, bodyColumns }: Props<T>) {
                 const tdValue = (() => {
                   if (sc.key) {
                     if (sc.itemRender) {
-                      return sc.itemRender(item[sc.key]);
+                      return sc.itemRender(item[sc.key], item as Record<keyof T, ItemTotal>);
                     }
 
                     if (sc.totalType === "avg") {

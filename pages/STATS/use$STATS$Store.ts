@@ -1,5 +1,5 @@
 import create from "zustand";
-import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
+import { ExampleListRequest, ExampleStatItem } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
@@ -11,7 +11,7 @@ import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
 
 interface ListRequest extends ExampleListRequest {}
-interface DtoItem extends ExampleItem {}
+interface DtoItem extends ExampleStatItem {}
 export type PanelType = "pg1" | "pg2";
 
 interface MetaData {
@@ -53,7 +53,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
     try {
       const apiParam = request ?? get().requestValue;
-      const response = await ExampleService.list(apiParam);
+      const response = await ExampleService.stat(apiParam);
 
       set({
         listData: response.ds,

@@ -4,8 +4,10 @@ import { StatTableProps, StatTableStyleProps } from "./types";
 import { StatTableTHead } from "./StatTableTHead";
 import { StatTableTBody } from "./StatTableTBody";
 import { StatTableTFoot } from "./StatTableTFoot";
+import { Loading } from "../common";
 
 function StatTable<T = Record<string, any>>({
+  spinning,
   headRowHeight = 34,
   bodyRowHeight = 34,
   colGroups,
@@ -104,11 +106,13 @@ function StatTable<T = Record<string, any>>({
         <StatTableTBody cdata={cdata} subtotal={subtotal} bodyColumns={bodyColumns} />
         <StatTableTFoot total={total} totalValues={totalValues} />
       </Table>
+      <Loading active={spinning} />
     </Container>
   );
 }
 
 const Container = styled.div`
+  position: relative;
   overflow: auto;
   border-radius: 4px;
   border: 1px solid ${(p) => p.theme.border_color_base};
