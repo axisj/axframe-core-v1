@@ -63,4 +63,6 @@ export interface StatTableProps<T> extends StatTableStyleProps {
   subtotal?: StatSubTotal<T>;
   total?: StatTotal<T>;
   data: T[];
+  width: number;
+  height: number;
 }

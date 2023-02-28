@@ -6,11 +6,10 @@ import { Button, Form, Tabs } from "antd";
 import { PageLayout } from "styles/pageStyled";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { useI18n, useUnmountEffect } from "@core/hooks";
-import { use$STATS$Store } from "./use$STATS$Store";
+import { PanelType, use$STATS$Store } from "./use$STATS$Store";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { PanelIndex } from "./PanelIndex";
-import { PanelType } from "./use$STATS$Store";
 
 interface DtoItem extends ExampleItem {}
 
@@ -122,21 +121,15 @@ function App({}: Props) {
         />
       </PageTabBar>
 
-      <Body>
-        <Frame>
-          <PanelIndex contentType={activeTabKey} />
-        </Frame>
-      </Body>
+      <PanelIndex contentType={activeTabKey} />
     </Container>
   );
 }
 
 const Container = styled(PageLayout)``;
 const Header = styled(PageLayout.Header)``;
-const Body = styled(PageLayout.FrameRow)``;
 const ButtonGroup = styled(PageLayout.ButtonGroup)``;
 const PageSearchBar = styled(PageLayout.PageSearchBar)``;
 const PageTabBar = styled(PageLayout.PageTabBar)``;
-const Frame = styled(PageLayout.FrameColumn)``;
 
 export default App;

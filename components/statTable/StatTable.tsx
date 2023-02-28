@@ -1,12 +1,16 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { StatTableProps, StatTableStyleProps } from "./types";
+import { StatTableProps } from "./types";
 import { StatTableTHead } from "./StatTableTHead";
 import { StatTableTBody } from "./StatTableTBody";
 import { StatTableTFoot } from "./StatTableTFoot";
 import { Loading } from "../common";
 
 function StatTable<T = Record<string, any>>({
+  width,
+  height,
+  className,
+  style,
   spinning,
   headRowHeight = 34,
   bodyRowHeight = 34,
@@ -22,6 +26,17 @@ function StatTable<T = Record<string, any>>({
       return acc + (cur.width ?? 0);
     }, 0);
   }, [colGroups]);
+
+  const { headHeight, bodyHeight, footHeight } = React.useMemo(() => {
+    const headHeight = headColumns.length * headRowHeight + 1;
+    const footHeight = bodyRowHeight + 1;
+    const bodyHeight = height - headHeight - footHeight;
+    return {
+      headHeight,
+      bodyHeight,
+      footHeight,
+    };
+  }, [bodyRowHeight, headColumns.length, headRowHeight, height]);
 
   const { newData: cdata, totalValues } = React.useMemo(() => {
     const newData = [] as Record<string, any>[];
@@ -93,78 +108,123 @@ function StatTable<T = Record<string, any>>({
     };
   }, [bodyColumns, data, subtotal, total?.columns]);
 
+  const [scrollLeft, setScrollLeft] = React.useState(0);
+  const [scrollTop, setScrollTop] = React.useState(0);
+
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const onScroll = React.useCallback(() => {
+    if (scrollContainerRef.current) {
+      const { scrollTop, scrollLeft } = scrollContainerRef.current;
+      setScrollTop(scrollTop);
+      setScrollLeft(scrollLeft);
+    }
+  }, []);
+
+  const onWheel: (this: HTMLDivElement, ev: HTMLElementEventMap["wheel"]) => any = React.useCallback((evt) => {
+    evt.preventDefault();
+
+    if (scrollContainerRef.current) {
+      const delta = { x: 0, y: 0 };
+
+      if ((evt as any).detail) {
+        delta.y = (evt as any).detail * 10;
+      } else {
+        if (typeof evt.deltaY === "undefined") {
+          delta.y = -(evt as any).wheelDelta;
+          delta.x = 0;
+        } else {
+          delta.y = evt.deltaY;
+          delta.x = evt.deltaX;
+        }
+      }
+
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta.y;
+    }
+  }, []);
+  //setInitialized
+  React.useEffect(() => {
+    const scrollContainerRefCurrent = scrollContainerRef?.current;
+
+    if (scrollContainerRefCurrent) {
+      scrollContainerRefCurrent.removeEventListener("scroll", onScroll);
+      scrollContainerRefCurrent.addEventListener("scroll", onScroll, { passive: true, capture: true });
+      // scrollContainerRef.current.scrollLeft = props.scrollLeft ?? scrollLeft;
+      // scrollContainerRef.current.scrollTop = props.scrollTop ?? scrollTop;
+    }
+
+    return () => {
+      scrollContainerRefCurrent?.removeEventListener("scroll", onScroll);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <Container>
-      <Table style={{ minWidth: tableWidth }} headRowHeight={headRowHeight} bodyRowHeight={bodyRowHeight}>
-        <colgroup>
-          {colGroups.map((cg, cgi) => (
-            <col key={cgi} width={cg.width} />
-          ))}
-          <col />
-        </colgroup>
-        <StatTableTHead headColumns={headColumns} />
-        <StatTableTBody cdata={cdata} subtotal={subtotal} bodyColumns={bodyColumns} />
-        <StatTableTFoot total={total} totalValues={totalValues} />
-      </Table>
+    <Container className={className} style={style} width={width} height={height}>
+      <HeadContainer style={{ width: width, height: headHeight }}>
+        <StatTableTHead
+          marginLeft={-scrollLeft}
+          colGroups={colGroups}
+          headColumns={headColumns}
+          tableWidth={tableWidth}
+          headRowHeight={headRowHeight}
+        />
+      </HeadContainer>
+
+      <BodyContainer ref={scrollContainerRef} style={{ width: width, height: bodyHeight }}>
+        <StatTableTBody
+          colGroups={colGroups}
+          cdata={cdata}
+          subtotal={subtotal}
+          bodyColumns={bodyColumns}
+          tableWidth={tableWidth}
+          bodyRowHeight={bodyRowHeight}
+        />
+      </BodyContainer>
+
+      <FootContainer style={{ width: width, height: footHeight }}>
+        <StatTableTFoot
+          marginLeft={-scrollLeft}
+          colGroups={colGroups}
+          total={total}
+          totalValues={totalValues}
+          tableWidth={tableWidth}
+          bodyRowHeight={bodyRowHeight}
+        />
+      </FootContainer>
+
       <Loading active={spinning} />
     </Container>
   );
 }
 
-const Container = styled.div`
+const Container = styled.div<{ width: number; height: number }>`
   position: relative;
-  overflow: auto;
+  overflow: hidden;
   border-radius: 4px;
   border: 1px solid ${(p) => p.theme.border_color_base};
+  width: ${(p) => p.width}px;
+  height: ${(p) => p.height}px;
 `;
-const Table = styled.table<StatTableStyleProps>`
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-  border-style: hidden;
+
+const HeadContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid ${(p) => p.theme.border_color_base};
   background: ${(p) => p.theme.component_background};
-
-  thead {
-    th {
-      white-space: nowrap;
-      border: 1px solid ${(p) => p.theme.border_color_base};
-      background: ${(p) => p.theme.axfdg_header_bg};
-      line-height: 20px;
-      padding: 0 6.5px;
-      height: ${(p) => p.headRowHeight}px;
-    }
-  }
-
-  tbody {
-    td {
-      white-space: nowrap;
-      border: 1px solid ${(p) => p.theme.border_color_base};
-      line-height: 20px;
-      padding: 0 6.5px;
-      height: ${(p) => p.bodyRowHeight}px;
-    }
-
-    tr[role="subtotal"] {
-      td {
-        background: #ffeeee;
-      }
-    }
-  }
-
-  tfoot {
-    td {
-      background: #eee;
-      white-space: nowrap;
-      border: 1px solid ${(p) => p.theme.border_color_base};
-      line-height: 20px;
-      padding: 0 6.5px;
-      height: ${(p) => p.bodyRowHeight}px;
-    }
-  }
 `;
 
-StatTable.tbody = styled.tbody``;
-StatTable.tr = styled.tr``;
-StatTable.td = styled.td``;
+const BodyContainer = styled.div`
+  position: relative;
+  overflow: auto;
+  background: ${(p) => p.theme.component_background};
+`;
+
+const FootContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid ${(p) => p.theme.border_color_base};
+  background: #eee;
+`;
 
 export { StatTable };

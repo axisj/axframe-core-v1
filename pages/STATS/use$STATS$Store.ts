@@ -18,6 +18,8 @@ interface MetaData {
   requestValue: ListRequest;
   listColWidths: number[];
   activeTabKey: PanelType;
+  flexGrowPg1: number;
+  flexGrowPg2: number;
 }
 
 interface States extends MetaData {
@@ -31,6 +33,8 @@ interface Actions extends PageStoreActions<States> {
   setRequestValue: (requestValue: ListRequest) => void;
   setListColWidths: (colWidths: number[]) => void;
   setActiveTabKey: (key: PanelType) => void;
+  setFlexGrowPg1: (flexGlow: number) => void;
+  setFlexGrowPg2: (flexGlow: number) => void;
 }
 
 // create states
@@ -44,6 +48,8 @@ const createState: States = {
   spinning: false,
   listData: [],
   activeTabKey: "pg1",
+  flexGrowPg1: 1,
+  flexGrowPg2: 1,
 };
 
 // create actions
@@ -67,9 +73,17 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setRequestValue: (requestValues) => set({ requestValue: requestValues }),
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setActiveTabKey: (key) => set({ activeTabKey: key }),
+  setFlexGrowPg1: (flexGlow) => set({ flexGrowPg1: flexGlow }),
+  setFlexGrowPg2: (flexGlow) => set({ flexGrowPg2: flexGlow }),
 
   syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = ["requestValue", "listColWidths", "activeTabKey"];
+    const metaDataKeys: (keyof MetaData)[] = [
+      "requestValue",
+      "listColWidths",
+      "activeTabKey",
+      "flexGrowPg1",
+      "flexGrowPg2",
+    ];
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
@@ -87,12 +101,14 @@ export const use$STATS$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$STATS$Store.subscribe(
-  (s) => [s.requestValue, s.listColWidths, s.activeTabKey],
-  ([requestValue, listColWidths, activeTabKey]) => {
+  (s) => [s.requestValue, s.listColWidths, s.activeTabKey, s.flexGrowPg1, s.flexGrowPg2],
+  ([requestValue, listColWidths, activeTabKey, flexGrowPg1, flexGrowPg2]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
       requestValue,
       listColWidths,
       activeTabKey,
+      flexGrowPg1,
+      flexGrowPg2,
     });
   },
   { equalityFn: shallow }
