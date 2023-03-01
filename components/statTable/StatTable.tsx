@@ -5,6 +5,7 @@ import { StatTableTHead } from "./StatTableTHead";
 import { StatTableTBody } from "./StatTableTBody";
 import { StatTableTFoot } from "./StatTableTFoot";
 import { Loading } from "../common";
+import { SMixinScrollerStyle } from "../../styles/emotion";
 
 function StatTable<T = Record<string, any>>({
   width,
@@ -218,6 +219,12 @@ const BodyContainer = styled.div`
   position: relative;
   overflow: auto;
   background: ${(p) => p.theme.component_background};
+
+  ${(p) =>
+    SMixinScrollerStyle({
+      track_color: p.theme.body_background,
+      thumb_color: p.theme.scroll_thumb_color,
+    })};
 `;
 
 const FootContainer = styled.div`
