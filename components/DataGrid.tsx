@@ -4,53 +4,14 @@ import { AXFDGProps, AXFDataGrid } from "@axframe/datagrid";
 
 interface Props<T> extends AXFDGProps<T> {}
 
-export function DataGrid<T>({
-  frozenColumnIndex,
-  width,
-  height,
-  columns,
-  data,
-  spinning,
-  page,
-  sort,
-  onClick,
-  onChangeColumns,
-  rowKey,
-  selectedRowKey,
-  rowChecked,
-  editable,
-  onChangeData,
-}: Props<T>) {
-  // console.log("data", data, selectedRowKey);
-
+export function DataGrid<T>({ width, height, ...rest }: Props<T>) {
   if (width === 0 || height === 0) {
     return null;
   }
 
   return (
     <Container>
-      <AXFDataGrid
-        headerHeight={35}
-        itemHeight={20}
-        footerHeight={35}
-        {...{
-          frozenColumnIndex,
-          width,
-          height,
-          columns,
-          data,
-          spinning,
-          page,
-          onClick,
-          sort,
-          onChangeColumns,
-          rowKey,
-          selectedRowKey,
-          rowChecked,
-          editable,
-          onChangeData,
-        }}
-      />
+      <AXFDataGrid width={width} height={height} headerHeight={35} itemHeight={20} footerHeight={35} {...rest} />
     </Container>
   );
 }
