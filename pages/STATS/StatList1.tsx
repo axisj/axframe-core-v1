@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { toMoney } from "@core/utils/number";
 import { ExampleStatItem } from "@core/services/example/ExampleRepositoryInterface";
 import { use$STATS$Store } from "./use$STATS$Store";
-import { useContainerSize } from "@core/hooks";
+import { useContainerSize, useI18n } from "@core/hooks";
 import { StatDataGrid } from "@core/components/StatDataGrid";
 
 interface DtoItem extends ExampleStatItem {}
@@ -11,6 +11,7 @@ interface DtoItem extends ExampleStatItem {}
 interface Props {}
 
 function StatList1({}: Props) {
+  const { t } = useI18n();
   const listData = use$STATS$Store((s) => s.listData);
   const spinning = use$STATS$Store((s) => s.spinning);
   const _colGroups = use$STATS$Store((s) => s.colGroupsPg1);
@@ -48,7 +49,7 @@ function StatList1({}: Props) {
         headColumns={[
           {
             children: [
-              { label: "부문", rowspan: 2 },
+              { label: t.pages.example.stats.title, rowspan: 2 },
               { label: "기타", colspan: 9 },
             ],
           },
