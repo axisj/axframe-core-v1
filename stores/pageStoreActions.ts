@@ -7,7 +7,8 @@ interface PageStoreConfig {
 
 export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
   init: () => {
-    const metaData = getMetaDataByPath(get().routePath);
+    set({ routePath: location.pathname });
+    const metaData = getMetaDataByPath(location.pathname);
     if (metaData) get().syncMetadata(metaData);
   },
   reset: () => {

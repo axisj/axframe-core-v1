@@ -1,23 +1,11 @@
 import * as React from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { use$STATS$Store } from "./use$STATS$Store";
 import { Loading } from "@core/components/common";
 import { Tabs } from "antd";
 import styled from "@emotion/styled";
 import { SMixinFlexRow } from "@core/styles/emotion";
-import { CHART_COLORS } from "@types";
 import { PageLayout } from "styles/pageStyled";
+import { Chart, ChartType } from "@core/components/Chart";
 
 interface Props {}
 
@@ -27,7 +15,7 @@ function StatChart01({}: Props) {
   const listData = use$STATS$Store((s) => s.listData);
   const spinning = use$STATS$Store((s) => s.spinning);
 
-  const [chartType, setChartType] = React.useState("line");
+  const [chartType, setChartType] = React.useState<ChartType>("line");
 
   const { chartData, dataKeys } = React.useMemo(() => {
     const map: Record<string, any> = {};
@@ -61,78 +49,21 @@ function StatChart01({}: Props) {
     };
   }, [listData]);
 
-  const margin = {
-    top: 20,
-    bottom: 20,
-    right: 20,
-    left: 10,
-  };
-
   return (
     <Container>
       <ChartWrap>
         <div>
-          {chartType === "line" && (
-            <ResponsiveContainer width='100%' height='100%'>
-              <LineChart data={chartData} margin={margin}>
-                <CartesianGrid strokeDasharray='3 3' />
-                <XAxis dataKey='name' />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-
-                {dataKeys.map((dataKey, di) => (
-                  <Line
-                    key={dataKey}
-                    type='monotone'
-                    dataKey={dataKey}
-                    stroke={CHART_COLORS[di % CHART_COLORS.length]}
-                    activeDot={{ r: 5 }}
-                  />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
-          )}
-          {chartType === "bar" && (
-            <ResponsiveContainer width='100%' height='100%'>
-              <BarChart data={chartData} margin={margin}>
-                <CartesianGrid strokeDasharray='3 3' />
-                <XAxis dataKey='name' />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-
-                {dataKeys.map((dataKey, di) => (
-                  <Bar key={dataKey} dataKey={dataKey} fill={CHART_COLORS[di % CHART_COLORS.length]} />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
-          )}
-          {chartType === "bar-stacked" && (
-            <ResponsiveContainer width='100%' height='100%'>
-              <BarChart data={chartData} margin={margin}>
-                <CartesianGrid strokeDasharray='3 3' />
-                <XAxis dataKey='name' />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-
-                {dataKeys.map((dataKey, di) => (
-                  <Bar key={dataKey} dataKey={dataKey} stackId={"a"} fill={CHART_COLORS[di % CHART_COLORS.length]} />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
-          )}
+          <Chart chartType={chartType} dataKeys={dataKeys} data={chartData} />
         </div>
       </ChartWrap>
       <Tabs
         tabPosition={"right"}
         activeKey={chartType}
-        onChange={setChartType}
+        onChange={(chartType) => setChartType(chartType as ChartType)}
         items={[
           { label: "Line", key: "line" },
           { label: "Bar", key: "bar" },
-          { label: "StackedBar", key: "bar-stacked" },
+          { label: "StackedBar", key: "stackedBar" },
         ]}
       />
       <Loading active={spinning} />
