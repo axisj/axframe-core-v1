@@ -58,6 +58,7 @@ export interface StatTableProps<T> extends StatTableStyleProps {
   style?: React.CSSProperties;
   className?: string;
   colGroups: StatCol[];
+  onChangeColGroups: (colGroups: StatCol[]) => void;
   headColumns: StatHeadTr[];
   bodyColumns: StatBodyTd<T>[];
   subtotal?: StatSubTotal<T>;

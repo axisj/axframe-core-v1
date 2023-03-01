@@ -4,14 +4,15 @@ import styled from "@emotion/styled";
 import StatTableColResizer from "./StatTableColResizer";
 
 interface Props {
-  marginLeft: number;
+  marginLeft?: number;
   tableWidth: number;
   colGroups: StatCol[];
   headColumns: StatHeadTr[];
   headRowHeight: number;
+  onChangeColGroups: (colGroups: StatCol[]) => void;
 }
 
-function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRowHeight }: Props) {
+function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRowHeight, onChangeColGroups }: Props) {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   const colGroupsWithPosition = React.useMemo(() => {
@@ -25,6 +26,14 @@ function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRo
       };
     });
   }, [colGroups]);
+
+  const onChangeColWidth = React.useCallback(
+    (ci: number, width: number) => {
+      colGroups[ci].width = width;
+      onChangeColGroups([...colGroups]);
+    },
+    [colGroups, onChangeColGroups]
+  );
 
   return (
     <Container ref={containerRef} style={{ width: tableWidth, marginLeft }}>
@@ -49,7 +58,16 @@ function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRo
         </thead>
       </Table>
       {colGroupsWithPosition.map((cg, cgi) => {
-        return <StatTableColResizer key={cgi} container={containerRef} columnIndex={0} left={cg.left - 7} />;
+        return (
+          <StatTableColResizer
+            key={cgi}
+            container={containerRef}
+            columnIndex={0}
+            left={cg.left - 7}
+            width={cg.width ?? 0}
+            onChangeWidth={(width) => onChangeColWidth(cgi, width)}
+          />
+        );
       })}
     </Container>
   );
@@ -73,6 +91,9 @@ const Table = styled.table<StatTableStyleProps>`
       line-height: 20px;
       padding: 0 6.5px;
       height: ${(p) => p.headRowHeight}px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     td:last-child {

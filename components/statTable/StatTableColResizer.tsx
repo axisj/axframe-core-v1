@@ -11,25 +11,25 @@ interface Props extends StyledProps {
   container: React.RefObject<HTMLDivElement>;
   columnIndex: number;
   left: number;
+  width: number;
+  onChangeWidth: (width: number) => void;
 }
 
-function StatTableColResizer({ container, columnIndex, left }: Props) {
+function StatTableColResizer({ container, columnIndex, left, width, onChangeWidth }: Props) {
+  const resizerRef = React.useRef<HTMLDivElement>(null);
+
   const onMouseDownResizerHandle = React.useCallback(
     (evt: React.MouseEvent<HTMLDivElement, MouseEvent>, columnIndex: number) => {
       evt.preventDefault();
       evt.stopPropagation();
 
-      const columnNode = container.current?.querySelector(`[data-column-index="${columnIndex}"]`);
-      const columnSX = columnNode?.getBoundingClientRect().left ?? 0;
+      const columnSX = container.current?.getBoundingClientRect().left ?? 0;
 
       mouseEventSubscribe(
         (mousePosition) => {
-          const mX = mousePosition.clientX + 4;
-          const width = columnSX + 50 < mX ? mX - columnSX : 50;
-          // setColumnResizing(true);
-          // setColumnWidth(columnIndex, width);
-
-          console.log(width);
+          const mX = mousePosition.clientX;
+          const dx = mX - columnSX - left - 7;
+          onChangeWidth(Math.max(dx + width, 50));
         },
         () => {
           // setColumnResizing(false);
@@ -37,7 +37,7 @@ function StatTableColResizer({ container, columnIndex, left }: Props) {
         }
       );
     },
-    [container]
+    [container, left, onChangeWidth, width]
   );
 
   const onMouseDoubleClick = React.useCallback(
@@ -75,9 +75,10 @@ function StatTableColResizer({ container, columnIndex, left }: Props) {
 
   return (
     <Container
+      ref={resizerRef}
       style={{ left }}
       onMouseDown={(evt) => onMouseDownResizerHandle(evt, columnIndex)}
-      onDoubleClick={(evt) => onMouseDoubleClick(evt, columnIndex)}
+      // onDoubleClick={(evt) => onMouseDoubleClick(evt, columnIndex)}
       onClick={(evt) => evt.stopPropagation()}
     />
   );

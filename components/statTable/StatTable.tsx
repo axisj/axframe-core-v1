@@ -16,6 +16,7 @@ function StatTable<T = Record<string, any>>({
   headRowHeight = 34,
   bodyRowHeight = 34,
   colGroups,
+  onChangeColGroups,
   headColumns,
   bodyColumns,
   subtotal,
@@ -112,6 +113,7 @@ function StatTable<T = Record<string, any>>({
   const [scrollLeft, setScrollLeft] = React.useState(0);
   const [scrollTop, setScrollTop] = React.useState(0);
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
   const onScroll = React.useCallback(() => {
@@ -119,6 +121,17 @@ function StatTable<T = Record<string, any>>({
       const { scrollTop, scrollLeft } = scrollContainerRef.current;
       setScrollTop(scrollTop);
       setScrollLeft(scrollLeft);
+
+      if (containerRef.current) {
+        const headDiv = containerRef.current.querySelector("[role='head-container'] > div");
+        if (headDiv && headDiv["style"]) {
+          headDiv["style"].marginLeft = `${-scrollLeft}px`;
+        }
+        const footDiv = containerRef.current.querySelector("[role='foot-container'] > table");
+        if (footDiv && footDiv["style"]) {
+          footDiv["style"].marginLeft = `${-scrollLeft}px`;
+        }
+      }
     }
   }, []);
 
@@ -143,6 +156,7 @@ function StatTable<T = Record<string, any>>({
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta.y;
     }
   }, []);
+
   //setInitialized
   React.useEffect(() => {
     const scrollContainerRefCurrent = scrollContainerRef?.current;
@@ -161,14 +175,15 @@ function StatTable<T = Record<string, any>>({
   }, []);
 
   return (
-    <Container className={className} style={style} width={width} height={height}>
-      <HeadContainer style={{ width: width, height: headHeight }}>
+    <Container ref={containerRef} className={className} style={style} width={width} height={height}>
+      <HeadContainer style={{ width: width, height: headHeight }} role={"head-container"}>
         <StatTableTHead
-          marginLeft={-scrollLeft}
+          // marginLeft={-scrollLeft}
           colGroups={colGroups}
           headColumns={headColumns}
           tableWidth={tableWidth}
           headRowHeight={headRowHeight}
+          onChangeColGroups={onChangeColGroups}
         />
       </HeadContainer>
 
@@ -183,9 +198,9 @@ function StatTable<T = Record<string, any>>({
         />
       </BodyContainer>
 
-      <FootContainer style={{ width: width, height: footHeight }}>
+      <FootContainer style={{ width: width, height: footHeight }} role={"foot-container"}>
         <StatTableTFoot
-          marginLeft={-scrollLeft}
+          // marginLeft={-scrollLeft}
           colGroups={colGroups}
           total={total}
           totalValues={totalValues}

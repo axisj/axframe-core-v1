@@ -4,7 +4,7 @@ import { toMoney } from "@core/utils/number";
 import styled from "@emotion/styled";
 
 interface Props<T> {
-  marginLeft: number;
+  marginLeft?: number;
   colGroups: StatCol[];
   total?: StatTotal<T>;
   totalValues: Record<string, any>;
@@ -70,6 +70,9 @@ const Table = styled.table<StatTableStyleProps>`
       line-height: 20px;
       padding: 0 6.5px;
       height: ${(p) => p.bodyRowHeight}px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     td:last-child {
       background: transparent;

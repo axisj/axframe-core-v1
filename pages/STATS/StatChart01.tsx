@@ -62,78 +62,82 @@ function StatChart01({}: Props) {
 
   return (
     <Container>
-      {chartType === "line" && (
-        <ResponsiveContainer width='100%' height='100%'>
-          <LineChart
-            data={chartData}
-            margin={{
-              top: 10,
-              bottom: 10,
-              right: 10,
-            }}
-          >
-            <CartesianGrid strokeDasharray='3 3' />
-            <XAxis dataKey='name' />
-            <YAxis />
-            <Tooltip />
-            <Legend />
+      <ChartWrap>
+        <div>
+          {chartType === "line" && (
+            <ResponsiveContainer width='100%' height='100%'>
+              <LineChart
+                data={chartData}
+                margin={{
+                  top: 10,
+                  bottom: 10,
+                  right: 10,
+                }}
+              >
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='name' />
+                <YAxis />
+                <Tooltip />
+                <Legend />
 
-            {dataKeys.map((dataKey, di) => (
-              <Line
-                key={dataKey}
-                type='monotone'
-                dataKey={dataKey}
-                stroke={CHART_COLORS[di % CHART_COLORS.length]}
-                activeDot={{ r: 5 }}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
-      )}
-      {chartType === "bar" && (
-        <ResponsiveContainer width='100%' height='100%'>
-          <BarChart
-            data={chartData}
-            margin={{
-              top: 10,
-              bottom: 10,
-              right: 10,
-            }}
-          >
-            <CartesianGrid strokeDasharray='3 3' />
-            <XAxis dataKey='name' />
-            <YAxis />
-            <Tooltip />
-            <Legend />
+                {dataKeys.map((dataKey, di) => (
+                  <Line
+                    key={dataKey}
+                    type='monotone'
+                    dataKey={dataKey}
+                    stroke={CHART_COLORS[di % CHART_COLORS.length]}
+                    activeDot={{ r: 5 }}
+                  />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+          {chartType === "bar" && (
+            <ResponsiveContainer width='100%' height='100%'>
+              <BarChart
+                data={chartData}
+                margin={{
+                  top: 10,
+                  bottom: 10,
+                  right: 10,
+                }}
+              >
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='name' />
+                <YAxis />
+                <Tooltip />
+                <Legend />
 
-            {dataKeys.map((dataKey, di) => (
-              <Bar key={dataKey} dataKey={dataKey} fill={CHART_COLORS[di % CHART_COLORS.length]} />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-      {chartType === "bar-stacked" && (
-        <ResponsiveContainer width='100%' height='100%'>
-          <BarChart
-            data={chartData}
-            margin={{
-              top: 10,
-              bottom: 10,
-              right: 10,
-            }}
-          >
-            <CartesianGrid strokeDasharray='3 3' />
-            <XAxis dataKey='name' />
-            <YAxis />
-            <Tooltip />
-            <Legend />
+                {dataKeys.map((dataKey, di) => (
+                  <Bar key={dataKey} dataKey={dataKey} fill={CHART_COLORS[di % CHART_COLORS.length]} />
+                ))}
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+          {chartType === "bar-stacked" && (
+            <ResponsiveContainer width='100%' height='100%'>
+              <BarChart
+                data={chartData}
+                margin={{
+                  top: 10,
+                  bottom: 10,
+                  right: 10,
+                }}
+              >
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='name' />
+                <YAxis />
+                <Tooltip />
+                <Legend />
 
-            {dataKeys.map((dataKey, di) => (
-              <Bar key={dataKey} dataKey={dataKey} stackId={"a"} fill={CHART_COLORS[di % CHART_COLORS.length]} />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
-      )}
+                {dataKeys.map((dataKey, di) => (
+                  <Bar key={dataKey} dataKey={dataKey} stackId={"a"} fill={CHART_COLORS[di % CHART_COLORS.length]} />
+                ))}
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </ChartWrap>
       <Tabs
         tabPosition={"right"}
         activeKey={chartType}
@@ -154,6 +158,20 @@ const Container = styled.div`
   height: 100%;
   ${SMixinFlexRow("stretch", "stretch")};
   position: relative;
+
+  .ant-tabs-content-holder {
+    width: 16px;
+  }
+`;
+
+const ChartWrap = styled.div`
+  flex: 1;
+  position: relative;
+  > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export { StatChart01 };

@@ -13,8 +13,27 @@ interface Props {}
 function StatList1({}: Props) {
   const listData = use$STATS$Store((s) => s.listData);
   const spinning = use$STATS$Store((s) => s.spinning);
+  const _colGroups = use$STATS$Store((s) => s.colGroupsPg1);
+  const setColGroups = use$STATS$Store((s) => s.setColGroupsPg1);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
+
+  const colGroups = React.useMemo(() => {
+    return (
+      _colGroups ?? [
+        { width: 100 },
+        { width: 90 },
+        { width: 80 },
+        { width: 120 },
+        { width: 120 },
+        { width: 130 },
+        { width: 120 },
+        { width: 100 },
+        { width: 100 },
+        { width: 100 },
+      ]
+    );
+  }, [_colGroups]);
 
   return (
     <Container ref={containerRef}>
@@ -24,18 +43,8 @@ function StatList1({}: Props) {
         spinning={spinning}
         headRowHeight={30}
         bodyRowHeight={30}
-        colGroups={[
-          { width: 100 },
-          { width: 90 },
-          { width: 80 },
-          { width: 120 },
-          { width: 120 },
-          { width: 130 },
-          { width: 120 },
-          { width: 100 },
-          { width: 100 },
-          { width: 100 },
-        ]}
+        colGroups={colGroups}
+        onChangeColGroups={setColGroups}
         headColumns={[
           {
             children: [
