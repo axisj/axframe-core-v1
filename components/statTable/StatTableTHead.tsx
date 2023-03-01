@@ -91,6 +91,8 @@ const Table = styled.table<StatTableStyleProps>`
       line-height: 20px;
       padding: 0 6.5px;
       height: ${(p) => p.headRowHeight}px;
+      color: ${(p) => p.theme.axfdg_header_color};
+      font-weight: : ${(p) => p.theme.axfdg_header_font_weight};
 
       overflow: hidden;
       text-overflow: ellipsis;

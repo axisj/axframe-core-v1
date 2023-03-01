@@ -88,6 +88,7 @@ const Table = styled.table<StatTableStyleProps>`
       line-height: 20px;
       padding: 0 6.5px;
       height: ${(p) => p.bodyRowHeight}px;
+      color: ${(p) => p.theme.axfdg_body_color};
 
       overflow: hidden;
       text-overflow: ellipsis;

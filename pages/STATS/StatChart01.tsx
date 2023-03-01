@@ -1,15 +1,15 @@
 import * as React from "react";
 import {
-  LineChart,
-  BarChart,
-  Line,
   Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
 import { use$STATS$Store } from "./use$STATS$Store";
 import { Loading } from "@core/components/common";
@@ -17,6 +17,7 @@ import { Tabs } from "antd";
 import styled from "@emotion/styled";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { CHART_COLORS } from "@types";
+import { PageLayout } from "styles/pageStyled";
 
 interface Props {}
 
@@ -60,20 +61,20 @@ function StatChart01({}: Props) {
     };
   }, [listData]);
 
+  const margin = {
+    top: 20,
+    bottom: 20,
+    right: 20,
+    left: 10,
+  };
+
   return (
     <Container>
       <ChartWrap>
         <div>
           {chartType === "line" && (
             <ResponsiveContainer width='100%' height='100%'>
-              <LineChart
-                data={chartData}
-                margin={{
-                  top: 10,
-                  bottom: 10,
-                  right: 10,
-                }}
-              >
+              <LineChart data={chartData} margin={margin}>
                 <CartesianGrid strokeDasharray='3 3' />
                 <XAxis dataKey='name' />
                 <YAxis />
@@ -94,14 +95,7 @@ function StatChart01({}: Props) {
           )}
           {chartType === "bar" && (
             <ResponsiveContainer width='100%' height='100%'>
-              <BarChart
-                data={chartData}
-                margin={{
-                  top: 10,
-                  bottom: 10,
-                  right: 10,
-                }}
-              >
+              <BarChart data={chartData} margin={margin}>
                 <CartesianGrid strokeDasharray='3 3' />
                 <XAxis dataKey='name' />
                 <YAxis />
@@ -116,14 +110,7 @@ function StatChart01({}: Props) {
           )}
           {chartType === "bar-stacked" && (
             <ResponsiveContainer width='100%' height='100%'>
-              <BarChart
-                data={chartData}
-                margin={{
-                  top: 10,
-                  bottom: 10,
-                  right: 10,
-                }}
-              >
+              <BarChart data={chartData} margin={margin}>
                 <CartesianGrid strokeDasharray='3 3' />
                 <XAxis dataKey='name' />
                 <YAxis />
@@ -164,9 +151,11 @@ const Container = styled.div`
   }
 `;
 
-const ChartWrap = styled.div`
+const ChartWrap = styled(PageLayout.ContentBox)`
   flex: 1;
+  padding: 0;
   position: relative;
+  background: ${(p) => p.theme.component_background};
   > div {
     position: absolute;
     width: 100%;
