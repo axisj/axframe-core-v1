@@ -9,7 +9,7 @@ import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
-import { StatCol } from "../../components/statTable";
+import { StatCol } from "@core/components/statTable";
 
 interface ListRequest extends ExampleListRequest {}
 interface DtoItem extends ExampleStatItem {}

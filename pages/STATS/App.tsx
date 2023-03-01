@@ -8,10 +8,7 @@ import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { useI18n, useUnmountEffect } from "@core/hooks";
 import { PanelType, use$STATS$Store } from "./use$STATS$Store";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
-import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { PanelIndex } from "./PanelIndex";
-
-interface DtoItem extends ExampleItem {}
 
 interface Props {}
 
