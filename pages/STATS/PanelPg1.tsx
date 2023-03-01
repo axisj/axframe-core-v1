@@ -4,6 +4,7 @@ import { PageLayout } from "styles/pageStyled";
 import { StatList1 } from "./StatList1";
 import { RowResizer } from "@core/components/common";
 import { use$STATS$Store } from "./use$STATS$Store";
+import { StatChart01 } from "./StatChart01";
 
 interface Props {}
 
@@ -19,7 +20,9 @@ function PanelPg1({}: Props) {
         <StatList1 />
       </Frame>
       <RowResizer containerRef={resizerContainerRef} onResize={(flexGlow) => setFlexGrow(flexGlow)} />
-      <Frame style={{ flex: 2 - flexGrow }}></Frame>
+      <Frame style={{ flex: 2 - flexGrow }}>
+        <StatChart01 />
+      </Frame>
     </Body>
   );
 }
