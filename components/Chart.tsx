@@ -40,6 +40,16 @@ const margin = {
 };
 
 export function Chart({ chartType, dataKeys, data }: ChartProps) {
+  const [activeDataKey, setActiveDataKey] = React.useState<string>();
+
+  const handleMouseEnter = React.useCallback((o) => {
+    const { dataKey } = o;
+    setActiveDataKey(dataKey);
+  }, []);
+  const handleMouseLeave = React.useCallback((o) => {
+    setActiveDataKey(undefined);
+  }, []);
+
   switch (chartType) {
     case "line":
       return (
@@ -49,14 +59,25 @@ export function Chart({ chartType, dataKeys, data }: ChartProps) {
             <XAxis dataKey='name' />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
 
             {dataKeys.map((dataKey, di) => (
               <Line
                 key={dataKey}
                 type='monotone'
                 dataKey={dataKey}
-                stroke={CHART_COLORS[di % CHART_COLORS.length]}
+                stroke={
+                  activeDataKey === undefined
+                    ? CHART_COLORS[di % CHART_COLORS.length]
+                    : activeDataKey === dataKey
+                    ? "#0356ce"
+                    : "#ccc"
+                }
+                strokeWidth={activeDataKey === dataKey ? 2 : 1}
+                dot={{
+                  r: activeDataKey === dataKey ? 4 : 2,
+                  fill: activeDataKey === dataKey ? "#0356ce" : CHART_COLORS[di % CHART_COLORS.length],
+                }}
                 activeDot={{ r: 5 }}
               />
             ))}
@@ -71,10 +92,20 @@ export function Chart({ chartType, dataKeys, data }: ChartProps) {
             <XAxis dataKey='name' />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
 
             {dataKeys.map((dataKey, di) => (
-              <Bar key={dataKey} dataKey={dataKey} fill={CHART_COLORS[di % CHART_COLORS.length]} />
+              <Bar
+                key={dataKey}
+                dataKey={dataKey}
+                fill={
+                  activeDataKey === undefined
+                    ? CHART_COLORS[di % CHART_COLORS.length]
+                    : activeDataKey === dataKey
+                    ? "#0356ce"
+                    : "#ccc"
+                }
+              />
             ))}
           </BarChart>
         </ResponsiveContainer>
@@ -88,10 +119,21 @@ export function Chart({ chartType, dataKeys, data }: ChartProps) {
             <XAxis dataKey='name' />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
 
             {dataKeys.map((dataKey, di) => (
-              <Bar key={dataKey} dataKey={dataKey} stackId={"a"} fill={CHART_COLORS[di % CHART_COLORS.length]} />
+              <Bar
+                key={dataKey}
+                dataKey={dataKey}
+                stackId={"a"}
+                fill={
+                  activeDataKey === undefined
+                    ? CHART_COLORS[di % CHART_COLORS.length]
+                    : activeDataKey === dataKey
+                    ? "#0356ce"
+                    : "#ccc"
+                }
+              />
             ))}
           </BarChart>
         </ResponsiveContainer>
