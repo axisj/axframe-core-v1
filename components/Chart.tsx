@@ -79,6 +79,8 @@ export function Chart({ chartType, dataKeys, data }: ChartProps) {
                   fill: activeDataKey === dataKey ? "#0356ce" : CHART_COLORS[di % CHART_COLORS.length],
                 }}
                 activeDot={{ r: 5 }}
+                animationDuration={300}
+                animationEasing={"ease-in"}
               />
             ))}
           </LineChart>
@@ -105,6 +107,8 @@ export function Chart({ chartType, dataKeys, data }: ChartProps) {
                     ? "#0356ce"
                     : "#ccc"
                 }
+                animationDuration={300}
+                animationEasing={"ease-in"}
               />
             ))}
           </BarChart>
@@ -133,6 +137,8 @@ export function Chart({ chartType, dataKeys, data }: ChartProps) {
                     ? "#0356ce"
                     : "#ccc"
                 }
+                animationDuration={300}
+                animationEasing={"ease-in"}
               />
             ))}
           </BarChart>
