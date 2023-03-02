@@ -1,6 +1,5 @@
 import * as React from "react";
-import { ItemTotal, StatBodyTd, StatCol, StatSubTotal, StatTableStyleProps } from "./types";
-import { toMoney } from "@core/utils/number";
+import { StatBodyTd, StatCol, StatSubTotal, StatTableStyleProps } from "./types";
 import styled from "@emotion/styled";
 
 interface Props<T> {
@@ -25,31 +24,37 @@ function StatTableTBody<T>({ tableWidth, bodyRowHeight, colGroups, cdata, subtot
         {cdata?.map((item, ri) => {
           if (item["__subtotal__"]) {
             return (
-              <tr key={ri} role={"subtotal"}>
-                {subtotal?.columns.map((sc, si) => {
-                  const tdValue = (() => {
-                    if (sc.key) {
-                      if (sc.itemRender) {
-                        return sc.itemRender(item[sc.key], item as Record<keyof T, ItemTotal>);
-                      }
-
-                      if (sc.totalType === "avg") {
-                        return toMoney((item[sc.key].sum / item[sc.key].count).toFixed(2));
-                      }
-                      return toMoney(item[sc.key][sc.totalType ?? "sum"]);
-                    }
-                    return sc.label;
-                  })();
-
-                  return (
-                    <td key={si} colSpan={sc.colspan} align={sc.align ?? "center"}>
-                      {tdValue}
-                    </td>
-                  );
-                })}
-                <td />
+              <tr key={ri}>
+                <td>1</td>
               </tr>
             );
+
+            //   return (
+            //     <tr key={ri} role={"subtotal"}>
+            //       {subtotal?.columns.map((sc, si) => {
+            //         const tdValue = (() => {
+            //           if (sc.key) {
+            //             if (sc.itemRender) {
+            //               return sc.itemRender(item[sc.key], item as Record<keyof T, ItemTotal>);
+            //             }
+            //
+            //             if (sc.totalType === "avg") {
+            //               return toMoney((item[sc.key].sum / item[sc.key].count).toFixed(2));
+            //             }
+            //             return toMoney(item[sc.key][sc.totalType ?? "sum"]);
+            //           }
+            //           return sc.label;
+            //         })();
+            //
+            //         return (
+            //           <td key={si} colSpan={sc.colspan} align={sc.align ?? "center"}>
+            //             {tdValue}
+            //           </td>
+            //         );
+            //       })}
+            //       <td />
+            //     </tr>
+            //   );
           }
 
           return (

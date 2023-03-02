@@ -73,11 +73,59 @@ function StatList1({}: Props) {
             isRowMerge: (p, c) => {
               return p.busi === c.busi;
             },
+            subtotal: {
+              condition: (c, n) => {
+                return c.busi !== n.busi;
+              },
+              columns: [
+                {
+                  colspan: 2,
+                  label: "소계",
+                },
+                { key: "01-28", totalType: "sum", align: "right" },
+                { key: "01-27", totalType: "count", align: "right" },
+                { key: "01-26", totalType: "avg", align: "right" },
+                {
+                  key: "01-25",
+                  itemRender: (total, item) => {
+                    return "₩" + toMoney(total.sum * item["01-24"]?.sum);
+                  },
+                  align: "right",
+                },
+                { key: "01-24", totalType: "sum", align: "right" },
+                { key: "01-23", totalType: "sum", align: "right" },
+                { key: "01-22", totalType: "sum", align: "right" },
+              ],
+            },
           },
           {
             key: "stor",
             isRowMerge: (p, c) => {
               return p.busi === c.busi && p.stor === c.stor;
+            },
+            subtotal: {
+              condition: (c, n) => {
+                console.log(c.busi !== n.busi && c.stor !== n.stor, c, n);
+                return c.busi === n.busi && c.stor !== n.stor;
+              },
+              columns: [
+                {
+                  label: "소계",
+                },
+                { key: "01-28", totalType: "sum", align: "right" },
+                { key: "01-27", totalType: "count", align: "right" },
+                { key: "01-26", totalType: "avg", align: "right" },
+                {
+                  key: "01-25",
+                  itemRender: (total, item) => {
+                    return "₩" + toMoney(total.sum * item["01-24"]?.sum);
+                  },
+                  align: "right",
+                },
+                { key: "01-24", totalType: "sum", align: "right" },
+                { key: "01-23", totalType: "sum", align: "right" },
+                { key: "01-22", totalType: "sum", align: "right" },
+              ],
             },
           },
           { key: "storCnt", align: "right" },
@@ -95,31 +143,6 @@ function StatList1({}: Props) {
           { key: "01-23", align: "right" },
           { key: "01-22", align: "right" },
         ]}
-        subtotal={{
-          condition: (c, n) => {
-            return c.busi !== n.busi;
-          },
-          columns: [
-            {
-              colspan: 3,
-              label: "소계",
-            },
-            // { key: "storCnt", align: "right" },
-            { key: "01-28", totalType: "sum", align: "right" },
-            { key: "01-27", totalType: "count", align: "right" },
-            { key: "01-26", totalType: "avg", align: "right" },
-            {
-              key: "01-25",
-              itemRender: (total, item) => {
-                return "₩" + toMoney(total.sum * item["01-24"]?.sum);
-              },
-              align: "right",
-            },
-            { key: "01-24", totalType: "sum", align: "right" },
-            { key: "01-23", totalType: "sum", align: "right" },
-            { key: "01-22", totalType: "sum", align: "right" },
-          ],
-        }}
         total={{
           columns: [
             {

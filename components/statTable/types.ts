@@ -22,6 +22,7 @@ export interface StatBodyTd<T> {
   colspan?: number;
   rowspan?: number;
   isRowMerge?: (prevItem: T, curItem: T) => boolean;
+  subtotal?: StatSubTotal<T>;
   itemRender?: (item: T) => React.ReactNode;
   align?: Align;
 }

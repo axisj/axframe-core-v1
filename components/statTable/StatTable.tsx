@@ -42,7 +42,6 @@ function StatTable<T = Record<string, any>>({
 
   const { newData: cdata, totalValues } = React.useMemo(() => {
     const newData = [] as Record<string, any>[];
-    let subTotalValues: Record<string, any> = {};
     const totalValues: Record<string, any> = {};
 
     for (let i = 0; i < data.length; i++) {
@@ -53,25 +52,29 @@ function StatTable<T = Record<string, any>>({
       const newItem: Record<string, any> = {
         __originValue__: { ...curItem },
       };
+
+      const subTotalItems: Record<string, any>[] = [];
+
       bodyColumns.forEach((bc) => {
         if (!bc.key) return;
 
         newItem[bc.key] = {
+          dataIndex: i,
           originValue: curItem[bc.key],
           rowspan: 1,
         };
-
-        if (subtotal?.columns.find((sc) => sc.key === bc.key)) {
-          if (bc.key in subTotalValues) {
-            subTotalValues[bc.key].sum += curItem[bc.key];
-            subTotalValues[bc.key].count += 1;
-          } else {
-            subTotalValues[bc.key] = {
-              sum: curItem[bc.key],
-              count: 1,
-            };
-          }
-        }
+        //
+        // if (subtotal?.columns.find((sc) => sc.key === bc.key)) {
+        //   if (bc.key in subTotalValues) {
+        //     subTotalValues[bc.key].sum += curItem[bc.key];
+        //     subTotalValues[bc.key].count += 1;
+        //   } else {
+        //     subTotalValues[bc.key] = {
+        //       sum: curItem[bc.key],
+        //       count: 1,
+        //     };
+        //   }
+        // }
 
         if (total?.columns.find((tc) => tc.key === bc.key)) {
           if (bc.key in totalValues) {
@@ -85,30 +88,51 @@ function StatTable<T = Record<string, any>>({
           }
         }
 
+        let parentIndex;
         if (prevItem && bc.isRowMerge?.(prevItem, curItem)) {
-          const parentIndex = newData[newData.length - 1][bc.key].parentIndex ?? newData.length - 1;
+          parentIndex = newData[newData.length - 1][bc.key].parentIndex ?? newData.length - 1;
+
           newData[parentIndex][bc.key].rowspan += 1;
           newItem[bc.key].rowspan = 0;
           newItem[bc.key].parentIndex = parentIndex;
         }
+
+        if (bc.isRowMerge && nextItem && bc.subtotal?.condition?.(curItem, nextItem)) {
+          if (newItem[bc.key].parentIndex === undefined) {
+            newItem[bc.key].rowspan += 1;
+          } else {
+            newData[newItem[bc.key].parentIndex].rowspan += 1;
+          }
+
+          const map = JSON.parse(JSON.stringify(totalValues));
+          subTotalItems.push({
+            __subtotal__: true,
+            ...{
+              ...newItem,
+              ...map,
+            },
+          });
+        }
       });
 
-      newData.push(newItem);
-
-      if (!nextItem || subtotal?.condition(curItem, nextItem)) {
-        newData.push({
-          __subtotal__: true,
-          ...subTotalValues,
-        });
-        subTotalValues = {};
-      }
+      // newData.push(newItem);
+      newData.push(newItem, ...subTotalItems);
+      //
+      // if (!nextItem || subtotal?.condition(curItem, nextItem)) {
+      //   newData.push({
+      //     __subtotal__: true,
+      //     ...subTotalValues,
+      //   });
+      //   subTotalValues = {};
+      // }
     }
 
+    console.log(newData);
     return {
       newData,
       totalValues,
     };
-  }, [bodyColumns, data, subtotal, total?.columns]);
+  }, [bodyColumns, data, total?.columns]);
 
   const [scrollLeft, setScrollLeft] = React.useState(0);
   const [scrollTop, setScrollTop] = React.useState(0);
