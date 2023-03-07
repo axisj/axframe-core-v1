@@ -8,7 +8,7 @@ export const SearchParamDate: SearchParamComponent = ({ name, label, picker, wid
   };
 
   return (
-    <Form.Item name={name} {...(label ? { label } : { noStyle: true })}>
+    <Form.Item name={name} {...(label ? { label, style: { marginBottom: 0, marginRight: 10 } } : { noStyle: true })}>
       <DatePicker style={{ width: width ?? 120 }} onChange={onChange} allowClear picker={picker ?? "date"} />
     </Form.Item>
   );

@@ -26,6 +26,8 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
     } catch (err) {}
   }, [onSearch, form, name, onChangedComponentValue]);
 
+  width = width ? width - 29 : 71;
+
   return (
     <Form.Item {...(label ? { label, style: { marginBottom: 0, marginRight: 10 } } : { noStyle: true })}>
       <Input.Group compact>
@@ -42,7 +44,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
             allowClear
           />
         </Form.Item>
-        <Button onClick={handleSearch} icon={<AXFISearch style={{ marginTop: 3 }} />} />
+        <Button onClick={handleSearch} style={{ width: 30 }} icon={<AXFISearch style={{ marginTop: 3 }} />} />
       </Input.Group>
     </Form.Item>
   );

@@ -31,7 +31,7 @@ export const SearchParamTimeRange: SearchParamComponent = ({ name, onClickExtraB
   );
 
   return (
-    <Form.Item name={name} {...(label ? { label } : { noStyle: true })}>
+    <Form.Item name={name} {...(label ? { label, style: { marginBottom: 0, marginRight: 10 } } : { noStyle: true })}>
       <DatePicker.RangePicker
         style={{ width: 240 }}
         showNow
