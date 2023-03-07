@@ -33,7 +33,7 @@ export const SearchParamTimeRange: SearchParamComponent = ({ name, onClickExtraB
   return (
     <Form.Item name={name} {...(label ? { label, style: { marginBottom: 0, marginRight: 10 } } : { noStyle: true })}>
       <DatePicker.RangePicker
-        style={{ width: 240 }}
+        style={{ width: 220 }}
         showNow
         renderExtraFooter={() => (
           <Space direction={"horizontal"} size={4}>

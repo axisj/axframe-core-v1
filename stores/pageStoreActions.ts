@@ -2,7 +2,7 @@ import { getMetaDataByPath, setMetaDataByPath, usePageTabStore } from "./usePage
 
 interface PageStoreConfig {
   unSubscribe?: () => void;
-  initialState?: Record<string, any>;
+  createState?: Record<string, any>;
 }
 
 export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
@@ -16,8 +16,8 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
     if (!routePath) return;
 
     setMetaDataByPath(routePath, {});
-    if (config?.initialState) {
-      set(config.initialState);
+    if (config?.createState) {
+      set(config.createState);
     } else {
       get().syncMetadata();
     }
@@ -29,8 +29,8 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
     if (!page) {
       setMetaDataByPath(routePath, {});
 
-      if (config?.initialState) {
-        set(config.initialState);
+      if (config?.createState) {
+        set(config.createState);
       } else {
         get().syncMetadata();
       }
