@@ -53,9 +53,9 @@ const SearchParamComponents: SearchParamComponentProp<SearchParamComponent> = {
   [SearchParamType.VALUES_FINDER]: SearchParamValuesFinder,
 };
 
-const SearchParam: SearchParamComponent = (props) => {
-  const Comp = SearchParamComponents[props.type];
-  return <Comp {...props} />;
+const SearchParam: SearchParamComponent = ({ type, width = 220, ...rest }) => {
+  const Comp = SearchParamComponents[type];
+  return <Comp type={type} width={width} {...rest} />;
 };
 
 export { SearchParam };
