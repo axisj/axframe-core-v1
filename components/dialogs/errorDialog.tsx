@@ -4,7 +4,8 @@ import { Divider, Modal } from "antd";
 import i18n from "i18n";
 import { useAppStore } from "stores";
 import { ErrorCommonMsg } from "components/common/ErrorCommonMsg";
-import { CustomError } from "../../services/CustomError";
+import { CustomError } from "@core/services/CustomError";
+import { ApiErrorCode } from "@types";
 
 export interface IErrorDialogOptions {
   icon?: React.ReactNode;
@@ -33,6 +34,7 @@ export const errorDialog = (
 
     if (options instanceof CustomError) {
       dialogConfig = {
+        title: Object.entries(ApiErrorCode).find(([k, v]) => v === `${options.code}`)?.[0],
         content:
           options.code && t.apiErrMsg[options.code]
             ? t.apiErrMsg[options.code] + (options.message ? ` [${options.message}]` : "")
@@ -43,6 +45,10 @@ export const errorDialog = (
     } else {
       if (options.code && t.apiErrMsg[options.code]) {
         options.content = t.apiErrMsg[options.code] + (options.message ? ` [${options.message}]` : "");
+      }
+
+      if (!options.code) {
+        options.title = "Error";
       }
 
       dialogConfig = { ...options };
