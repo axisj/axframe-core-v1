@@ -4,6 +4,7 @@ import { Divider, Modal } from "antd";
 import i18n from "i18n";
 import { useAppStore } from "stores";
 import { ErrorCommonMsg } from "components/common/ErrorCommonMsg";
+import { CustomError } from "../../services/CustomError";
 
 export interface IErrorDialogOptions {
   icon?: React.ReactNode;
@@ -16,7 +17,7 @@ export interface IErrorDialogOptions {
 }
 
 export const errorDialog = (
-  options: IErrorDialogOptions,
+  options: IErrorDialogOptions | CustomError,
   isMounted?: React.MutableRefObject<boolean>
 ): Promise<boolean> =>
   new Promise<boolean>((resolve) => {
@@ -26,26 +27,42 @@ export const errorDialog = (
 
     const currentLanguage = useAppStore.getState().currentLanguage;
     const t = i18n[currentLanguage ?? "en"];
+    let dialogConfig: IErrorDialogOptions = {
+      content: "",
+    };
 
-    if (options.code && t.apiErrMsg[options.code]) {
-      options.content = t.apiErrMsg[options.code] + (options.message ? ` [${options.message}]` : "");
+    if (options instanceof CustomError) {
+      dialogConfig = {
+        content:
+          options.code && t.apiErrMsg[options.code]
+            ? t.apiErrMsg[options.code] + (options.message ? ` [${options.message}]` : "")
+            : "",
+        message: options.message,
+        code: options.code,
+      };
+    } else {
+      if (options.code && t.apiErrMsg[options.code]) {
+        options.content = t.apiErrMsg[options.code] + (options.message ? ` [${options.message}]` : "");
+      }
+
+      dialogConfig = { ...options };
     }
 
     Modal.error({
-      icon: options.icon === null ? null : options.icon || <CloseCircleOutlined />,
+      icon: dialogConfig.icon === null ? null : dialogConfig.icon || <CloseCircleOutlined />,
       autoFocusButton: "ok",
-      className: options.className,
+      className: dialogConfig.className,
       okText: t.button.ok,
       cancelText: t.button.cancel,
       transitionName: "slide-down",
-      title: options.title ?? `Error ${options.code}`,
+      title: dialogConfig.title ?? `Error ${options.code}`,
       content: (
         <>
-          {options.content || options.message || "Unknown error occurred"} <Divider style={{ margin: "10px 0" }} />
+          {dialogConfig.content || options.message || "Unknown error occurred"} <Divider style={{ margin: "10px 0" }} />
           <ErrorCommonMsg />
         </>
       ),
-      width: options.width,
+      width: dialogConfig.width,
       bodyStyle: {
         padding: 15,
       },
