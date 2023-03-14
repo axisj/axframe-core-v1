@@ -28,15 +28,7 @@ const StoreSpinner: React.FC<IProps> = ({ spinning }) => {
   }
   return (
     <Container>
-      <Progress
-        percent={percent}
-        type='line'
-        strokeWidth={6}
-        showInfo={false}
-        size={"small"}
-        strokeLinecap='square'
-        status='active'
-      />
+      <Progress percent={percent} type='line' showInfo={false} size={"small"} strokeLinecap='square' status='active' />
     </Container>
   );
 };

@@ -85,12 +85,12 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
               key={breadCrumb.keyPath.join(".")}
               menu={
                 breadCrumbs.length - 1 === idx
-                  ? {
+                  ? ({
                       onClick: handleClickMenu,
                       items: menuItems,
                       selectedKeys: [breadCrumb.keyPath.join(".")],
                       className: "breadcrumb-menu",
-                    }
+                    } as any)
                   : undefined
               }
             >
