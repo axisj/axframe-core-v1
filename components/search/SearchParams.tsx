@@ -154,7 +154,7 @@ export function SearchParams({
           ) : (
             <SearchInput>
               <Form.Item {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
-                <Input.Group compact>
+                <Space.Compact>
                   <Form.Item name={"filter"} noStyle>
                     <Input placeholder={"search"} allowClear style={{ width: filterWidth }} />
                   </Form.Item>
@@ -164,7 +164,7 @@ export function SearchParams({
                     icon={<AXFISearch fontSize={14} style={{ marginTop: 3 }} />}
                     onClick={handleSearch}
                   />
-                </Input.Group>
+                </Space.Compact>
               </Form.Item>
             </SearchInput>
           )}

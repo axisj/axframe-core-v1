@@ -208,7 +208,7 @@ function FormSet({ form }: Props) {
               </Col>
               <Col xs={24} sm={8}>
                 <Form.Item label={t.pages.example.form.birthDt.label}>
-                  <Input.Group compact>
+                  <Space.Compact>
                     <Form.Item name={"birthDt"} noStyle rules={[{ required: true }]}>
                       <DatePicker />
                     </Form.Item>
@@ -220,7 +220,7 @@ function FormSet({ form }: Props) {
                         suffix={t.pages.example.form.age.suffix}
                       />
                     </Form.Item>
-                  </Input.Group>
+                  </Space.Compact>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={8}>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SearchParamComponent } from "./SearchParam";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Select, Space } from "antd";
 import styled from "@emotion/styled";
 import { AXFISearch } from "@axframe/icon";
 
@@ -30,7 +30,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
 
   return (
     <Form.Item {...(label ? { label, style: { marginBottom: 0, marginRight: 10 } } : { noStyle: true })}>
-      <Input.Group compact>
+      <Space.Compact>
         <Form.Item name={name} noStyle>
           <Select
             mode={config?.single ? undefined : "multiple"}
@@ -45,7 +45,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
           />
         </Form.Item>
         <Button onClick={handleSearch} style={{ width: 30 }} icon={<AXFISearch style={{ marginTop: 3 }} />} />
-      </Input.Group>
+      </Space.Compact>
     </Form.Item>
   );
 };
