@@ -6,9 +6,8 @@ import { IconText } from "@core/components/common";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { PageLayout } from "styles/pageStyled";
 import { DateType, SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
-import { getDayJsRangeValue } from "../../utils/object";
+import { deleteEmptyValue, getDayJsRangeValue } from "@core/utils/object";
 import dayjs from "dayjs";
-import { deleteEmptyValue } from "../../utils/object/deleteEmptyValue";
 
 export interface IParam {
   name: string;

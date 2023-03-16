@@ -107,6 +107,7 @@ function App({}: Props) {
           onChangeParamsValue={(value) => setListRequestValue(value)}
           onSearch={handleSearch}
           spinning={listSpinning}
+          disableFilter
         />
 
         <ListDataGrid onClick={onClickItem} />
