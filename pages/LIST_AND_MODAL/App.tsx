@@ -92,7 +92,15 @@ function App({}: Props) {
           </Button>
         </ProgramTitle>
 
-        <ButtonGroup compact></ButtonGroup>
+        <ButtonGroup compact>
+          <Button
+            onClick={() => {
+              callListApi();
+            }}
+          >
+            {t.button.search}
+          </Button>
+        </ButtonGroup>
       </Header>
 
       <Body>

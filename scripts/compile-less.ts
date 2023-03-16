@@ -34,6 +34,10 @@ const buildLessVar = () => {
       path.resolve(__dirname, `../../styles/palette/theme-${palette}.less`),
       Object.keys(themeValue)
         .map((k) => {
+          if (k === "token") {
+            return "";
+          }
+
           if (typeof themeValue[k] !== "string" || !themeValue[k].includes("#")) {
             return `@${k.replace(/_/g, "-")}: ${themeValue[k]};`;
           }
@@ -42,7 +46,6 @@ const buildLessVar = () => {
         })
         .join("\r\n") + "\r\n"
     );
-
     compileLESS(`../../styles/less/app-${palette}.less`, `../../../public/app-${palette}.css`);
   });
 

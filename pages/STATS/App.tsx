@@ -97,7 +97,6 @@ function App({}: Props) {
           onChangeParamsValue={(value) => setRequestValue(value)}
           onSearch={handleSearch}
           spinning={spinning}
-          disableFilter
         />
       </PageSearchBar>
 

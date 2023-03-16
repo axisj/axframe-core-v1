@@ -3,7 +3,7 @@ export function deleteEmptyValue(target: Record<string, any> = {}) {
 
   Object.keys(target).forEach((key) => {
     if (target[key] === "") {
-      delete target[key];
+      target[key] = undefined;
     }
   });
 

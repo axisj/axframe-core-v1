@@ -1,13 +1,14 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Button, Form, FormInstance, Input, Space } from "antd";
-import { AXFIArrowDown, AXFIArrowUp, AXFISearch } from "@axframe/icon";
+import { Form, FormInstance, Space } from "antd";
+import { AXFIArrowDown, AXFIArrowUp } from "@axframe/icon";
 import { IconText } from "@core/components/common";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { PageLayout } from "styles/pageStyled";
 import { DateType, SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
 import { getDayJsRangeValue } from "../../utils/object";
 import dayjs from "dayjs";
+import { deleteEmptyValue } from "../../utils/object/deleteEmptyValue";
 
 export interface IParam {
   name: string;
@@ -37,10 +38,7 @@ interface Props {
   expand?: boolean;
   onChangeExpand?: (expand: boolean) => void;
   spinning?: boolean;
-  filterWidth?: number;
   extraButtons?: React.FC;
-  filterLabel?: string;
-  disableFilter?: boolean;
 }
 
 export function SearchParams({
@@ -53,10 +51,7 @@ export function SearchParams({
   expand,
   onChangeExpand,
   spinning,
-  filterWidth,
   extraButtons: ExtraButtons,
-  filterLabel,
-  disableFilter = false,
 }: Props) {
   const [showChildren, setShowChildren] = React.useState(false);
 
@@ -107,7 +102,7 @@ export function SearchParams({
       }
     });
 
-    form.setFieldsValue(formValues);
+    form.setFieldsValue(deleteEmptyValue(formValues));
 
     if (expand !== undefined) {
       setShowChildren(expand);
@@ -147,26 +142,6 @@ export function SearchParams({
                 />
               ))}
             </Space>
-          )}
-
-          {disableFilter ? (
-            <SearchInput />
-          ) : (
-            <SearchInput>
-              <Form.Item {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
-                <Space.Compact>
-                  <Form.Item name={"filter"} noStyle>
-                    <Input placeholder={"search"} allowClear style={{ width: filterWidth }} />
-                  </Form.Item>
-                  <Button
-                    loading={spinning}
-                    style={{ width: 40 }}
-                    icon={<AXFISearch fontSize={14} style={{ marginTop: 3 }} />}
-                    onClick={handleSearch}
-                  />
-                </Space.Compact>
-              </Form.Item>
-            </SearchInput>
           )}
 
           {ExtraButtons && (

@@ -89,7 +89,15 @@ function App({}: Props) {
           </Button>
         </ProgramTitle>
 
-        <ButtonGroup compact></ButtonGroup>
+        <ButtonGroup compact>
+          <Button
+            onClick={() => {
+              callListApi();
+            }}
+          >
+            {t.button.search}
+          </Button>
+        </ButtonGroup>
       </Header>
 
       <Body>
@@ -101,7 +109,6 @@ function App({}: Props) {
           onSearch={handleSearch}
           spinning={spinning}
         />
-
         <ListDataGrid onClick={onClickItem} />
       </Body>
     </Container>
