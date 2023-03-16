@@ -44,7 +44,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
             allowClear
           />
         </Form.Item>
-        <Button onClick={handleSearch} style={{ width: 30 }} icon={<AXFISearch style={{ marginTop: 3 }} />} />
+        <Button onClick={handleSearch} style={{ width: 30 }} icon={<AXFISearch />} />
       </Space.Compact>
     </Form.Item>
   );

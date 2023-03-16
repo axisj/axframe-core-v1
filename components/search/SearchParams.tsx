@@ -161,7 +161,7 @@ export function SearchParams({
                   <Button
                     loading={spinning}
                     style={{ width: 40 }}
-                    icon={<AXFISearch fontSize={14} style={{ marginTop: 3 }} />}
+                    icon={<AXFISearch fontSize={14} />}
                     onClick={handleSearch}
                   />
                 </Space.Compact>
