@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { Form, FormInstance, Space } from "antd";
-import { AXFIArrowDown, AXFIArrowUp } from "@axframe/icon";
+import { Button, Form, FormInstance, Input, Space } from "antd";
+import { AXFIArrowDown, AXFIArrowUp, AXFISearch } from "@axframe/icon";
 import { IconText } from "@core/components/common";
 import { SMixinFlexRow } from "@core/styles/emotion";
 import { PageLayout } from "styles/pageStyled";
@@ -39,6 +39,9 @@ interface Props {
   onChangeExpand?: (expand: boolean) => void;
   spinning?: boolean;
   extraButtons?: React.FC;
+  filterWidth?: number;
+  filterLabel?: string;
+  disableFilter?: boolean;
 }
 
 export function SearchParams({
@@ -52,6 +55,9 @@ export function SearchParams({
   onChangeExpand,
   spinning,
   extraButtons: ExtraButtons,
+  filterWidth,
+  filterLabel,
+  disableFilter = false,
 }: Props) {
   const [showChildren, setShowChildren] = React.useState(false);
 
@@ -142,6 +148,26 @@ export function SearchParams({
                 />
               ))}
             </Space>
+          )}
+
+          {disableFilter ? (
+            <SearchInput />
+          ) : (
+            <SearchInput>
+              <Form.Item {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
+                <Space.Compact>
+                  <Form.Item name={"filter"} noStyle>
+                    <Input placeholder={"search"} allowClear style={{ width: filterWidth }} />
+                  </Form.Item>
+                  <Button
+                    loading={spinning}
+                    style={{ width: 40 }}
+                    icon={<AXFISearch fontSize={14} style={{ marginTop: 3 }} />}
+                    onClick={handleSearch}
+                  />
+                </Space.Compact>
+              </Form.Item>
+            </SearchInput>
           )}
 
           {ExtraButtons && (
