@@ -9,7 +9,12 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
   init: () => {
     set({ routePath: location.pathname });
     const metaData = getMetaDataByPath(location.pathname);
-    if (metaData) get().syncMetadata(metaData);
+
+    if (metaData) {
+      get().syncMetadata(metaData);
+    } else if (config?.createState) {
+      set(config.createState);
+    }
   },
   reset: () => {
     const routePath = get().routePath;

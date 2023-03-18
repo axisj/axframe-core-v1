@@ -249,7 +249,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     ];
     set(pick(metaData ?? createState, metaDataKeys));
   },
-  ...pageStoreActions(set, get),
+  ...pageStoreActions(set, get, { createState }),
 });
 
 // ---------------- exports
