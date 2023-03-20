@@ -154,9 +154,9 @@ export function SearchParams({
           ) : (
             <SearchInput>
               <Form.Item {...(filterLabel ? { label: filterLabel } : { noStyle: true })}>
-                <Space.Compact>
+                <Space.Compact style={{ width: filterWidth ? filterWidth : "100%" }}>
                   <Form.Item name={"filter"} noStyle>
-                    <Input placeholder={"search"} allowClear style={{ width: filterWidth }} />
+                    <Input placeholder={"search"} allowClear />
                   </Form.Item>
                   <Button
                     loading={spinning}
