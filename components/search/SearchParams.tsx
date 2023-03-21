@@ -93,7 +93,10 @@ export function SearchParams({
     const formValues = {
       filterType: paramsValue?.filterType,
       filter: paramsValue?.filter,
+      ...paramsValue,
     };
+
+    // console.log("formValues", formValues);
 
     params?.forEach((filter) => {
       if (filter.type === SearchParamType.TIME_RANGE) {
@@ -123,6 +126,17 @@ export function SearchParams({
       onFinish={handleSearch}
       scrollToFirstError
     >
+      {Object.keys(paramsValue ?? {})
+        .filter((pv) => {
+          return !params?.find((p) => p.name === pv);
+        })
+        .map((key) => {
+          return (
+            <Form.Item key={key} name={key} noStyle>
+              <Input type={"hidden"} />
+            </Form.Item>
+          );
+        })}
       <Container>
         <DefaultWrap role={"page-search-bar"}>
           {params && params?.length > 0 && (
