@@ -31,14 +31,14 @@ function StatTable<T = Record<string, any>>({
 
   const { headHeight, bodyHeight, footHeight } = React.useMemo(() => {
     const headHeight = headColumns.length * headRowHeight + 1;
-    const footHeight = bodyRowHeight + 1;
+    const footHeight = total ? bodyRowHeight + 1 : 0;
     const bodyHeight = height - headHeight - footHeight;
     return {
       headHeight,
       bodyHeight,
       footHeight,
     };
-  }, [bodyRowHeight, headColumns.length, headRowHeight, height]);
+  }, [bodyRowHeight, headColumns.length, headRowHeight, height, total]);
 
   const { newData: cdata, totalValues } = React.useMemo(() => {
     const newData = [] as Record<string, any>[];
@@ -95,12 +95,14 @@ function StatTable<T = Record<string, any>>({
 
       newData.push(newItem);
 
-      if (!nextItem || subtotal?.condition(curItem, nextItem)) {
-        newData.push({
-          __subtotal__: true,
-          ...subTotalValues,
-        });
-        subTotalValues = {};
+      if (subtotal) {
+        if (!nextItem || subtotal.condition(curItem, nextItem)) {
+          newData.push({
+            __subtotal__: true,
+            ...subTotalValues,
+          });
+          subTotalValues = {};
+        }
       }
     }
 
@@ -198,16 +200,18 @@ function StatTable<T = Record<string, any>>({
         />
       </BodyContainer>
 
-      <FootContainer style={{ width: width, height: footHeight }} role={"foot-container"}>
-        <StatTableTFoot
-          // marginLeft={-scrollLeft}
-          colGroups={colGroups}
-          total={total}
-          totalValues={totalValues}
-          tableWidth={tableWidth}
-          bodyRowHeight={bodyRowHeight}
-        />
-      </FootContainer>
+      {total && (
+        <FootContainer style={{ width: width, height: footHeight }} role={"foot-container"}>
+          <StatTableTFoot
+            // marginLeft={-scrollLeft}
+            colGroups={colGroups}
+            total={total}
+            totalValues={totalValues}
+            tableWidth={tableWidth}
+            bodyRowHeight={bodyRowHeight}
+          />
+        </FootContainer>
+      )}
 
       <Loading active={spinning} />
     </Container>
