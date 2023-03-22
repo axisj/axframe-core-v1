@@ -135,7 +135,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
           currentPage: response.page.pageNumber ?? 1,
           pageSize: response.page.pageSize ?? 0,
           totalPages: response.page.pageCount ?? 0,
-          totalElements: response.ds.length,
+          totalElements: response.page?.totalCount,
         },
       });
     } catch (e) {
