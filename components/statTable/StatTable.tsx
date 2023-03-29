@@ -24,9 +24,12 @@ function StatTable<T = Record<string, any>>({
   data,
 }: StatTableProps<T>) {
   const tableWidth = React.useMemo(() => {
-    return colGroups.reduce((acc, cur) => {
-      return acc + (cur.width ?? 0);
-    }, 0);
+    if (Array.isArray(colGroups)) {
+      return colGroups.reduce((acc, cur) => {
+        return acc + (cur.width ?? 0);
+      }, 0);
+    }
+    return 0;
   }, [colGroups]);
 
   const { headHeight, bodyHeight, footHeight } = React.useMemo(() => {
