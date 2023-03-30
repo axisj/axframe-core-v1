@@ -9,8 +9,8 @@ interface PageStoreConfig {
 
 export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
   init: async () => {
-    set({ routePath: location.pathname });
-    const metaData = getMetaDataByPath(location.pathname);
+    // set({ routePath: location.pathname });
+    const metaData = getMetaDataByPath(get().routePath);
 
     const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
     if (currentRoute) {
