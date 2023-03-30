@@ -14,7 +14,7 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
 
     const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
     if (currentRoute) {
-      const data = await UserService.getProgramFn({ progCd: currentRoute.program_type });
+      const data = await UserService.getProgramFn({ progCd: currentRoute.program_type, apiUrl: location.pathname });
 
       const programFn = data.ds.reduce((acc, cur) => {
         return { ...acc, [cur.key]: cur.label };
@@ -42,7 +42,7 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
     if (config?.createState) {
       const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
       if (currentRoute) {
-        const data = await UserService.getProgramFn({ progCd: currentRoute.program_type });
+        const data = await UserService.getProgramFn({ progCd: currentRoute.program_type, apiUrl: location.pathname });
         const programFn = data.ds.reduce((acc, cur) => {
           return { ...acc, [cur.key]: cur.label };
         }, {});
