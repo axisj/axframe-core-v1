@@ -66,7 +66,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = ["saveRequestValue"];
+    const metaDataKeys: (keyof MetaData)[] = ["programFn", "saveRequestValue"];
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
@@ -83,9 +83,10 @@ export const use$DETAIL$Store = create(
 );
 
 use$DETAIL$Store.subscribe(
-  (s) => [s.saveRequestValue],
-  ([saveRequestValue]) => {
+  (s) => [s.programFn, s.saveRequestValue],
+  ([programFn, saveRequestValue]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
+      programFn,
       saveRequestValue: saveRequestValue,
     });
   },

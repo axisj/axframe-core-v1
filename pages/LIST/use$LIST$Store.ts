@@ -97,7 +97,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     await get().callListApi();
   },
   syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = ["listSortParams", "listRequestValue", "listColWidths"];
+    const metaDataKeys: (keyof MetaData)[] = ["programFn", "listSortParams", "listRequestValue", "listColWidths"];
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
@@ -115,9 +115,10 @@ export const use$LIST$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST$Store.subscribe(
-  (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
-  ([listSortParams, listRequestValue, listColWidths]) => {
+  (s) => [s.programFn, s.listSortParams, s.listRequestValue, s.listColWidths],
+  ([programFn, listSortParams, listRequestValue, listColWidths]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
+      programFn,
       listSortParams,
       listRequestValue,
       listColWidths,
