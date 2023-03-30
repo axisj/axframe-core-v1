@@ -9,7 +9,7 @@ enum RangeType {
   D7 = "D7",
 }
 
-export const SearchParamTimeRange: SearchParamComponent = ({ name, onClickExtraButton, label }) => {
+export const SearchParamTimeRange: SearchParamComponent = ({ name, onClickExtraButton, label, disabled }) => {
   const onClickButton = React.useCallback(
     (rangeType: RangeType) => {
       let range: Dayjs[] = [];
@@ -35,6 +35,7 @@ export const SearchParamTimeRange: SearchParamComponent = ({ name, onClickExtraB
       <DatePicker.RangePicker
         style={{ width: 220 }}
         showNow
+        disabled={disabled}
         renderExtraFooter={() => (
           <Space direction={"horizontal"} size={4}>
             <Button type={"link"} size='small' onClick={() => onClickButton(RangeType.TODAY)}>

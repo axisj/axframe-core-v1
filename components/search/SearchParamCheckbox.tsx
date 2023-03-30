@@ -10,6 +10,7 @@ export const SearchParamCheckbox: SearchParamComponent = ({
   label,
   checkAllItem,
   onChangedComponentValue,
+  disabled,
 }) => {
   const { t } = useI18n();
   const form = Form.useFormInstance();
@@ -28,13 +29,14 @@ export const SearchParamCheckbox: SearchParamComponent = ({
           indeterminate={checkedAll.length < options.length}
           onChange={onCheckAllChange}
           checked={checkedAll.length === options.length}
+          disabled={disabled}
         >
           {t.common.checkAll}
         </Checkbox>
       )}
 
       <Form.Item name={name} noStyle>
-        <Checkbox.Group options={options} />
+        <Checkbox.Group options={options} disabled={disabled} />
       </Form.Item>
     </Form.Item>
   );

@@ -14,6 +14,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
   onSearch,
   onChangedComponentValue,
   config,
+  disabled,
 }) => {
   const form = Form.useFormInstance();
 
@@ -33,6 +34,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
       <Space.Compact>
         <Form.Item name={name} noStyle>
           <Select
+            disabled={disabled}
             mode={config?.single ? undefined : "multiple"}
             style={{ minWidth: 100, width }}
             placeholder={placeholder}
@@ -44,7 +46,7 @@ export const SearchParamValuesFinder: SearchParamComponent = ({
             allowClear
           />
         </Form.Item>
-        <Button onClick={handleSearch} style={{ width: 30 }} icon={<AXFISearch />} />
+        <Button onClick={handleSearch} style={{ width: 30 }} icon={<AXFISearch />} disabled={disabled} />
       </Space.Compact>
     </Form.Item>
   );

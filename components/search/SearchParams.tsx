@@ -21,6 +21,7 @@ export interface IParam {
   picker?: DateType;
   onSearch?: () => Promise<SearchParamOption[]>;
   config?: Record<string, any>;
+  disabled?: boolean;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -158,6 +159,7 @@ export function SearchParams({
                   picker={param.picker}
                   onSearch={param.onSearch}
                   config={param.config}
+                  disabled={param.disabled}
                 />
               ))}
             </Space>

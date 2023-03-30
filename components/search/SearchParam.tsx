@@ -36,6 +36,7 @@ interface Props {
   picker?: DateType;
   onSearch?: () => Promise<SearchParamOption[]>;
   config?: Record<string, any>;
+  disabled?: boolean;
 }
 
 export type SearchParamComponentProp<R> = {
