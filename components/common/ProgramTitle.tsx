@@ -8,7 +8,7 @@ import { useI18n, useLink } from "../../hooks";
 import { AppMenu } from "../../../services";
 
 interface Props {
-  title: string;
+  title?: string;
   icon?: React.ReactNode;
   disableIcon?: boolean;
   children?: React.ReactNode;
@@ -25,10 +25,10 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
   const { currentLanguage } = useI18n();
   const { APP_MENUS, MENUS_LIST } = useAppMenu();
   const { linkByRoute } = useLink();
-  const route = ROUTES_LIST.find((route) => route.path === location.pathname);
+  const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
 
   const { iconTy, breadCrumbs } = React.useMemo(() => {
-    const currentMenu = MENUS_LIST.find((m) => m.progCd === route?.program_type);
+    const currentMenu = MENUS_LIST.find((m) => m.progCd === currentRoute?.program_type);
 
     const breadCrumbs: BreadCrumb[] = [];
     currentMenu?.keyPath?.reduce((acc, cur) => {
@@ -45,7 +45,7 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
       iconTy: currentMenu?.iconTy,
       breadCrumbs,
     };
-  }, [APP_MENUS, MENUS_LIST, route?.program_type]);
+  }, [APP_MENUS, MENUS_LIST, currentRoute?.program_type]);
 
   const handleClickMenu = React.useCallback(
     (m) => {
@@ -98,12 +98,18 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
     });
   }, [breadCrumbs, currentLanguage, handleClickMenu]);
 
+  const currentMenu = React.useMemo(() => {
+    if (currentRoute) {
+      return MENUS_LIST.find((m) => m.progCd === currentRoute.program_type);
+    }
+  }, [MENUS_LIST, currentRoute]);
+
   return (
     <Container>
       {disableIcon
         ? null
         : icon ?? <MenuIcon typeName={iconTy ?? "Default"} color={"#0281FE"} secondColor={"#0281FE"} fontSize={22} />}
-      <TitleWrap>{title}</TitleWrap>
+      <TitleWrap>{title ?? currentMenu?.multiLanguage[currentLanguage]}</TitleWrap>
       <Breadcrumb items={bItems} />
       {children}
     </Container>
