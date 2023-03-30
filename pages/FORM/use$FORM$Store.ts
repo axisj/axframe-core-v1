@@ -10,10 +10,12 @@ import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
 import { convertDateToString } from "@core/utils/object";
+import { ProgramFn } from "@types";
 
 interface SaveRequest extends ExampleSaveRequest {}
 
 interface MetaData {
+  programFn?: ProgramFn;
   saveRequestValue: SaveRequest;
 }
 
@@ -59,7 +61,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = ["saveRequestValue"];
+    const metaDataKeys: (keyof MetaData)[] = ["programFn", "saveRequestValue"];
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
@@ -76,9 +78,10 @@ export const use$FORM$Store = create(
 );
 
 use$FORM$Store.subscribe(
-  (s) => [s.saveRequestValue],
-  ([saveRequestValue]) => {
+  (s) => [s.programFn, s.saveRequestValue],
+  ([programFn, saveRequestValue]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
+      programFn,
       saveRequestValue: saveRequestValue,
     });
   },

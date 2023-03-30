@@ -13,12 +13,14 @@ import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
+import { ProgramFn } from "@types";
 
 interface SaveRequest extends ExampleSaveRequest {}
 interface APIDetailRequest extends ExampleDetailRequest {}
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
+  programFn?: ProgramFn;
   saveRequestValue: SaveRequest;
 }
 

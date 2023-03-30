@@ -10,12 +10,14 @@ import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
 import { StatCol } from "@core/components/statTable";
+import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
 interface DtoItem extends ExampleStatItem {}
 export type PanelType = "pg1" | "pg2";
 
 interface MetaData {
+  programFn?: ProgramFn;
   requestValue: ListRequest;
   colGroupsPg1?: StatCol[];
   colGroupsPg2?: StatCol[];
@@ -83,6 +85,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
+      "programFn",
       "requestValue",
       "colGroupsPg1",
       "colGroupsPg2",
@@ -107,9 +110,10 @@ export const use$STATS$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$STATS$Store.subscribe(
-  (s) => [s.requestValue, s.colGroupsPg1, s.colGroupsPg2, s.activeTabKey, s.flexGrowPg1, s.flexGrowPg2],
-  ([requestValue, colGroupsPg1, colGroupsPg2, activeTabKey, flexGrowPg1, flexGrowPg2]) => {
+  (s) => [s.programFn, s.requestValue, s.colGroupsPg1, s.colGroupsPg2, s.activeTabKey, s.flexGrowPg1, s.flexGrowPg2],
+  ([programFn, requestValue, colGroupsPg1, colGroupsPg2, activeTabKey, flexGrowPg1, flexGrowPg2]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
+      programFn,
       requestValue,
       colGroupsPg1,
       colGroupsPg2,

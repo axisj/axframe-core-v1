@@ -18,6 +18,7 @@ import { ROUTES } from "router/Routes";
 import { omit, pick } from "lodash";
 import { convertDateToString } from "@core/utils/object";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
+import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
 interface SaveRequest extends ExampleSaveRequest {}
@@ -25,6 +26,7 @@ interface DtoItem extends ExampleItem {}
 interface DtoSubItem extends ExampleSubItem {}
 
 interface MetaData {
+  programFn?: ProgramFn;
   listRequestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
@@ -234,6 +236,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
+      "programFn",
       "listSortParams",
       "listRequestValue",
       "listColWidths",
@@ -264,6 +267,7 @@ export const use$LIST_WITH_FORM_LIST$Store = create(
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST_WITH_FORM_LIST$Store.subscribe(
   (s) => [
+    s.programFn,
     s.listSortParams,
     s.listRequestValue,
     s.listColWidths,
@@ -278,6 +282,7 @@ use$LIST_WITH_FORM_LIST$Store.subscribe(
     s.subListData,
   ],
   ([
+    programFn,
     listSortParams,
     listRequestValue,
     listColWidths,
@@ -292,6 +297,7 @@ use$LIST_WITH_FORM_LIST$Store.subscribe(
     subListData,
   ]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
+      programFn,
       listSortParams,
       listRequestValue,
       listColWidths,

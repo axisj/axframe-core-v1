@@ -12,12 +12,14 @@ import { pick } from "lodash";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
+import { ProgramFn } from "@types";
 
 interface Request extends ExampleListRequest {}
 
 interface DtoItem extends ExampleSubItem {}
 
 interface MetaData {
+  programFn?: ProgramFn;
   requestValue: Request;
 
   listAColWidths: number[];
@@ -238,6 +240,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
+      "programFn",
       "requestValue",
       "listAColWidths",
       "listASelectedRowKey",
@@ -267,6 +270,7 @@ export const use$THREE_LIST$Store = create(
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$THREE_LIST$Store.subscribe(
   (s) => [
+    s.programFn,
     s.requestValue,
     s.listAColWidths,
     s.listASelectedRowKey,
@@ -279,6 +283,7 @@ use$THREE_LIST$Store.subscribe(
     s.listCCheckedIndexes,
   ],
   ([
+    programFn,
     requestValue,
     listAColWidths,
     listASelectedRowKey,
@@ -291,6 +296,7 @@ use$THREE_LIST$Store.subscribe(
     listCCheckedIndexes,
   ]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
+      programFn,
       requestValue,
       listAColWidths,
       listASelectedRowKey,

@@ -14,12 +14,14 @@ import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
+import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
 interface DetailRequest extends ExampleDetailRequest {}
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
+  programFn?: ProgramFn;
   listRequestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
@@ -120,7 +122,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = ["listSortParams", "listRequestValue", "listColWidths"];
+    const metaDataKeys: (keyof MetaData)[] = ["programFn", "listSortParams", "listRequestValue", "listColWidths"];
     set(pick(metaData ?? createState, metaDataKeys));
   },
 
@@ -138,9 +140,10 @@ export const use$LIST_AND_MODAL$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST_AND_MODAL$Store.subscribe(
-  (s) => [s.listSortParams, s.listRequestValue, s.listColWidths],
-  ([listSortParams, listRequestValue, listColWidths]) => {
+  (s) => [s.programFn, s.listSortParams, s.listRequestValue, s.listColWidths],
+  ([programFn, listSortParams, listRequestValue, listColWidths]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
+      programFn,
       listSortParams,
       listRequestValue,
       listColWidths,

@@ -10,11 +10,13 @@ import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
+import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
+  programFn?: ProgramFn;
   listRequestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
