@@ -17,7 +17,7 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
       const data = await UserService.getProgramFn({ progCd: currentRoute.program_type, apiUrl: location.pathname });
 
       const programFn = data.ds.reduce((acc, cur) => {
-        return { ...acc, [cur.key]: cur.label };
+        return { ...acc, [cur]: true };
       }, {});
 
       if (metaData) {
@@ -44,7 +44,7 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
       if (currentRoute) {
         const data = await UserService.getProgramFn({ progCd: currentRoute.program_type, apiUrl: location.pathname });
         const programFn = data.ds.reduce((acc, cur) => {
-          return { ...acc, [cur.key]: cur.label };
+          return { ...acc, [cur]: true };
         }, {});
 
         config.createState.programFn = programFn;
