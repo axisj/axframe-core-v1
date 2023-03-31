@@ -97,8 +97,6 @@ export function SearchParams({
       ...paramsValue,
     };
 
-    // console.log("formValues", formValues);
-
     params?.forEach((filter) => {
       if (filter.type === SearchParamType.TIME_RANGE) {
         formValues[filter.name] = getDayJsRangeValue(paramsValue?.[filter.name]);
@@ -106,6 +104,9 @@ export function SearchParams({
         formValues[filter.name] = paramsValue?.[filter.name] ? dayjs(paramsValue?.[filter.name]) : undefined;
       } else if (filter.type === SearchParamType.VALUES_FINDER) {
         formValues[filter.name] = paramsValue?.[filter.name] ?? [];
+      } else if (filter.type === SearchParamType.SELECT) {
+        formValues[filter.name] =
+          paramsValue?.[filter.name] ?? filter.options?.length === 1 ? filter.options?.[0].value : "";
       } else {
         formValues[filter.name] = paramsValue?.[filter.name] ?? "";
       }
@@ -142,26 +143,28 @@ export function SearchParams({
         <DefaultWrap role={"page-search-bar"}>
           {params && params?.length > 0 && (
             <Space wrap align={"center"}>
-              {params.map((param, idx) => (
-                <SearchParam
-                  key={idx}
-                  name={param.name}
-                  placeholder={param.placeholder}
-                  type={param.type}
-                  value={paramsValue?.[param.name]}
-                  options={param.options}
-                  onClickExtraButton={onClickExtraButton}
-                  label={param.label}
-                  checkAllItem={param.checkAllItem}
-                  width={param.width}
-                  onChangedComponentValue={onChangedComponentValue}
-                  loading={param.loading}
-                  picker={param.picker}
-                  onSearch={param.onSearch}
-                  config={param.config}
-                  disabled={param.disabled}
-                />
-              ))}
+              {params.map((param, idx) => {
+                return (
+                  <SearchParam
+                    key={idx}
+                    name={param.name}
+                    placeholder={param.placeholder}
+                    type={param.type}
+                    value={paramsValue?.[param.name]}
+                    options={param.options}
+                    onClickExtraButton={onClickExtraButton}
+                    label={param.label}
+                    checkAllItem={param.checkAllItem}
+                    width={param.width}
+                    onChangedComponentValue={onChangedComponentValue}
+                    loading={param.loading}
+                    picker={param.picker}
+                    onSearch={param.onSearch}
+                    config={param.config}
+                    disabled={param.disabled}
+                  />
+                );
+              })}
             </Space>
           )}
 
