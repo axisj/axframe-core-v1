@@ -105,8 +105,7 @@ export function SearchParams({
       } else if (filter.type === SearchParamType.VALUES_FINDER) {
         formValues[filter.name] = paramsValue?.[filter.name] ?? [];
       } else if (filter.type === SearchParamType.SELECT) {
-        formValues[filter.name] =
-          paramsValue?.[filter.name] ?? filter.options?.length === 1 ? filter.options?.[0].value : "";
+        formValues[filter.name] = paramsValue?.[filter.name] ?? "";
       } else {
         formValues[filter.name] = paramsValue?.[filter.name] ?? "";
       }
