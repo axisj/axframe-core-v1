@@ -8,6 +8,7 @@ import { use$LIST_WITH_FORM_LIST$Store } from "./use$LIST_WITH_FORM_LIST$Store";
 import { EmptyMsg } from "components/common";
 import { convertToDate } from "@core/utils/object";
 import { SubListDataGrid } from "./SubListDataGrid";
+import { errorDialog } from "../../components/dialogs";
 
 interface Props {
   form: FormInstance<DtoItem>;
@@ -35,10 +36,14 @@ function FormSet({ form }: Props) {
   );
 
   React.useEffect(() => {
-    if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
-      form.resetFields();
-    } else {
-      form.setFieldsValue(convertToDate({ ...formInitialValues, ...saveRequestValue }, ["cnsltDt"]));
+    try {
+      if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
+        form.resetFields();
+      } else {
+        form.setFieldsValue(convertToDate({ ...formInitialValues, ...saveRequestValue }, ["cnsltDt"]));
+      }
+    } catch (err) {
+      errorDialog(err as any);
     }
   }, [saveRequestValue, form, formInitialValues]);
 

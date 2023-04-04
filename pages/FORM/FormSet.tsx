@@ -9,6 +9,7 @@ import { use$FORM$Store } from "./use$FORM$Store";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
+import { errorDialog } from "../../components/dialogs";
 
 interface Props {
   form: FormInstance<DtoItem>;
@@ -69,7 +70,11 @@ function FormSet({ form }: Props) {
 
   useDidMountEffect(() => {
     console.log("form.setFieldsValue by metaData");
-    form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
+    try {
+      form.setFieldsValue(convertToDate(saveRequestValue, ["cnsltDt", "birthDt"]));
+    } catch (err) {
+      errorDialog(err as any);
+    }
   });
 
   return (

@@ -9,6 +9,7 @@ import { convertToDate } from "@core/utils/object";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { use$LIST_WITH_FORM$Store } from "./use$LIST_WITH_FORM$Store";
 import { EmptyMsg } from "components/common";
+import { errorDialog } from "../../components/dialogs";
 
 interface Props {
   form: FormInstance<DtoItem>;
@@ -55,10 +56,14 @@ function FormSet({ form }: Props) {
   );
 
   React.useEffect(() => {
-    if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
-      form.resetFields();
-    } else {
-      form.setFieldsValue(convertToDate({ ...formInitialValues, ...saveRequestValue }, ["cnsltDt", "birthDt"]));
+    try {
+      if (!saveRequestValue || Object.keys(saveRequestValue).length < 1) {
+        form.resetFields();
+      } else {
+        form.setFieldsValue(convertToDate({ ...formInitialValues, ...saveRequestValue }, ["cnsltDt", "birthDt"]));
+      }
+    } catch (err) {
+      errorDialog(err as any);
     }
   }, [saveRequestValue, form, formInitialValues]);
 
