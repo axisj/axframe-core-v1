@@ -12,6 +12,8 @@ export function convertDateToString(
     keys.forEach((key) => {
       if (target[key] instanceof dayjs) {
         target[key] = target[key].format(formatString);
+      } else {
+        target[key] = dayjs(target[key]).format(formatString);
       }
     });
   } else {
