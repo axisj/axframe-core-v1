@@ -2,6 +2,7 @@ import * as React from "react";
 import { StatCol, StatHeadTr, StatTableStyleProps } from "./types";
 import styled from "@emotion/styled";
 import StatTableColResizer from "./StatTableColResizer";
+import { dangerouslySetInnerHTML } from "../../utils/string";
 
 interface Props {
   marginLeft?: number;
@@ -49,7 +50,7 @@ function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRo
             <tr key={hi}>
               {h.children?.map((th, thi) => (
                 <th key={thi} colSpan={th.colspan} rowSpan={th.rowspan} align={th.align ?? "center"}>
-                  {th.label}
+                  <span {...dangerouslySetInnerHTML(th.label)} />
                 </th>
               ))}
               <th />
