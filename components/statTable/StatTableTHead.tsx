@@ -43,6 +43,7 @@ function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRo
           {colGroups.map((cg, cgi) => (
             <col key={cgi} width={cg.width} />
           ))}
+          <col />
         </colgroup>
         <thead>
           {headColumns.map((h, hi) => (
@@ -58,6 +59,7 @@ function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRo
                   ></th>
                 );
               })}
+              <th />
             </tr>
           ))}
         </thead>
