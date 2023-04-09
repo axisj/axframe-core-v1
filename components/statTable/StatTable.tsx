@@ -33,7 +33,7 @@ function StatTable<T = Record<string, any>>({
   }, [colGroups]);
 
   const { headHeight, bodyHeight, footHeight } = React.useMemo(() => {
-    const headHeight = headColumns.length * headRowHeight + 1;
+    const headHeight = headRowHeight + 1;
     const footHeight = total ? bodyRowHeight + 1 : 0;
     const bodyHeight = height - headHeight - footHeight;
     return {
@@ -41,7 +41,7 @@ function StatTable<T = Record<string, any>>({
       bodyHeight,
       footHeight,
     };
-  }, [bodyRowHeight, headColumns.length, headRowHeight, height, total]);
+  }, [bodyRowHeight, headRowHeight, height, total]);
 
   const { newData: cdata, totalValues } = React.useMemo(() => {
     const newData = [] as Record<string, any>[];

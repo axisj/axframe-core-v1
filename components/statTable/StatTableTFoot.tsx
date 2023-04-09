@@ -23,7 +23,6 @@ function StatTableTFoot<T>({ marginLeft, colGroups, total, totalValues, tableWid
         {colGroups.map((cg, cgi) => (
           <col key={cgi} width={cg.width} />
         ))}
-        <col />
       </colgroup>
       <tfoot>
         <tr>
@@ -50,7 +49,6 @@ function StatTableTFoot<T>({ marginLeft, colGroups, total, totalValues, tableWid
               </td>
             );
           })}
-          <td />
         </tr>
       </tfoot>
     </Table>

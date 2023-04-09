@@ -43,17 +43,21 @@ function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRo
           {colGroups.map((cg, cgi) => (
             <col key={cgi} width={cg.width} />
           ))}
-          <col />
         </colgroup>
         <thead>
           {headColumns.map((h, hi) => (
             <tr key={hi}>
-              {h.children?.map((th, thi) => (
-                <th key={thi} colSpan={th.colspan} rowSpan={th.rowspan} align={th.align ?? "center"}>
-                  <span {...dangerouslySetInnerHTML(th.label)} />
-                </th>
-              ))}
-              <th />
+              {h.children?.map((th, thi) => {
+                return (
+                  <th
+                    key={thi}
+                    colSpan={th.colspan}
+                    rowSpan={th.rowspan}
+                    align={th.align ?? "center"}
+                    {...dangerouslySetInnerHTML(th.label)}
+                  ></th>
+                );
+              })}
             </tr>
           ))}
         </thead>
@@ -83,17 +87,16 @@ const Table = styled.table<StatTableStyleProps>`
   width: 100%;
   border-collapse: collapse;
   border-style: hidden;
+  height: ${(p) => p.headRowHeight}px;
 
   thead {
     th {
       white-space: nowrap;
       border: 1px solid ${(p) => p.theme.border_color_base};
       background: ${(p) => p.theme.axfdg_header_bg};
-      line-height: 20px;
       padding: 0 6.5px;
-      height: ${(p) => p.headRowHeight}px;
       color: ${(p) => p.theme.axfdg_header_color};
-      font-weight: : ${(p) => p.theme.axfdg_header_font_weight};
+      font-weight: ${(p) => p.theme.axfdg_header_font_weight};
 
       overflow: hidden;
       text-overflow: ellipsis;

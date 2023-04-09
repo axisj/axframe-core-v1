@@ -19,7 +19,6 @@ function StatTableTBody<T>({ tableWidth, bodyRowHeight, colGroups, cdata, subtot
         {colGroups.map((cg, cgi) => (
           <col key={cgi} width={cg.width} />
         ))}
-        <col />
       </colgroup>
       <tbody>
         {cdata?.map((item, ri) => {
@@ -47,7 +46,6 @@ function StatTableTBody<T>({ tableWidth, bodyRowHeight, colGroups, cdata, subtot
                     </td>
                   );
                 })}
-                <td />
               </tr>
             );
           }
@@ -64,7 +62,6 @@ function StatTableTBody<T>({ tableWidth, bodyRowHeight, colGroups, cdata, subtot
                   );
                 }
               })}
-              <td />
             </tr>
           );
         })}
