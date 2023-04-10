@@ -22,6 +22,8 @@ function StatTable<T = Record<string, any>>({
   subtotal,
   total,
   data,
+  onClick,
+  selectedRowIndex,
 }: StatTableProps<T>) {
   const tableWidth = React.useMemo(() => {
     if (Array.isArray(colGroups)) {
@@ -200,6 +202,8 @@ function StatTable<T = Record<string, any>>({
           bodyColumns={bodyColumns}
           tableWidth={tableWidth}
           bodyRowHeight={bodyRowHeight}
+          onClick={onClick}
+          selectedRowIndex={selectedRowIndex}
         />
       </BodyContainer>
 

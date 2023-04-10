@@ -66,4 +66,6 @@ export interface StatTableProps<T> extends StatTableStyleProps {
   data: T[];
   width: number;
   height: number;
+  onClick?: (rowIndex: number, item: T) => void;
+  selectedRowIndex?: number;
 }

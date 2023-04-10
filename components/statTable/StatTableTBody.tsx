@@ -10,9 +10,20 @@ interface Props<T> {
   cdata: Record<string, any>[];
   subtotal?: StatSubTotal<T>;
   bodyColumns: StatBodyTd<T>[];
+  onClick?: (rowIndex: number, item: T) => void;
+  selectedRowIndex?: number;
 }
 
-function StatTableTBody<T>({ tableWidth, bodyRowHeight, colGroups, cdata, subtotal, bodyColumns }: Props<T>) {
+function StatTableTBody<T>({
+  tableWidth,
+  bodyRowHeight,
+  colGroups,
+  cdata,
+  subtotal,
+  bodyColumns,
+  onClick,
+  selectedRowIndex,
+}: Props<T>) {
   return (
     <Table style={{ minWidth: tableWidth }} bodyRowHeight={bodyRowHeight}>
       <colgroup>
@@ -53,12 +64,22 @@ function StatTableTBody<T>({ tableWidth, bodyRowHeight, colGroups, cdata, subtot
           }
 
           return (
-            <tr key={ri}>
+            <tr key={ri} className={ri === selectedRowIndex ? "selected" : ""}>
               {bodyColumns.map((c, ci) => {
                 if (item[c.key].rowspan) {
                   const tdValue = c.itemRender ? c.itemRender(item.__originValue__) : item[c.key].originValue;
                   return (
-                    <td key={ci} rowSpan={item[c.key].rowspan} align={c.align ?? "center"}>
+                    <td
+                      key={ci}
+                      rowSpan={item[c.key].rowspan}
+                      role={"click-item"}
+                      onClick={(evt) => {
+                        if (item[c.key].rowspan < 2) {
+                          onClick?.(ri, item.__originValue__);
+                        }
+                      }}
+                      align={c.align ?? "center"}
+                    >
                       {tdValue}
                     </td>
                   );
@@ -92,8 +113,16 @@ const Table = styled.table<StatTableStyleProps>`
 
       overflow: hidden;
       text-overflow: ellipsis;
+
+      &[role="click-item"] {
+        cursor: pointer;
+      }
     }
 
+    tr.selected {
+      background: ${(p) => p.theme.item_active_bg};
+      color: ${(p) => p.theme.primary_color};
+    }
     tr[role="subtotal"] {
       td {
         background: #ffeeee;
