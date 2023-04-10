@@ -72,7 +72,7 @@ function StatTableTBody<T>({
                     <td
                       key={ci}
                       rowSpan={item[c.key].rowspan}
-                      role={"click-item"}
+                      role={onClick ? "click-item" : ""}
                       onClick={(evt) => {
                         if (item[c.key].rowspan < 2) {
                           onClick?.(ri, item.__originValue__);
