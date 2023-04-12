@@ -194,7 +194,7 @@ function StatTable<T = Record<string, any>>({
         />
       </HeadContainer>
 
-      <BodyContainer ref={scrollContainerRef} style={{ width: width, height: bodyHeight }}>
+      <BodyContainer ref={scrollContainerRef} style={{ width: width, height: bodyHeight }} role={"body-container"}>
         <StatTableTBody
           colGroups={colGroups}
           cdata={cdata}
