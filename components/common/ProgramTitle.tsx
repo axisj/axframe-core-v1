@@ -119,6 +119,7 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
 const Container = styled.div`
   ${SMixinFlexRow("flex-start", "center")};
   gap: 5px;
+  min-height: 32px;
 
   .ant-breadcrumb {
     font-weight: 400;
