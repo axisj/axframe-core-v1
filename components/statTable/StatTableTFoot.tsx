@@ -50,7 +50,7 @@ function StatTableTFoot<T>({ marginLeft, colGroups, total, totalValues, tableWid
               </td>
             );
           })}
-          <td />
+          <td className={"dummy"} />
         </tr>
       </tfoot>
     </Table>

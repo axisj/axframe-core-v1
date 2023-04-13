@@ -55,11 +55,12 @@ function StatTableTHead({ marginLeft, tableWidth, colGroups, headColumns, headRo
                     colSpan={th.colspan}
                     rowSpan={th.rowspan}
                     align={th.align ?? "center"}
+                    data-text-cell={true}
                     {...dangerouslySetInnerHTML(th.label)}
                   ></th>
                 );
               })}
-              <th />
+              <th className={"dummy"} />
             </tr>
           ))}
         </thead>

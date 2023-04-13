@@ -58,7 +58,7 @@ function StatTableTBody<T>({
                     </td>
                   );
                 })}
-                <td />
+                <td className={"dummy"} />
               </tr>
             );
           }
@@ -85,7 +85,7 @@ function StatTableTBody<T>({
                   );
                 }
               })}
-              <td />
+              <td className={"dummy"} />
             </tr>
           );
         })}
