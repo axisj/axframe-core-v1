@@ -31,7 +31,7 @@ export const confirmDialog = (
       okText: t.button.ok,
       cancelText: t.button.cancel,
       transitionName: "slide-down",
-      title: options.title === null ? null : options.title || "Error",
+      title: options.title === null ? null : options.title || "Confirm",
       content: options.content || options.message || "Unknown error occurred",
       width: options.width,
       bodyStyle: {

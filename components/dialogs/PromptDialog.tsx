@@ -35,7 +35,7 @@ function PromptModal({ open, onOk, onCancel, afterClose, params }: Props) {
     onOk({
       data: form.getFieldsValue(),
     });
-  }, []);
+  }, [form, onOk]);
 
   return (
     <Modal width={params.dialogWidth ?? 500} {...{ open, onCancel, onOk: onOk as any, afterClose }}>
