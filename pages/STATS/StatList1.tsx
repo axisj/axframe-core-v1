@@ -42,7 +42,7 @@ function StatList1({}: Props) {
         width={containerWidth}
         height={containerHeight}
         spinning={spinning}
-        headRowHeight={30}
+        headRowHeight={60}
         bodyRowHeight={30}
         colGroups={colGroups}
         onChangeColGroups={setColGroups}

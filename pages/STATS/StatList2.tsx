@@ -21,7 +21,7 @@ function StatList2({}: Props) {
       <StatDataGrid
         width={containerWidth}
         height={containerHeight}
-        headRowHeight={28}
+        headRowHeight={60}
         bodyRowHeight={34}
         colGroups={colGroups}
         onChangeColGroups={setColGroups}

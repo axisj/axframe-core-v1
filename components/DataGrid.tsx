@@ -13,7 +13,7 @@ export function DataGrid<T>({ width, height, ...rest }: Props<T>) {
 
   return (
     <Container>
-      <AXFDataGrid width={width} height={height} headerHeight={35} itemHeight={20} footerHeight={35} {...rest} />
+      <AXFDataGrid width={width} height={height} headerHeight={28} itemHeight={20} footerHeight={35} {...rest} />
     </Container>
   );
 }
