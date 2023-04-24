@@ -123,6 +123,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     get().setSubListData(subListData, true);
   },
   callListApi: async (request) => {
+    if (get().listSpinning) return;
     await set({ listSpinning: true });
 
     try {
@@ -163,6 +164,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   },
   setSaveSpinning: (exampleSaveSpinning) => set({ saveSpinning: exampleSaveSpinning }),
   callSaveApi: async (request) => {
+    if (get().saveSpinning) return;
     await set({ saveSpinning: true });
 
     try {

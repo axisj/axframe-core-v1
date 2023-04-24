@@ -87,6 +87,7 @@ const createState: States = {
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   callListApi: async (request) => {
+    if (get().spinning) return;
     await set({ spinning: true });
 
     try {

@@ -70,6 +70,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListSpinning: (spinning) => set({ listSpinning: spinning }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
   callListApi: async (request) => {
+    if (get().listSpinning) return;
     await set({ listSpinning: true });
 
     try {

@@ -100,6 +100,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set({ spinning: spinning });
   },
   callListApi: async () => {
+    if (get().spinning) return;
     await set({ spinning: true });
 
     try {
@@ -124,6 +125,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   callSaveApi: async () => {
+    if (get().spinning) return;
     await set({ spinning: true });
 
     const listDataCollector = (item) => {
