@@ -2,7 +2,6 @@ import create from "zustand";
 import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -83,7 +82,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         },
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ listSpinning: false });
     }

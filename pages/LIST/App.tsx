@@ -13,6 +13,7 @@ import { useLink, useUnmountEffect } from "hooks";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ROUTES } from "router";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { errorDialog } from "../../components/dialogs";
 
 interface DtoItem extends ExampleItem {}
 interface Props {}
@@ -32,7 +33,11 @@ function App({}: Props) {
   const [searchForm] = Form.useForm();
 
   const handleSearch = React.useCallback(async () => {
-    await callApi();
+    try {
+      await callApi();
+    } catch (e: any) {
+      await errorDialog(e);
+    }
   }, [callApi]);
 
   const onClickItem = React.useCallback(
