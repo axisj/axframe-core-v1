@@ -1,7 +1,6 @@
 import create from "zustand";
 import { ExampleListRequest, ExampleStatItem } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -72,7 +71,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         listData: response.ds,
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ spinning: false });
     }

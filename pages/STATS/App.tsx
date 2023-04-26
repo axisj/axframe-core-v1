@@ -9,6 +9,7 @@ import { useI18n, useUnmountEffect } from "@core/hooks";
 import { PanelType, use$STATS$Store } from "./use$STATS$Store";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { PanelIndex } from "./PanelIndex";
+import { errorDialog } from "../../components/dialogs";
 
 interface Props {}
 
@@ -29,11 +30,19 @@ function App({}: Props) {
 
   const handleReset = React.useCallback(async () => {
     reset();
-    await callListApi();
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorDialog(e as any);
+    }
   }, [callListApi, reset]);
 
   const handleSearch = React.useCallback(async () => {
-    await callListApi();
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorDialog(e as any);
+    }
   }, [callListApi]);
 
   const params = React.useMemo(

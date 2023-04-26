@@ -110,7 +110,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         },
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ spinning: false });
     }

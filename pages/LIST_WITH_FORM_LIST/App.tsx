@@ -5,20 +5,20 @@ import { ColResizer, ProgramTitle } from "@core/components/common";
 import { AXFIRevert } from "@axframe/icon";
 import { Button, Form } from "antd";
 import { PageLayout } from "styles/pageStyled";
-import { useDidMountEffect, useI18n, useUnmountEffect } from "@core/hooks";
+import { useDialog, useDidMountEffect, useI18n, useUnmountEffect } from "@core/hooks";
 import { use$LIST_WITH_FORM_LIST$Store } from "./use$LIST_WITH_FORM_LIST$Store";
 import { FormSet } from "./FormSet";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGrid } from "./ListDataGrid";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
-
 interface DtoItem extends ExampleItem {}
 
 interface Props {}
 
 function App({}: Props) {
   const { t } = useI18n();
+  const { errorDialog } = useDialog();
 
   const init = use$LIST_WITH_FORM_LIST$Store((s) => s.init);
   const reset = use$LIST_WITH_FORM_LIST$Store((s) => s.reset);
@@ -44,22 +44,30 @@ function App({}: Props) {
 
   const handleReset = React.useCallback(async () => {
     reset();
-    await callListApi();
-  }, [callListApi, reset]);
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorDialog(e as any);
+    }
+  }, [callListApi, errorDialog, reset]);
 
   const handleSearch = React.useCallback(async () => {
-    await callListApi();
-  }, [callListApi]);
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorDialog(e as any);
+    }
+  }, [callListApi, errorDialog]);
 
   const handleSave = useCallback(async () => {
     try {
       await form.validateFields();
       await callSaveApi();
       await reset();
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      await errorDialog(e as any);
     }
-  }, [callSaveApi, reset, form]);
+  }, [form, callSaveApi, reset, errorDialog]);
 
   const params = React.useMemo(
     () =>

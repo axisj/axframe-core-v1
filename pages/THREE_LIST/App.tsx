@@ -12,6 +12,7 @@ import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGridA } from "./ListDataGridA";
 import { ListDataGridB } from "./ListDataGridB";
 import { ListDataGridC } from "./ListDataGridC";
+import { errorDialog } from "../../components/dialogs";
 
 interface Props {}
 
@@ -31,13 +32,21 @@ function App({}: Props) {
 
   const handleReset = React.useCallback(async () => {
     reset();
-    await callListApi();
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorDialog(e as any);
+    }
   }, [callListApi, reset]);
 
   const [searchForm] = Form.useForm();
 
   const handleSearch = React.useCallback(async () => {
-    await callListApi();
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorDialog(e as any);
+    }
   }, [callListApi]);
 
   const params = React.useMemo(
