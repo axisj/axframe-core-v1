@@ -18,7 +18,7 @@ export type PanelType = "pg1" | "pg2";
 
 interface MetaData {
   programFn?: ProgramFn;
-  requestValue: ListRequest;
+  listRequestValue: ListRequest;
   colGroupsPg1?: StatCol[];
   colGroupsPg2?: StatCol[];
   activeTabKey: PanelType;
@@ -33,7 +33,7 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  callListApi: (request?: ListRequest) => Promise<void>;
+  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
   setRequestValue: (requestValue: ListRequest) => void;
   setActiveTabKey: (key: PanelType) => void;
   setFlexGrowPg1: (flexGlow: number) => void;
@@ -45,7 +45,7 @@ interface Actions extends PageStoreActions<States> {
 // create states
 const createState: States = {
   routePath: ROUTES.EXAMPLES.children.STATS.path,
-  requestValue: {
+  listRequestValue: {
     pageNumber: 1,
     pageSize: 100,
   },
@@ -65,7 +65,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     await set({ spinning: true });
 
     try {
-      const apiParam = request ?? get().requestValue;
+      const apiParam = request ?? get().listRequestValue;
       const response = await ExampleService.stat(apiParam);
 
       set({
@@ -77,7 +77,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       await set({ spinning: false });
     }
   },
-  setRequestValue: (requestValues) => set({ requestValue: requestValues }),
+  setRequestValue: (requestValues) => set({ listRequestValue: requestValues }),
   setActiveTabKey: (key) => set({ activeTabKey: key }),
   setFlexGrowPg1: (flexGlow) => set({ flexGrowPg1: flexGlow }),
   setFlexGrowPg2: (flexGlow) => set({ flexGrowPg2: flexGlow }),
@@ -87,7 +87,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
       "programFn",
-      "requestValue",
+      "listRequestValue",
       "colGroupsPg1",
       "colGroupsPg2",
       "activeTabKey",
@@ -111,11 +111,19 @@ export const use$STATS$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$STATS$Store.subscribe(
-  (s) => [s.programFn, s.requestValue, s.colGroupsPg1, s.colGroupsPg2, s.activeTabKey, s.flexGrowPg1, s.flexGrowPg2],
-  ([programFn, requestValue, colGroupsPg1, colGroupsPg2, activeTabKey, flexGrowPg1, flexGrowPg2]) => {
+  (s) => [
+    s.programFn,
+    s.listRequestValue,
+    s.colGroupsPg1,
+    s.colGroupsPg2,
+    s.activeTabKey,
+    s.flexGrowPg1,
+    s.flexGrowPg2,
+  ],
+  ([programFn, listRequestValue, colGroupsPg1, colGroupsPg2, activeTabKey, flexGrowPg1, flexGrowPg2]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
       programFn,
-      requestValue,
+      listRequestValue,
       colGroupsPg1,
       colGroupsPg2,
       activeTabKey,

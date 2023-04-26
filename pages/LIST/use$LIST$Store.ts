@@ -33,7 +33,7 @@ interface Actions extends PageStoreActions<States> {
   setListColWidths: (colWidths: number[]) => void;
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  callListApi: (request?: ListRequest) => Promise<void>;
+  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
 }
 
@@ -62,12 +62,16 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setListSpinning: (spinning) => set({ listSpinning: spinning }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
-  callListApi: async (request) => {
+  callListApi: async (request, pageNumber = 1) => {
     if (get().listSpinning) return;
     await set({ listSpinning: true });
 
     try {
-      const apiParam = request ?? get().listRequestValue;
+      const requestValue = request ?? get().listRequestValue;
+      const apiParam: ListRequest = {
+        ...requestValue,
+        pageNumber,
+      };
       const response = await ExampleService.list(apiParam);
 
       set({
@@ -94,7 +98,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       pageSize,
     };
     set({ listRequestValue: requestValues });
-    await get().callListApi();
+    await get().callListApi(undefined, pageNumber);
   },
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = ["programFn", "listSortParams", "listRequestValue", "listColWidths"];

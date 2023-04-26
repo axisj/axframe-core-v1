@@ -45,7 +45,7 @@ interface Actions extends PageStoreActions<States> {
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
   setListSelectedRowKey: (key?: React.Key, detail?: DtoItem) => void;
-  callListApi: (request?: ListRequest) => Promise<void>;
+  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
   setFlexGrow: (flexGlow: number) => void;
 
@@ -88,12 +88,16 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListSelectedRowKey: async (key, detail) => {
     set({ listSelectedRowKey: key, saveRequestValue: { ...detail }, detail });
   },
-  callListApi: async (request) => {
+  callListApi: async (request, pageNumber = 1) => {
     if (get().listSpinning) return;
     await set({ listSpinning: true });
 
     try {
-      const apiParam = request ?? get().listRequestValue;
+      const requestValue = request ?? get().listRequestValue;
+      const apiParam: ListRequest = {
+        ...requestValue,
+        pageNumber,
+      };
       const response = await ExampleService.list(apiParam);
 
       set({
@@ -120,7 +124,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       pageSize,
     };
     set({ listRequestValue: requestValues });
-    await get().callListApi();
+    await get().callListApi(undefined, pageNumber);
   },
   setFlexGrow: (flexGlow) => {
     set({ flexGrow: flexGlow });

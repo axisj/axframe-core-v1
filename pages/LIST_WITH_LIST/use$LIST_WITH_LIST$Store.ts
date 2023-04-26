@@ -20,7 +20,7 @@ interface SubDtoItem extends ExampleSubItem {}
 
 interface MetaData {
   programFn?: ProgramFn;
-  requestValue: ListRequest;
+  listRequestValue: ListRequest;
   listColWidths: number[];
   listSortParams: AXFDGSortParam[];
   listSelectedRowKey?: React.Key;
@@ -39,7 +39,7 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  callListApi: (request?: ListRequest) => Promise<void>;
+  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
   callSaveApi: () => Promise<void>;
   setSpinning: (spinning: boolean) => void;
@@ -62,7 +62,7 @@ interface Actions extends PageStoreActions<States> {
 // create states
 const createState: States = {
   routePath: ROUTES.EXAMPLES.children.LIST_WITH_LIST.path,
-  requestValue: {
+  listRequestValue: {
     pageNumber: 1,
     pageSize: 100,
   },
@@ -86,12 +86,16 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
-  callListApi: async (request) => {
+  callListApi: async (request, pageNumber = 1) => {
     if (get().spinning) return;
     await set({ spinning: true });
 
     try {
-      const apiParam = request ?? get().requestValue;
+      const requestValue = request ?? get().listRequestValue;
+      const apiParam: ListRequest = {
+        ...requestValue,
+        pageNumber,
+      };
       const response = await ExampleService.list(apiParam);
 
       set({
@@ -113,12 +117,12 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   },
   changeListPage: async (pageNumber, pageSize) => {
     const requestValues = {
-      ...get().requestValue,
+      ...get().listRequestValue,
       pageNumber,
       pageSize,
     };
-    set({ requestValue: requestValues });
-    await get().callListApi();
+    set({ listRequestValue: requestValues });
+    await get().callListApi(undefined, pageNumber);
   },
   callSaveApi: async () => {
     await set({ spinning: true });
@@ -151,7 +155,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   setSpinning: (spinning) => set({ spinning }),
-  setRequestValue: (requestValues) => set({ requestValue: requestValues }),
+  setRequestValue: (requestValues) => set({ listRequestValue: requestValues }),
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
   setListSelectedRowKey: (key, detail) => {
@@ -190,7 +194,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
       "programFn",
-      "requestValue",
+      "listRequestValue",
       "listColWidths",
       "listSortParams",
       "listSelectedRowKey",
@@ -219,7 +223,7 @@ export const use$LIST_WITH_LIST$Store = create(
 use$LIST_WITH_LIST$Store.subscribe(
   (s) => [
     s.programFn,
-    s.requestValue,
+    s.listRequestValue,
     s.listColWidths,
     s.listSortParams,
     s.listSelectedRowKey,
@@ -231,7 +235,7 @@ use$LIST_WITH_LIST$Store.subscribe(
   ],
   ([
     programFn,
-    requestValue,
+    listRequestValue,
     listColWidths,
     listSortParams,
     listSelectedRowKey,
@@ -243,7 +247,7 @@ use$LIST_WITH_LIST$Store.subscribe(
   ]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
       programFn,
-      requestValue,
+      listRequestValue,
       listColWidths,
       listSortParams,
       listSelectedRowKey,

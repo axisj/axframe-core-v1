@@ -14,13 +14,13 @@ import { errorDialog } from "@core/components/dialogs";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
 import { ProgramFn } from "@types";
 
-interface Request extends ExampleListRequest {}
+interface ListRequest extends ExampleListRequest {}
 
 interface DtoItem extends ExampleSubItem {}
 
 interface MetaData {
   programFn?: ProgramFn;
-  requestValue: Request;
+  listRequestValue: ListRequest;
 
   listAColWidths: number[];
   listASelectedRowKey?: React.Key;
@@ -45,8 +45,8 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  setRequestValue: (requestValue: Request) => void;
-  callListApi: (request?: Request) => Promise<void>;
+  setRequestValue: (requestValue: ListRequest) => void;
+  callListApi: (request?: ListRequest) => Promise<void>;
   callSaveApi: () => Promise<void>;
   setSpinning: (spinning: boolean) => void;
 
@@ -74,7 +74,7 @@ interface Actions extends PageStoreActions<States> {
 // create states
 const createState: States = {
   routePath: ROUTES.EXAMPLES.children.THREE_LIST.path,
-  requestValue: {},
+  listRequestValue: {},
   spinning: false,
 
   listAColWidths: [],
@@ -94,7 +94,7 @@ const createState: States = {
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setRequestValue: (requestValue) => {
-    set({ requestValue: requestValue });
+    set({ listRequestValue: requestValue });
   },
   setSpinning: (spinning) => {
     set({ spinning: spinning });
@@ -104,7 +104,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     await set({ spinning: true });
 
     try {
-      const apiParam = get().requestValue;
+      const apiParam = get().listRequestValue;
       const response = await ExampleService.childList(apiParam);
 
       set({
@@ -243,7 +243,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = [
       "programFn",
-      "requestValue",
+      "listRequestValue",
       "listAColWidths",
       "listASelectedRowKey",
       "listACheckedIndexes",
@@ -273,7 +273,7 @@ export const use$THREE_LIST$Store = create(
 use$THREE_LIST$Store.subscribe(
   (s) => [
     s.programFn,
-    s.requestValue,
+    s.listRequestValue,
     s.listAColWidths,
     s.listASelectedRowKey,
     s.listACheckedIndexes,
@@ -286,7 +286,7 @@ use$THREE_LIST$Store.subscribe(
   ],
   ([
     programFn,
-    requestValue,
+    listRequestValue,
     listAColWidths,
     listASelectedRowKey,
     listACheckedIndexes,
@@ -299,7 +299,7 @@ use$THREE_LIST$Store.subscribe(
   ]) => {
     setMetaDataByPath<MetaData>(createState.routePath, {
       programFn,
-      requestValue,
+      listRequestValue,
       listAColWidths,
       listASelectedRowKey,
       listACheckedIndexes,
