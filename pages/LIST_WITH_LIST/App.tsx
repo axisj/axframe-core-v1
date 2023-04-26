@@ -27,7 +27,7 @@ function App({}: Props) {
   const callListApi = use$LIST_WITH_LIST$Store((s) => s.callListApi);
   const callSaveApi = use$LIST_WITH_LIST$Store((s) => s.callSaveApi);
   const setFlexGrow = use$LIST_WITH_LIST$Store((s) => s.setFlexGrow);
-  const requestValue = use$LIST_WITH_LIST$Store((s) => s.requestValue);
+  const listRequestValue = use$LIST_WITH_LIST$Store((s) => s.listRequestValue);
   const setRequestValue = use$LIST_WITH_LIST$Store((s) => s.setRequestValue);
   const spinning = use$LIST_WITH_LIST$Store((s) => s.spinning);
   const setListSelectedRowKey = use$LIST_WITH_LIST$Store((s) => s.setListSelectedRowKey);
@@ -117,7 +117,7 @@ function App({}: Props) {
         <SearchParams
           form={searchForm}
           params={params}
-          paramsValue={requestValue}
+          paramsValue={listRequestValue}
           onChangeParamsValue={(value) => setRequestValue(value)}
           onSearch={handleSearch}
           spinning={spinning}

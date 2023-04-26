@@ -21,7 +21,7 @@ function App({}: Props) {
   const init = use$THREE_LIST$Store((s) => s.init);
   const reset = use$THREE_LIST$Store((s) => s.reset);
   const destroy = use$THREE_LIST$Store((s) => s.destroy);
-  const requestValue = use$THREE_LIST$Store((s) => s.requestValue);
+  const listRequestValue = use$THREE_LIST$Store((s) => s.listRequestValue);
   const setRequestValue = use$THREE_LIST$Store((s) => s.setRequestValue);
   const callListApi = use$THREE_LIST$Store((s) => s.callListApi);
   const callSaveApi = use$THREE_LIST$Store((s) => s.callSaveApi);
@@ -105,7 +105,7 @@ function App({}: Props) {
         <SearchParams
           form={searchForm}
           params={params}
-          paramsValue={requestValue}
+          paramsValue={listRequestValue}
           onChangeParamsValue={(value) => setRequestValue(value)}
           onSearch={handleSearch}
           spinning={spinning}

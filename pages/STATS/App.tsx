@@ -19,7 +19,7 @@ function App({}: Props) {
   const reset = use$STATS$Store((s) => s.reset);
   const destroy = use$STATS$Store((s) => s.destroy);
   const callListApi = use$STATS$Store((s) => s.callListApi);
-  const requestValue = use$STATS$Store((s) => s.requestValue);
+  const listRequestValue = use$STATS$Store((s) => s.listRequestValue);
   const setRequestValue = use$STATS$Store((s) => s.setRequestValue);
   const spinning = use$STATS$Store((s) => s.spinning);
   const activeTabKey = use$STATS$Store((s) => s.activeTabKey);
@@ -93,7 +93,7 @@ function App({}: Props) {
         <SearchParams
           form={searchForm}
           params={params}
-          paramsValue={requestValue}
+          paramsValue={listRequestValue}
           onChangeParamsValue={(value) => setRequestValue(value)}
           onSearch={handleSearch}
           spinning={spinning}
