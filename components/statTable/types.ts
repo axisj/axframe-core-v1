@@ -24,6 +24,7 @@ export interface StatBodyTd<T> {
   isRowMerge?: (prevItem: T, curItem: T) => boolean;
   itemRender?: (item: T) => React.ReactNode;
   align?: Align;
+  textCell?: boolean;
 }
 
 export interface ItemTotal {
@@ -38,6 +39,7 @@ export interface StatTotalTd<T> {
   totalType?: "sum" | "count" | "avg";
   itemRender?: (total: ItemTotal, item: Record<keyof T, ItemTotal>) => React.ReactNode;
   align?: Align;
+  textCell?: boolean;
 }
 
 export interface StatSubTotal<T> {
