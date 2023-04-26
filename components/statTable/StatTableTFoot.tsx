@@ -45,7 +45,7 @@ function StatTableTFoot<T>({ marginLeft, colGroups, total, totalValues, tableWid
             })();
 
             return (
-              <td key={si} colSpan={sc.colspan} align={sc.align ?? "center"}>
+              <td key={si} colSpan={sc.colspan} align={sc.align ?? "center"} data-text-cell={sc.textCell}>
                 {tdValue}
               </td>
             );
