@@ -59,6 +59,7 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
+  onMountApp: () => {},
   callListApi: async (request) => {
     if (get().spinning) return;
     await set({ spinning: true });

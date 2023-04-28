@@ -13,7 +13,7 @@ import { useLink, useUnmountEffect } from "hooks";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ROUTES } from "router";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
-import { errorDialog } from "../../components/dialogs";
+import { errorHandling } from "utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
 interface Props {}
@@ -27,18 +27,17 @@ function App({}: Props) {
   const callListApi = use$LIST$Store((s) => s.callListApi);
   const listRequestValue = use$LIST$Store((s) => s.listRequestValue);
   const setListRequestValue = use$LIST$Store((s) => s.setListRequestValue);
-  const callApi = use$LIST$Store((s) => s.callListApi);
   const spinning = use$LIST$Store((s) => s.listSpinning);
 
   const [searchForm] = Form.useForm();
 
   const handleSearch = React.useCallback(async () => {
     try {
-      await callApi();
+      await callListApi();
     } catch (e: any) {
-      await errorDialog(e);
+      await errorHandling(e);
     }
-  }, [callApi]);
+  }, [callListApi]);
 
   const onClickItem = React.useCallback(
     (params: AXFDGClickParams<DtoItem>) => {
@@ -48,8 +47,12 @@ function App({}: Props) {
   );
 
   const handleReset = React.useCallback(async () => {
-    reset();
-    await callListApi();
+    try {
+      reset();
+      await callListApi();
+    } catch (e: any) {
+      await errorHandling(e);
+    }
   }, [callListApi, reset]);
 
   const params = React.useMemo(
@@ -77,8 +80,14 @@ function App({}: Props) {
   );
 
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e: any) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

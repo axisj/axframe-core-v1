@@ -12,6 +12,7 @@ import { AXFDGClickParams } from "@axframe/datagrid";
 import { openDetailDrawer } from "./DetailDrawer";
 import { ListDataGrid } from "./ListDataGrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { errorHandling } from "../../../utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
 interface Props {}
@@ -71,8 +72,14 @@ function App({}: Props) {
   );
 
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e: any) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

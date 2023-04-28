@@ -102,6 +102,7 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
+  onMountApp: async () => {},
   setListRequestValue: (requestValues) => {
     set({ listRequestValue: requestValues });
   },

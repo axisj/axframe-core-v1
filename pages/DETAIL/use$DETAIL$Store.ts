@@ -45,6 +45,7 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
+  onMountApp: async () => {},
   setDetailRequestValue: (requestValue) => {
     set({ saveRequestValue: requestValue });
   },

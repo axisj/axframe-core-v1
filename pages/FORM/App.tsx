@@ -9,6 +9,7 @@ import { useI18n, useUnmountEffect } from "@core/hooks";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { FormSet } from "./FormSet";
 import { use$FORM$Store } from "./use$FORM$Store";
+import { errorHandling } from "../../../utils/errorHandling";
 
 interface Props {}
 function App({}: Props) {
@@ -32,7 +33,13 @@ function App({}: Props) {
   }, [callSaveApi, form, reset]);
 
   useDidMountEffect(() => {
-    init();
+    (async () => {
+      try {
+        await init();
+      } catch (e: any) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

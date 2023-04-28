@@ -56,7 +56,7 @@ export const SMixinScrollerStyle = ({ track_color, thumb_color }: SMixinScroller
 
   &::-webkit-scrollbar-thumb {
     background-color: ${thumb_color};
-    border-radius: 4.5px;
+    border-radius: 6px;
     border: 2px solid ${track_color};
   }
 
