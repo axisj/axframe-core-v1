@@ -13,7 +13,9 @@ import { pick } from "lodash";
 import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
+
 interface DetailRequest extends ExampleListRequest {}
+
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
@@ -94,7 +96,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         },
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ listSpinning: false });
     }
@@ -133,6 +135,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST_AND_DRAWER$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$LIST_AND_DRAWER$Store = create(
   subscribeWithSelector<$LIST_AND_DRAWER$Store>((set, get) => ({
     ...createState,

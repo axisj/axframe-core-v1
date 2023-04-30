@@ -12,7 +12,9 @@ import { StatCol } from "@core/components/statTable";
 import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
+
 interface DtoItem extends ExampleStatItem {}
+
 export type PanelType = "pg1" | "pg2";
 
 interface MetaData {
@@ -59,7 +61,7 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
-  onMountApp: () => {},
+  onMountApp: async () => {},
   callListApi: async (request) => {
     if (get().spinning) return;
     await set({ spinning: true });
@@ -102,6 +104,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $STATS$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$STATS$Store = create(
   subscribeWithSelector<$STATS$Store>((set, get) => ({
     ...createState,

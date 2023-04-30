@@ -5,7 +5,6 @@ import {
   ExampleSaveRequest,
 } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -16,7 +15,9 @@ import { pick } from "lodash";
 import { ProgramFn } from "@types";
 
 interface SaveRequest extends ExampleSaveRequest {}
+
 interface APIDetailRequest extends ExampleDetailRequest {}
+
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
@@ -51,6 +52,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   },
   setDetailSpinning: (spinning) => set({ detailSpinning: spinning }),
   callDetailApi: async (request) => {
+    if (get().detailSpinning) return;
     await set({ detailSpinning: true });
 
     try {
@@ -61,7 +63,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
       set({ detail: response.rs });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ detailSpinning: false });
     }
@@ -76,6 +78,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $DETAIL$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$DETAIL$Store = create(
   subscribeWithSelector<$DETAIL$Store>((set, get) => ({
     ...createState,

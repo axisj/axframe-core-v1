@@ -7,9 +7,10 @@ import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { View } from "./View";
 import { use$DETAIL$Store } from "./use$DETAIL$Store";
 import { useParams } from "react-router-dom";
-import { errorHandling } from "../../../utils/errorHandling";
+import { errorHandling } from "utils/errorHandling";
 
 interface Props {}
+
 function App({}: Props) {
   const { t } = useI18n();
   const init = use$DETAIL$Store((s) => s.init);

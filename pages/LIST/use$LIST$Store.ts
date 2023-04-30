@@ -12,6 +12,7 @@ import { pick } from "lodash";
 import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
+
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
@@ -33,7 +34,7 @@ interface Actions extends PageStoreActions<States> {
   setListColWidths: (colWidths: number[]) => void;
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
-  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
+  callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
 }
 
@@ -56,23 +57,21 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
-  onMountApp: async () => {},
+  onMountApp: async () => {
+    // onDidMount and store initialized
+  },
   setListRequestValue: (requestValues) => {
     set({ listRequestValue: requestValues });
   },
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setListSpinning: (spinning) => set({ listSpinning: spinning }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
-  callListApi: async (request, pageNumber = 1) => {
+  callListApi: async (request = { pageNumber: 1 }) => {
     if (get().listSpinning) return;
     await set({ listSpinning: true });
 
     try {
-      const requestValue = request ?? get().listRequestValue;
-      const apiParam: ListRequest = {
-        ...requestValue,
-        pageNumber,
-      };
+      const apiParam: ListRequest = { ...get().listRequestValue, ...request };
       const response = await ExampleService.list(apiParam);
 
       set({
@@ -93,13 +92,17 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    const requestValues = {
-      ...get().listRequestValue,
+    set({
+      listRequestValue: {
+        ...get().listRequestValue,
+        pageNumber,
+        pageSize,
+      },
+    });
+    await get().callListApi({
       pageNumber,
       pageSize,
-    };
-    set({ listRequestValue: requestValues });
-    await get().callListApi(undefined, pageNumber);
+    });
   },
   syncMetadata: (metaData) => {
     const metaDataKeys: (keyof MetaData)[] = ["programFn", "listSortParams", "listRequestValue", "listColWidths"];
@@ -111,6 +114,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$LIST$Store = create(
   subscribeWithSelector<$LIST$Store>((set, get) => ({
     ...createState,

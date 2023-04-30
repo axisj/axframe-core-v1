@@ -93,7 +93,7 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
-  onMountApp: () => {},
+  onMountApp: async () => {},
   setRequestValue: (requestValue) => {
     set({ listRequestValue: requestValue });
   },
@@ -263,6 +263,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST_WITH_LIST$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$THREE_LIST$Store = create(
   subscribeWithSelector<$LIST_WITH_LIST$Store>((set, get) => ({
     ...createState,

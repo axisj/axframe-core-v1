@@ -16,6 +16,7 @@ import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { errorHandling } from "utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
+
 interface Props {}
 
 function App({}: Props) {
