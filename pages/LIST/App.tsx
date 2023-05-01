@@ -32,10 +32,19 @@ function App({}: Props) {
 
   const [searchForm] = Form.useForm();
 
+  const handleReset = React.useCallback(async () => {
+    try {
+      reset();
+      await callListApi();
+    } catch (e) {
+      await errorHandling(e);
+    }
+  }, [callListApi, reset]);
+
   const handleSearch = React.useCallback(async () => {
     try {
       await callListApi();
-    } catch (e: any) {
+    } catch (e) {
       await errorHandling(e);
     }
   }, [callListApi]);
@@ -46,15 +55,6 @@ function App({}: Props) {
     },
     [linkByRoute]
   );
-
-  const handleReset = React.useCallback(async () => {
-    try {
-      reset();
-      await callListApi();
-    } catch (e: any) {
-      await errorHandling(e);
-    }
-  }, [callListApi, reset]);
 
   const params = React.useMemo(
     () =>
@@ -85,7 +85,7 @@ function App({}: Props) {
       try {
         await init();
         await callListApi();
-      } catch (e: any) {
+      } catch (e) {
         await errorHandling(e);
       }
     })();

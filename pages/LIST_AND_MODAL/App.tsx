@@ -12,6 +12,7 @@ import { openDetailModal } from "./DetailModal";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGrid } from "./ListDataGrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { errorHandling } from "utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
 
@@ -30,12 +31,20 @@ function App({}: Props) {
   const [searchForm] = Form.useForm();
 
   const handleReset = React.useCallback(async () => {
-    reset();
-    await callListApi();
+    try {
+      reset();
+      await callListApi();
+    } catch (e) {
+      await errorHandling(e);
+    }
   }, [callListApi, reset]);
 
   const handleSearch = React.useCallback(async () => {
-    await callListApi();
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorHandling(e);
+    }
   }, [callListApi]);
 
   const onClickItem = React.useCallback(async (params: AXFDGClickParams<DtoItem>) => {
@@ -75,8 +84,14 @@ function App({}: Props) {
   );
 
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {
