@@ -6,14 +6,22 @@ import { darken } from "../../styles/palette/colorUtil";
 
 interface Props<T> extends AXFDGProps<T> {}
 
-export function DataGrid<T>({ width, height, ...rest }: Props<T>) {
+export function DataGrid<T>({ width, height, showLineNumber = true, ...rest }: Props<T>) {
   if (width === 0 || height === 0) {
     return null;
   }
 
   return (
     <Container>
-      <AXFDataGrid width={width} height={height} headerHeight={28} itemHeight={20} footerHeight={35} {...rest} />
+      <AXFDataGrid
+        width={width}
+        height={height}
+        headerHeight={28}
+        itemHeight={20}
+        footerHeight={28}
+        showLineNumber={showLineNumber}
+        {...rest}
+      />
     </Container>
   );
 }
@@ -40,7 +48,9 @@ const Container = styled.div`
         --axfdg-border-radius: ${theme.axfdg_border_radius};
         --axfdg-row-selector-color: ${theme.axfdg_row_selector_color};
         --axfdg-body-bg: ${theme.axfdg_body_bg};
+        --axfdg-body-odd-bg: ${theme.axfdg_body_odd_bg};
         --axfdg-body-hover-bg: ${theme.axfdg_body_hover_bg};
+        --axfdg-body-hover-odd-bg: ${theme.axfdg_body_hover_odd_bg};
         --axfdg-body-active-bg: ${theme.axfdg_body_active_bg};
         --axfdg-body-color: ${theme.axfdg_body_color};
 
@@ -56,7 +66,7 @@ const Container = styled.div`
       }
 
       [role="rfdg-scroll-container"] {
-        background: #fff;
+        background: ${theme.component_background};
       }
     `;
   }}

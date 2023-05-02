@@ -1,6 +1,6 @@
 import { getMetaDataByPath, setMetaDataByPath, usePageTabStore } from "./usePageTabStore";
-import { UserService } from "../../services";
-import { ROUTES_LIST } from "../../router";
+import { UserService } from "services";
+import { ROUTES_LIST } from "router";
 
 interface PageStoreConfig {
   unSubscribe?: () => void;
@@ -9,7 +9,6 @@ interface PageStoreConfig {
 
 export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
   init: async () => {
-    // set({ routePath: location.pathname });
     const metaData = getMetaDataByPath(get().routePath);
 
     const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
@@ -32,6 +31,8 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
     } else if (config?.createState) {
       set(config.createState);
     }
+
+    await get().onMountApp();
   },
   reset: async () => {
     const routePath = get().routePath;
@@ -43,17 +44,17 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
       const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
       if (currentRoute) {
         const data = await UserService.getProgramFn({ progCd: currentRoute.program_type, apiUrl: location.pathname });
-        const programFn = data.ds.reduce((acc, cur) => {
+        config.createState.programFn = data.ds.reduce((acc, cur) => {
           return { ...acc, [cur]: true };
         }, {});
-
-        config.createState.programFn = programFn;
       }
 
       set(config.createState);
     } else {
       get().syncMetadata();
     }
+
+    await get().onMountApp();
   },
   destroy: () => {
     const routePath = get().routePath;

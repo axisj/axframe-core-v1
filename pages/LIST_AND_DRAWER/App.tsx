@@ -12,8 +12,10 @@ import { AXFDGClickParams } from "@axframe/datagrid";
 import { openDetailDrawer } from "./DetailDrawer";
 import { ListDataGrid } from "./ListDataGrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { errorHandling } from "utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
+
 interface Props {}
 
 function App({}: Props) {
@@ -28,8 +30,21 @@ function App({}: Props) {
 
   const [searchForm] = Form.useForm();
 
+  const handleReset = React.useCallback(async () => {
+    try {
+      reset();
+      await callListApi();
+    } catch (e) {
+      await errorHandling(e);
+    }
+  }, [callListApi, reset]);
+
   const handleSearch = React.useCallback(async () => {
-    await callListApi();
+    try {
+      await callListApi();
+    } catch (e) {
+      await errorHandling(e);
+    }
   }, [callListApi]);
 
   const onClickItem = React.useCallback(async (params: AXFDGClickParams<DtoItem>) => {
@@ -40,11 +55,6 @@ function App({}: Props) {
       console.log(err);
     }
   }, []);
-
-  const handleReset = React.useCallback(async () => {
-    reset();
-    await callListApi();
-  }, [callListApi, reset]);
 
   const params = React.useMemo(
     () =>
@@ -71,8 +81,14 @@ function App({}: Props) {
   );
 
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

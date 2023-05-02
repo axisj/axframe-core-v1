@@ -8,13 +8,14 @@ import {
   ExampleRepositoryInterface,
   ExampleSaveRequest,
   ExampleSaveResponse,
+  ExampleStatRequest,
   ExampleStatResponse,
 } from "./ExampleRepositoryInterface";
 import { resDs } from "./resDs";
 
 export class ExampleRepositoryMock extends ExampleRepositoryInterface {
   async list(params: ExampleListRequest): Promise<ExampleListResponse> {
-    console.log("ListRequest", params);
+    console.log("ExampleService.list", params);
     await delay(300);
     return {
       ds: resDs,
@@ -26,6 +27,7 @@ export class ExampleRepositoryMock extends ExampleRepositoryInterface {
       },
     };
   }
+
   async save(params: ExampleSaveRequest): Promise<ExampleSaveResponse> {
     console.log("CounselingSaveRequest", params);
     await delay(300);
@@ -61,6 +63,7 @@ export class ExampleRepositoryMock extends ExampleRepositoryInterface {
       },
     };
   }
+
   async detail(params) {
     console.log("CounselingDetailRequest", params);
     await delay(300);
@@ -126,7 +129,7 @@ export class ExampleRepositoryMock extends ExampleRepositoryInterface {
     return {};
   }
 
-  async stat(params: any): Promise<ExampleStatResponse> {
+  async stat(params: ExampleStatRequest): Promise<ExampleStatResponse> {
     await delay(300);
 
     function getRandomValue() {

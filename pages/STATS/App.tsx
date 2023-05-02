@@ -9,7 +9,7 @@ import { useI18n, useUnmountEffect } from "@core/hooks";
 import { PanelType, use$STATS$Store } from "./use$STATS$Store";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { PanelIndex } from "./PanelIndex";
-import { errorDialog } from "../../components/dialogs";
+import { errorHandling } from "../../../utils/errorHandling";
 
 interface Props {}
 
@@ -29,11 +29,11 @@ function App({}: Props) {
   const [searchForm] = Form.useForm();
 
   const handleReset = React.useCallback(async () => {
-    reset();
     try {
+      reset();
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi, reset]);
 
@@ -41,7 +41,7 @@ function App({}: Props) {
     try {
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi]);
 
@@ -70,8 +70,14 @@ function App({}: Props) {
   );
 
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {
@@ -88,13 +94,7 @@ function App({}: Props) {
         </ProgramTitle>
 
         <ButtonGroup compact>
-          <Button
-            onClick={() => {
-              callListApi();
-            }}
-          >
-            {t.button.search}
-          </Button>
+          <Button onClick={handleSearch}>{t.button.search}</Button>
         </ButtonGroup>
       </Header>
 

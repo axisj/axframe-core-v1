@@ -14,6 +14,7 @@ import { errorDialog } from "../../components/dialogs";
 interface Props {
   form: FormInstance<DtoItem>;
 }
+
 interface DtoItem extends ExampleItem {}
 
 function FormSet({ form }: Props) {

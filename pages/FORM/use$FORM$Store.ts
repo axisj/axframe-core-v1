@@ -1,7 +1,6 @@
 import create from "zustand";
 import { ExampleSaveRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -39,11 +38,13 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
+  onMountApp: async () => {},
   setSaveRequestValue: (exampleSaveRequestValue) => {
     set({ saveRequestValue: exampleSaveRequestValue });
   },
   setSaveSpinning: (exampleSaveSpinning) => set({ saveSpinning: exampleSaveSpinning }),
   callSaveApi: async (request) => {
+    if (get().saveSpinning) return;
     await set({ saveSpinning: true });
 
     try {
@@ -55,7 +56,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
       console.log(response);
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ saveSpinning: false });
     }
@@ -70,6 +71,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $FORM$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$FORM$Store = create(
   subscribeWithSelector<$FORM$Store>((set, get) => ({
     ...createState,

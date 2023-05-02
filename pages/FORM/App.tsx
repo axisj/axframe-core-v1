@@ -9,8 +9,10 @@ import { useI18n, useUnmountEffect } from "@core/hooks";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { FormSet } from "./FormSet";
 import { use$FORM$Store } from "./use$FORM$Store";
+import { errorHandling, formErrorHandling } from "utils/errorHandling";
 
 interface Props {}
+
 function App({}: Props) {
   const { t } = useI18n();
   const init = use$FORM$Store((s) => s.init);
@@ -23,16 +25,27 @@ function App({}: Props) {
   const handleSave = useCallback(async () => {
     try {
       await form.validateFields();
+    } catch (e) {
+      await formErrorHandling(form);
+      return;
+    }
 
+    try {
       await callSaveApi();
       await reset();
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      await errorHandling(e);
     }
   }, [callSaveApi, form, reset]);
 
   useDidMountEffect(() => {
-    init();
+    (async () => {
+      try {
+        await init();
+      } catch (e: any) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

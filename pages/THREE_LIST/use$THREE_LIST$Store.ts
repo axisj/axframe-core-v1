@@ -10,7 +10,6 @@ import React from "react";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
 import { ProgramFn } from "@types";
 
@@ -93,6 +92,7 @@ const createState: States = {
 
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
+  onMountApp: async () => {},
   setRequestValue: (requestValue) => {
     set({ listRequestValue: requestValue });
   },
@@ -148,7 +148,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         list: get().listCData.map(listDataCollector),
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ spinning: false });
     }
@@ -262,6 +262,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST_WITH_LIST$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$THREE_LIST$Store = create(
   subscribeWithSelector<$LIST_WITH_LIST$Store>((set, get) => ({
     ...createState,

@@ -76,8 +76,22 @@ function SubListDataGrid({}: Props) {
               return item.status !== undefined ? ITEM_STAT[item.status] : "";
             },
           },
-          { key: "code", label: "Code", align: "left", width: 80, itemRender: InputEditor },
-          { key: "type", label: "Type", align: "left", width: 100, itemRender: InputEditor },
+          {
+            key: "code",
+            label: "Code",
+            align: "left",
+            width: 80,
+            itemRender: InputEditor,
+            getClassName: (item) => "datagrid-editable",
+          },
+          {
+            key: "type",
+            label: "Type",
+            align: "left",
+            width: 100,
+            itemRender: InputEditor,
+            getClassName: (item) => "datagrid-editable",
+          },
           {
             key: "useYn",
             label: "Use YN",
@@ -87,6 +101,7 @@ function SubListDataGrid({}: Props) {
               { value: "Y", label: "사용" },
               { value: "N", label: "사용안함" },
             ]),
+            getClassName: (item) => "datagrid-editable",
           },
         ] as AXFDGColumn<DtoItem>[]
       ).map((column, colIndex) => {

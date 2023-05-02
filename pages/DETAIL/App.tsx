@@ -7,8 +7,10 @@ import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { View } from "./View";
 import { use$DETAIL$Store } from "./use$DETAIL$Store";
 import { useParams } from "react-router-dom";
+import { errorHandling } from "utils/errorHandling";
 
 interface Props {}
+
 function App({}: Props) {
   const { t } = useI18n();
   const init = use$DETAIL$Store((s) => s.init);
@@ -18,8 +20,14 @@ function App({}: Props) {
   const urlParams = useParams<{ id: string }>();
 
   useDidMountEffect(() => {
-    init();
-    if (urlParams.id) callDetailApi({ id: urlParams.id });
+    (async () => {
+      try {
+        await init();
+        if (urlParams.id) await callDetailApi({ id: urlParams.id });
+      } catch (e: any) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {
