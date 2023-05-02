@@ -8,6 +8,7 @@ import {
   ExampleRepositoryInterface,
   ExampleSaveRequest,
   ExampleSaveResponse,
+  ExampleStatRequest,
   ExampleStatResponse,
 } from "./ExampleRepositoryInterface";
 import { resDs } from "./resDs";
@@ -128,7 +129,7 @@ export class ExampleRepositoryMock extends ExampleRepositoryInterface {
     return {};
   }
 
-  async stat(params: any): Promise<ExampleStatResponse> {
+  async stat(params: ExampleStatRequest): Promise<ExampleStatResponse> {
     await delay(300);
 
     function getRandomValue() {

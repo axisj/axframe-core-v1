@@ -9,7 +9,7 @@ import { useI18n, useUnmountEffect } from "@core/hooks";
 import { useDidMountEffect } from "@core/hooks/useDidMountEffect";
 import { FormSet } from "./FormSet";
 import { use$FORM$Store } from "./use$FORM$Store";
-import { errorHandling } from "utils/errorHandling";
+import { errorHandling, formErrorHandling } from "utils/errorHandling";
 
 interface Props {}
 
@@ -25,10 +25,15 @@ function App({}: Props) {
   const handleSave = useCallback(async () => {
     try {
       await form.validateFields();
+    } catch (e) {
+      await formErrorHandling(form);
+      return;
+    }
 
+    try {
       await callSaveApi();
       await reset();
-    } catch (e: any) {
+    } catch (e) {
       await errorHandling(e);
     }
   }, [callSaveApi, form, reset]);

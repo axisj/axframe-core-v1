@@ -12,7 +12,7 @@ import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGridA } from "./ListDataGridA";
 import { ListDataGridB } from "./ListDataGridB";
 import { ListDataGridC } from "./ListDataGridC";
-import { errorDialog } from "../../components/dialogs";
+import { errorHandling } from "../../../utils/errorHandling";
 
 interface Props {}
 
@@ -31,11 +31,11 @@ function App({}: Props) {
   const resizerContainerRef = React.useRef<HTMLDivElement>(null);
 
   const handleReset = React.useCallback(async () => {
-    reset();
     try {
+      reset();
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi, reset]);
 
@@ -45,7 +45,7 @@ function App({}: Props) {
     try {
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi]);
 
@@ -74,8 +74,14 @@ function App({}: Props) {
   );
 
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

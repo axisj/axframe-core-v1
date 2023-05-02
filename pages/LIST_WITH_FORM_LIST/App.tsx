@@ -12,6 +12,8 @@ import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGrid } from "./ListDataGrid";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
+import { errorHandling, formErrorHandling } from "../../../utils/errorHandling";
+
 interface DtoItem extends ExampleItem {}
 
 interface Props {}
@@ -43,11 +45,11 @@ function App({}: Props) {
   const [form] = Form.useForm();
 
   const handleReset = React.useCallback(async () => {
-    reset();
     try {
+      reset();
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi, errorDialog, reset]);
 
@@ -55,19 +57,32 @@ function App({}: Props) {
     try {
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi, errorDialog]);
 
   const handleSave = useCallback(async () => {
     try {
       await form.validateFields();
+    } catch (e) {
+      await formErrorHandling(form);
+      return;
+    }
+
+    try {
       await callSaveApi();
       await reset();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [form, callSaveApi, reset, errorDialog]);
+
+  const onClickItem = React.useCallback(
+    (params: AXFDGClickParams<DtoItem>) => {
+      setListSelectedRowKey(params.item.id, params.item);
+    },
+    [setListSelectedRowKey]
+  );
 
   const params = React.useMemo(
     () =>
@@ -93,16 +108,15 @@ function App({}: Props) {
     [t]
   );
 
-  const onClickItem = React.useCallback(
-    (params: AXFDGClickParams<DtoItem>) => {
-      setListSelectedRowKey(params.item.id, params.item);
-    },
-    [setListSelectedRowKey]
-  );
-
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

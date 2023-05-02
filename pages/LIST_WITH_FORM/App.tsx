@@ -59,13 +59,6 @@ function App({}: Props) {
     }
   }, [callListApi]);
 
-  const onClickItem = React.useCallback(
-    (params: AXFDGClickParams<DtoItem>) => {
-      setListSelectedRowKey(params.item.id, params.item);
-    },
-    [setListSelectedRowKey]
-  );
-
   const handleSave = useCallback(async () => {
     try {
       await form.validateFields();
@@ -75,13 +68,19 @@ function App({}: Props) {
     }
 
     try {
-      await form.validateFields();
       await callSaveApi();
       await reset();
     } catch (e) {
       await errorHandling(e);
     }
   }, [callSaveApi, form, reset]);
+
+  const onClickItem = React.useCallback(
+    (params: AXFDGClickParams<DtoItem>) => {
+      setListSelectedRowKey(params.item.id, params.item);
+    },
+    [setListSelectedRowKey]
+  );
 
   const params = React.useMemo(
     () =>

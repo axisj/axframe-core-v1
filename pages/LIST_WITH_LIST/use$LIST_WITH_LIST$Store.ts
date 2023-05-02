@@ -2,7 +2,6 @@ import create from "zustand";
 import { ExampleItem, ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGDataItemStatus, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -15,7 +14,9 @@ import { addDataGridList, delDataGridList } from "@core/utils/array";
 import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
+
 interface DtoItem extends ExampleItem {}
+
 interface SubDtoItem extends ExampleSubItem {}
 
 interface MetaData {
@@ -39,7 +40,7 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
+  callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
   callSaveApi: () => Promise<void>;
   setSpinning: (spinning: boolean) => void;
@@ -87,15 +88,14 @@ const createState: States = {
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   onMountApp: async () => {},
-  callListApi: async (request, pageNumber = 1) => {
+  callListApi: async (request = { pageNumber: 1 }) => {
     if (get().spinning) return;
     await set({ spinning: true });
 
     try {
-      const requestValue = request ?? get().listRequestValue;
       const apiParam: ListRequest = {
-        ...requestValue,
-        pageNumber,
+        ...get().listRequestValue,
+        ...request,
       };
       const response = await ExampleService.list(apiParam);
 
@@ -117,15 +117,20 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    const requestValues = {
-      ...get().listRequestValue,
+    set({
+      listRequestValue: {
+        ...get().listRequestValue,
+        pageNumber,
+        pageSize,
+      },
+    });
+    await get().callListApi({
       pageNumber,
       pageSize,
-    };
-    set({ listRequestValue: requestValues });
-    await get().callListApi(undefined, pageNumber);
+    });
   },
   callSaveApi: async () => {
+    if (get().spinning) return;
     await set({ spinning: true });
 
     const listDataCollector = (item) => {
@@ -150,7 +155,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         })),
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ spinning: false });
     }
@@ -213,6 +218,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST_WITH_LIST$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$LIST_WITH_LIST$Store = create(
   subscribeWithSelector<$LIST_WITH_LIST$Store>((set, get) => ({
     ...createState,

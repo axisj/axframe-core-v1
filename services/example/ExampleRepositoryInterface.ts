@@ -10,6 +10,7 @@ export interface ExampleSubItem extends DefaultDto {
   type?: string;
   useYn?: string;
 }
+
 export interface ExampleItem extends DefaultDto {
   id?: number;
   cntrCd?: string;
@@ -116,15 +117,30 @@ export interface ExampleChildSaveRequest {
 
 export interface ExampleChildSaveResponse {}
 
+export interface ExampleStatRequest {
+  sttDt?: string;
+  endDt?: string;
+  filterType?: string;
+  filter?: string;
+  sorts?: AXFDGSortParam[];
+  pageSize?: number;
+  pageNumber?: number;
+}
+
 export interface ExampleStatResponse {
   ds: ExampleStatItem[];
 }
 
 export abstract class ExampleRepositoryInterface {
   abstract list(params: ExampleListRequest): Promise<ExampleListResponse>;
+
   abstract save(params: ExampleSaveRequest): Promise<ExampleSaveResponse>;
+
   abstract detail(params: ExampleDetailRequest): Promise<ExampleDetailResponse>;
+
   abstract childList(params: ExampleChildListRequest): Promise<ExampleChildListResponse>;
+
   abstract childListSave(params: ExampleChildSaveRequest): Promise<ExampleChildSaveResponse>;
-  abstract stat(params: any): Promise<ExampleStatResponse>;
+
+  abstract stat(params: ExampleStatRequest): Promise<ExampleStatResponse>;
 }

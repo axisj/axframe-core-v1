@@ -1,5 +1,9 @@
 import create from "zustand";
-import { ExampleListRequest, ExampleStatItem } from "@core/services/example/ExampleRepositoryInterface";
+import {
+  ExampleListRequest,
+  ExampleStatItem,
+  ExampleStatRequest,
+} from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
@@ -34,7 +38,7 @@ interface States extends MetaData {
 }
 
 interface Actions extends PageStoreActions<States> {
-  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
+  callListApi: (request?: ListRequest) => Promise<void>;
   setRequestValue: (requestValue: ListRequest) => void;
   setActiveTabKey: (key: PanelType) => void;
   setFlexGrowPg1: (flexGlow: number) => void;
@@ -67,7 +71,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     await set({ spinning: true });
 
     try {
-      const apiParam = request ?? get().listRequestValue;
+      const apiParam: ExampleStatRequest = { ...get().listRequestValue, ...request };
       const response = await ExampleService.stat(apiParam);
 
       set({

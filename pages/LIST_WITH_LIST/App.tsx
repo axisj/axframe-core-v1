@@ -13,6 +13,7 @@ import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { ListDataGrid } from "./ListDataGrid";
 import { ChildListDataGrid } from "./ChildListDataGrid";
+import { errorHandling } from "../../../utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
 
@@ -38,11 +39,11 @@ function App({}: Props) {
   const [searchForm] = Form.useForm();
 
   const handleReset = React.useCallback(async () => {
-    reset();
     try {
+      reset();
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi, errorDialog, reset]);
 
@@ -50,7 +51,7 @@ function App({}: Props) {
     try {
       await callListApi();
     } catch (e) {
-      await errorDialog(e as any);
+      await errorHandling(e);
     }
   }, [callListApi, errorDialog]);
 
@@ -86,8 +87,14 @@ function App({}: Props) {
   );
 
   useDidMountEffect(() => {
-    init();
-    callListApi();
+    (async () => {
+      try {
+        await init();
+        await callListApi();
+      } catch (e) {
+        await errorHandling(e);
+      }
+    })();
   });
 
   useUnmountEffect(() => {

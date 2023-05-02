@@ -10,7 +10,6 @@ import React from "react";
 import { ROUTES } from "router/Routes";
 import { pick } from "lodash";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
 import { ProgramFn } from "@types";
 
@@ -149,7 +148,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         list: get().listCData.map(listDataCollector),
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ spinning: false });
     }

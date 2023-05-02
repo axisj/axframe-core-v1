@@ -14,7 +14,9 @@ import { convertDateToString } from "@core/utils/object";
 import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
+
 interface SaveRequest extends ExampleSaveRequest {}
+
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
@@ -44,7 +46,7 @@ interface Actions extends PageStoreActions<States> {
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
   setListSelectedRowKey: (key?: React.Key, detail?: DtoItem) => void;
-  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
+  callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
   setFlexGrow: (flexGlow: number) => void;
 
@@ -88,15 +90,14 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListSelectedRowKey: async (key, detail) => {
     set({ listSelectedRowKey: key, saveRequestValue: { ...detail }, detail });
   },
-  callListApi: async (request, pageNumber = 1) => {
+  callListApi: async (request = { pageNumber: 1 }) => {
     if (get().listSpinning) return;
     await set({ listSpinning: true });
 
     try {
-      const requestValue = request ?? get().listRequestValue;
       const apiParam: ListRequest = {
-        ...requestValue,
-        pageNumber,
+        ...get().listRequestValue,
+        ...request,
       };
       const response = await ExampleService.list(apiParam);
 
@@ -118,13 +119,17 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    const requestValues = {
-      ...get().listRequestValue,
+    set({
+      listRequestValue: {
+        ...get().listRequestValue,
+        pageNumber,
+        pageSize,
+      },
+    });
+    await get().callListApi({
       pageNumber,
       pageSize,
-    };
-    set({ listRequestValue: requestValues });
-    await get().callListApi(undefined, pageNumber);
+    });
   },
   setFlexGrow: (flexGlow) => {
     set({ flexGrow: flexGlow });
@@ -177,6 +182,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST_WITH_FORM_ROW$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$LIST_WITH_FORM_ROW$Store = create(
   subscribeWithSelector<$LIST_WITH_FORM_ROW$Store>((set, get) => ({
     ...createState,
