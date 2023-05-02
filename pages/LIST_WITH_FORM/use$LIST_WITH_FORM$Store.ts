@@ -2,7 +2,6 @@ import create from "zustand";
 import { ExampleItem, ExampleListRequest, ExampleSaveRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
-import { errorDialog } from "@core/components/dialogs/errorDialog";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import shallow from "zustand/shallow";
@@ -15,7 +14,9 @@ import { convertDateToString } from "@core/utils/object";
 import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
+
 interface SaveRequest extends ExampleSaveRequest {}
+
 interface DtoItem extends ExampleItem {}
 
 interface MetaData {
@@ -45,7 +46,7 @@ interface Actions extends PageStoreActions<States> {
   setListSpinning: (spinning: boolean) => void;
   setListSortParams: (sortParams: AXFDGSortParam[]) => void;
   setListSelectedRowKey: (key?: React.Key, detail?: DtoItem) => void;
-  callListApi: (request?: ListRequest, pageNumber?: number) => Promise<void>;
+  callListApi: (request?: ListRequest) => Promise<void>;
   changeListPage: (currentPage: number, pageSize?: number) => Promise<void>;
   setFlexGrow: (flexGlow: number) => void;
 
@@ -89,15 +90,14 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListSelectedRowKey: async (key, detail) => {
     set({ listSelectedRowKey: key, detail, saveRequestValue: { ...detail } });
   },
-  callListApi: async (request, pageNumber = 1) => {
+  callListApi: async (request = { pageNumber: 1 }) => {
     if (get().listSpinning) return;
     await set({ listSpinning: true });
 
     try {
-      const requestValue = request ?? get().listRequestValue;
       const apiParam: ListRequest = {
-        ...requestValue,
-        pageNumber,
+        ...get().listRequestValue,
+        ...request,
       };
       const response = await ExampleService.list(apiParam);
 
@@ -113,19 +113,23 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
         },
       });
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ listSpinning: false });
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    const requestValues = {
-      ...get().listRequestValue,
+    set({
+      listRequestValue: {
+        ...get().listRequestValue,
+        pageNumber,
+        pageSize,
+      },
+    });
+    await get().callListApi({
       pageNumber,
       pageSize,
-    };
-    set({ listRequestValue: requestValues });
-    await get().callListApi(undefined, pageNumber);
+    });
   },
   setFlexGrow: (flexGlow) => {
     set({ flexGrow: flexGlow });
@@ -139,30 +143,18 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     await set({ saveSpinning: true });
 
     try {
-      const apiParam = request ?? get().saveRequestValue;
-      if (!apiParam) return;
+      const apiParam: ExampleSaveRequest = {
+        ...get().saveRequestValue,
+        ...request,
+      };
+      // validate apiParam
       apiParam.__status__ = get().listSelectedRowKey ? "U" : "C";
 
-      const response = await ExampleService.save(convertDateToString(apiParam));
-
-      console.log(response);
+      await ExampleService.save(convertDateToString(apiParam));
     } catch (e) {
-      await errorDialog(e as any);
+      throw e;
     } finally {
       await set({ saveSpinning: false });
-    }
-  },
-  callDetailApi: async (request) => {
-    await set({ detailSpinning: true });
-
-    try {
-      const data = await ExampleService.detail(request ?? { id: get().listSelectedRowKey });
-      console.log(data);
-      set({ detail: data.rs, saveRequestValue: data.rs });
-    } catch (err) {
-      await errorDialog(err as any);
-    } finally {
-      await set({ detailSpinning: false });
     }
   },
   cancelFormActive: () => {
@@ -191,6 +183,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
 
 // ---------------- exports
 export interface $LIST_WITH_FORM$Store extends States, Actions, PageStoreActions<States> {}
+
 export const use$LIST_WITH_FORM$Store = create(
   subscribeWithSelector<$LIST_WITH_FORM$Store>((set, get) => ({
     ...createState,
