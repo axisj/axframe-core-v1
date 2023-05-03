@@ -21,7 +21,7 @@ export class ExampleRepositoryMock extends ExampleRepositoryInterface {
       ds: resDs,
       page: {
         pageCount: 49,
-        total: 9737,
+        totalCount: 9737,
         pageNumber: params.pageNumber ?? 0,
         pageSize: params.pageSize ?? 0,
       },
