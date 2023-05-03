@@ -2,7 +2,6 @@ import * as React from "react";
 import { Modal } from "antd";
 import i18n from "i18n";
 import { useAppStore } from "stores";
-import { reject } from "lodash";
 
 export interface IConfirmDialogOptions {
   icon?: React.ReactNode;
@@ -17,7 +16,7 @@ export const confirmDialog = (
   options: IConfirmDialogOptions,
   isMounted?: React.MutableRefObject<boolean>
 ): Promise<boolean> =>
-  new Promise<boolean>((resolve) => {
+  new Promise<boolean>((resolve, reject) => {
     if (isMounted && !isMounted.current) {
       return resolve(true);
     }
@@ -41,7 +40,7 @@ export const confirmDialog = (
         resolve(true);
       },
       onCancel() {
-        reject("");
+        reject("confirm_cancel");
       },
     });
   });
