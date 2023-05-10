@@ -106,9 +106,7 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
 
   return (
     <Container>
-      {disableIcon
-        ? null
-        : icon ?? <MenuIcon typeName={iconTy ?? "Default"} color={"#0281FE"} secondColor={"#0281FE"} fontSize={22} />}
+      {disableIcon ? null : icon ?? <MenuIcon typeName={iconTy ?? "Default"} fontSize={22} />}
       <TitleWrap>{title ?? currentMenu?.multiLanguage[currentLanguage]}</TitleWrap>
       <Breadcrumb items={bItems} />
       {children}

@@ -34,7 +34,7 @@ const buildLessVar = () => {
       path.resolve(__dirname, `../../styles/palette/theme-${palette}.less`),
       Object.keys(themeValue)
         .map((k) => {
-          if (k === "token") {
+          if (k === "token" || k === "component") {
             return "";
           }
 
