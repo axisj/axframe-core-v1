@@ -29,6 +29,7 @@ function App({}: Props) {
   const listRequestValue = use$LIST$Store((s) => s.listRequestValue);
   const setListRequestValue = use$LIST$Store((s) => s.setListRequestValue);
   const spinning = use$LIST$Store((s) => s.listSpinning);
+  const programFn = use$LIST$Store((s) => s.programFn);
 
   const [searchForm] = Form.useForm();
 
