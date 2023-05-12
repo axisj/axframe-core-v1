@@ -1,4 +1,4 @@
-import create, { StateCreator } from "zustand";
+import { create, StateCreator } from "zustand";
 import { devtools, persist, PersistOptions } from "zustand/middleware";
 import { getPersistSerializer } from "@core/utils/store";
 

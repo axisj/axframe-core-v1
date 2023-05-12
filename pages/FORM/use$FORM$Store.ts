@@ -1,9 +1,9 @@
-import create from "zustand";
+import { create } from "zustand";
 import { ExampleSaveRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";

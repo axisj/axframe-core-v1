@@ -1,9 +1,9 @@
-import create from "zustand";
+import { create } from "zustand";
 import { ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGDataItemStatus } from "@axframe/datagrid";
 import { setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
