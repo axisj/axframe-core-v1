@@ -12,7 +12,7 @@ import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { ListDataGrid } from "./ListDataGrid";
-import { errorHandling, formErrorHandling } from "../../../utils/errorHandling";
+import { errorHandling, formErrorHandling } from "utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
 

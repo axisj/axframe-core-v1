@@ -13,7 +13,7 @@ import { AXFDGClickParams } from "@axframe/datagrid";
 import { ExampleItem } from "@core/services/example/ExampleRepositoryInterface";
 import { ListDataGrid } from "./ListDataGrid";
 import { ChildListDataGrid } from "./ChildListDataGrid";
-import { errorHandling } from "../../../utils/errorHandling";
+import { errorHandling } from "utils/errorHandling";
 
 interface DtoItem extends ExampleItem {}
 

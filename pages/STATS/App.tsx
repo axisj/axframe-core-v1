@@ -9,7 +9,7 @@ import { useI18n, useUnmountEffect } from "@core/hooks";
 import { PanelType, use$STATS$Store } from "./use$STATS$Store";
 import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { PanelIndex } from "./PanelIndex";
-import { errorHandling } from "../../../utils/errorHandling";
+import { errorHandling } from "utils/errorHandling";
 
 interface Props {}
 

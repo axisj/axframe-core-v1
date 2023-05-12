@@ -12,7 +12,7 @@ import { IParam, SearchParams, SearchParamType } from "@core/components/search";
 import { ListDataGridA } from "./ListDataGridA";
 import { ListDataGridB } from "./ListDataGridB";
 import { ListDataGridC } from "./ListDataGridC";
-import { errorHandling } from "../../../utils/errorHandling";
+import { errorHandling } from "utils/errorHandling";
 
 interface Props {}
 
