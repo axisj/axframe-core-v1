@@ -7,11 +7,14 @@ import { Breadcrumb } from "antd";
 import { useI18n, useLink } from "../../hooks";
 import { AppMenu } from "../../../services";
 import { matchPath } from "react-router-dom";
+import { Loading } from "./Loading";
+import { Spinner } from "./Spinner";
 
 interface Props {
   title?: string;
   icon?: React.ReactNode;
   disableIcon?: boolean;
+  spinning?: boolean;
   children?: React.ReactNode;
 }
 
@@ -22,7 +25,7 @@ interface BreadCrumb {
   children: AppMenu[];
 }
 
-function ProgramTitle({ title, icon, disableIcon, children }: Props) {
+function ProgramTitle({ title, icon, disableIcon, spinning, children }: Props) {
   const { currentLanguage } = useI18n();
   const { APP_MENUS, MENUS_LIST } = useAppMenu();
   const { linkByRoute } = useLink();
@@ -107,7 +110,7 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
 
   return (
     <Container>
-      {disableIcon ? null : icon ?? <MenuIcon typeName={iconTy ?? "Default"} fontSize={22} />}
+      {spinning ? <Spinner /> : disableIcon ? null : icon ?? <MenuIcon typeName={iconTy ?? "Default"} fontSize={22} />}
       <TitleWrap>{title ?? currentMenu?.multiLanguage[currentLanguage]}</TitleWrap>
       <Breadcrumb items={bItems} />
       {children}
@@ -116,6 +119,7 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
 }
 
 const Container = styled.div`
+  position: relative;
   ${SMixinFlexRow("flex-start", "center")};
   gap: 5px;
   min-height: 32px;
