@@ -1,6 +1,7 @@
 import { getMetaDataByPath, setMetaDataByPath, usePageTabStore } from "./usePageTabStore";
 import { UserService } from "services";
 import { ROUTES_LIST } from "router";
+import { matchPath } from "react-router-dom";
 
 interface PageStoreConfig {
   unSubscribe?: () => void;
@@ -11,7 +12,7 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
   init: async () => {
     const metaData = getMetaDataByPath(get().routePath);
 
-    const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
+    const currentRoute = ROUTES_LIST.find((route) => matchPath(route.path, location.pathname));
     if (currentRoute) {
       const data = await UserService.getProgramFn({ progCd: currentRoute.program_type, apiUrl: location.pathname });
 
@@ -41,7 +42,7 @@ export const pageStoreActions = (set, get, config?: PageStoreConfig) => ({
     setMetaDataByPath(routePath, {});
 
     if (config?.createState) {
-      const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
+      const currentRoute = ROUTES_LIST.find((route) => matchPath(route.path, location.pathname));
       if (currentRoute) {
         const data = await UserService.getProgramFn({ progCd: currentRoute.program_type, apiUrl: location.pathname });
         config.createState.programFn = data.ds.reduce((acc, cur) => {

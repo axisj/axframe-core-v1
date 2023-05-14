@@ -40,12 +40,12 @@ function App({}: Props) {
 
   const handleReset = React.useCallback(async () => {
     try {
-      reset();
+      await reset();
       await callListApi();
     } catch (e) {
       await errorHandling(e);
     }
-  }, [callListApi, errorDialog, reset]);
+  }, [callListApi, reset]);
 
   const handleSearch = React.useCallback(async () => {
     try {

@@ -6,6 +6,7 @@ import { MenuIcon } from "components/MenuIcon";
 import { Breadcrumb } from "antd";
 import { useI18n, useLink } from "../../hooks";
 import { AppMenu } from "../../../services";
+import { matchPath } from "react-router-dom";
 
 interface Props {
   title?: string;
@@ -25,7 +26,7 @@ function ProgramTitle({ title, icon, disableIcon, children }: Props) {
   const { currentLanguage } = useI18n();
   const { APP_MENUS, MENUS_LIST } = useAppMenu();
   const { linkByRoute } = useLink();
-  const currentRoute = ROUTES_LIST.find((route) => route.path === location.pathname);
+  const currentRoute = React.useMemo(() => ROUTES_LIST.find((route) => matchPath(route.path, location.pathname)), []);
 
   const { iconTy, breadCrumbs } = React.useMemo(() => {
     const currentMenu = MENUS_LIST.find((m) => m.progCd === currentRoute?.program_type);

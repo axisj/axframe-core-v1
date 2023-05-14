@@ -5,6 +5,13 @@ import { getFlattedMenus } from "@core/utils/store";
 import { MenuItem, RawRoute, ROUTES_LIST, useAppMenu } from "router";
 import { stringFormat } from "@core/utils/string";
 
+export interface MetadataLinkByRoute {
+  labels?: {
+    en: string;
+    ko: string;
+  };
+}
+
 export function useLink() {
   const navigate = useNavigate();
   const addTab = usePageTabStore((s) => s.addTab);
@@ -39,14 +46,20 @@ export function useLink() {
   );
 
   const linkByRoute = React.useCallback(
-    (route: RawRoute, params: Record<string, any>) => {
+    (route: RawRoute, params: Record<string, any>, metaData?: MetadataLinkByRoute) => {
       const labels = { en: route.program_type as string, ko: route.program_type as string };
       const { tabUuid, page } = getActiveTabPage();
 
       if (route.program_type) {
         const menu = MENUS_LIST.find((menu) => menu.progCd === route.program_type);
-        labels.en = stringFormat(menu?.multiLanguage.en ?? (route.program_type as string), params);
-        labels.ko = stringFormat(menu?.multiLanguage.ko ?? (route.program_type as string), params);
+        labels.en = stringFormat(
+          menu?.multiLanguage.en ?? metaData?.labels?.en ?? (route.program_type as string),
+          params
+        );
+        labels.ko = stringFormat(
+          menu?.multiLanguage.ko ?? metaData?.labels?.ko ?? (route.program_type as string),
+          params
+        );
       }
 
       const path = generatePath(route.path, params);
