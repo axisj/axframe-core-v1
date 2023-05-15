@@ -4,6 +4,10 @@ import { alertDialog, errorDialog } from "@core/components/dialogs";
 
 export async function errorHandler(err: any, msgs?: Record<string, any>) {
   const { t } = getI18n();
+
+  if (err === "confirm_cancel") {
+    return true;
+  }
   if (err?.code) {
     if (err.code === ApiErrorCode.SAME_REQ_EXCEPTION) {
       return true;
