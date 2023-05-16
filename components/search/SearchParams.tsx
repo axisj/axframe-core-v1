@@ -22,6 +22,8 @@ export interface IParam {
   onSearch?: () => Promise<SearchParamOption[]>;
   config?: Record<string, any>;
   disabled?: boolean;
+  style?: React.CSSProperties;
+  icon?: React.ReactNode;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -161,6 +163,8 @@ export function SearchParams({
                     onSearch={param.onSearch}
                     config={param.config}
                     disabled={param.disabled}
+                    icon={param.icon}
+                    style={param.style}
                   />
                 );
               })}
