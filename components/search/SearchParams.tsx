@@ -24,6 +24,7 @@ export interface IParam {
   disabled?: boolean;
   style?: React.CSSProperties;
   icon?: React.ReactNode;
+  onClick?: () => void;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -165,6 +166,7 @@ export function SearchParams({
                     disabled={param.disabled}
                     icon={param.icon}
                     style={param.style}
+                    onClick={param.onClick}
                   />
                 );
               })}

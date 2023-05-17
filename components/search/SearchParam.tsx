@@ -5,6 +5,7 @@ import { SearchParamCheckbox } from "./SearchParamCheckbox";
 import { SearchParamInput } from "./SearchParamInput";
 import { SearchParamDate } from "./SearchParamDate";
 import { SearchParamValuesFinder } from "./SearchParamValuesFinder";
+import { SearchParamSubmitButton } from "./SearchParamSubmitButton";
 import { SearchParamButton } from "./SearchParamButton";
 
 export enum SearchParamType {
@@ -15,6 +16,7 @@ export enum SearchParamType {
   DATE,
   VALUES_FINDER,
   SUBMIT_BUTTON,
+  BUTTON,
 }
 export type DateType = "date" | "week" | "month" | "quarter" | "year";
 
@@ -42,6 +44,7 @@ interface Props {
 
   style?: React.CSSProperties;
   icon?: React.ReactNode;
+  onClick?: () => void;
 }
 
 export type SearchParamComponentProp<R> = {
@@ -57,7 +60,8 @@ const SearchParamComponents: SearchParamComponentProp<SearchParamComponent> = {
   [SearchParamType.CHECKBOX]: SearchParamCheckbox,
   [SearchParamType.DATE]: SearchParamDate,
   [SearchParamType.VALUES_FINDER]: SearchParamValuesFinder,
-  [SearchParamType.SUBMIT_BUTTON]: SearchParamButton,
+  [SearchParamType.SUBMIT_BUTTON]: SearchParamSubmitButton,
+  [SearchParamType.BUTTON]: SearchParamButton,
 };
 
 const SearchParam: SearchParamComponent = ({ type, width = 220, ...rest }) => {
