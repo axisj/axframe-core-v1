@@ -74,7 +74,7 @@ function App({}: Props) {
         {
           placeholder: t.pages.example.form.cnsltDt.label,
           name: "timeRange",
-          type: SearchParamType.TIME_RANGE,
+          type: SearchParamType.DATE_RANGE,
         },
       ] as IParam[],
     [t]

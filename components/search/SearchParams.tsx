@@ -101,7 +101,7 @@ export function SearchParams({
     };
 
     params?.forEach((filter) => {
-      if (filter.type === SearchParamType.TIME_RANGE) {
+      if (filter.type === SearchParamType.DATE_RANGE) {
         formValues[filter.name] = getDayJsRangeValue(paramsValue?.[filter.name]);
       } else if (filter.type === SearchParamType.DATE) {
         formValues[filter.name] = paramsValue?.[filter.name] ? dayjs(paramsValue?.[filter.name]) : undefined;

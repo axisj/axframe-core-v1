@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SearchParamSelect } from "./SearchParamSelect";
-import { SearchParamTimeRange } from "./SearchParamTimeRange";
+import { SearchParamDateRange } from "./SearchParamDateRange";
 import { SearchParamCheckbox } from "./SearchParamCheckbox";
 import { SearchParamInput } from "./SearchParamInput";
 import { SearchParamDate } from "./SearchParamDate";
@@ -10,7 +10,7 @@ import { SearchParamButton } from "./SearchParamButton";
 
 export enum SearchParamType {
   INPUT,
-  TIME_RANGE,
+  DATE_RANGE,
   SELECT,
   CHECKBOX,
   DATE,
@@ -55,7 +55,7 @@ export type SearchParamComponent = React.FC<Props>;
 
 const SearchParamComponents: SearchParamComponentProp<SearchParamComponent> = {
   [SearchParamType.INPUT]: SearchParamInput,
-  [SearchParamType.TIME_RANGE]: SearchParamTimeRange,
+  [SearchParamType.DATE_RANGE]: SearchParamDateRange,
   [SearchParamType.SELECT]: SearchParamSelect,
   [SearchParamType.CHECKBOX]: SearchParamCheckbox,
   [SearchParamType.DATE]: SearchParamDate,
