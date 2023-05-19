@@ -20,11 +20,11 @@ export interface IParam {
   loading?: boolean;
   picker?: DateType;
   onSearch?: () => Promise<SearchParamOption[]>;
-  config?: Record<string, any>;
   disabled?: boolean;
   style?: React.CSSProperties;
   icon?: React.ReactNode;
   onClick?: () => void;
+  config?: Record<string, any>;
 }
 
 export interface ParamsValue extends Record<string, any> {
@@ -144,29 +144,15 @@ export function SearchParams({
       <Container>
         <DefaultWrap role={"page-search-bar"}>
           {params && params?.length > 0 && (
-            <Space wrap align={"center"}>
+            <Space wrap align={"center"} size={[5, 5]}>
               {params.map((param, idx) => {
                 return (
                   <SearchParam
                     key={idx}
-                    name={param.name}
-                    placeholder={param.placeholder}
-                    type={param.type}
                     value={paramsValue?.[param.name]}
-                    options={param.options}
                     onClickExtraButton={onClickExtraButton}
-                    label={param.label}
-                    checkAllItem={param.checkAllItem}
-                    width={param.width}
                     onChangedComponentValue={onChangedComponentValue}
-                    loading={param.loading}
-                    picker={param.picker}
-                    onSearch={param.onSearch}
-                    config={param.config}
-                    disabled={param.disabled}
-                    icon={param.icon}
-                    style={param.style}
-                    onClick={param.onClick}
+                    {...param}
                   />
                 );
               })}
@@ -220,7 +206,7 @@ const Container = styled.div`
 
 const DefaultWrap = styled.div`
   ${SMixinFlexRow("stretch", "center")};
-  gap: 10px;
+  gap: 6px;
   margin-bottom: 15px;
   .ant-form-item {
     margin-bottom: 0;

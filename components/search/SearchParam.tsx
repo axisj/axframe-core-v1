@@ -7,10 +7,13 @@ import { SearchParamDate } from "./SearchParamDate";
 import { SearchParamValuesFinder } from "./SearchParamValuesFinder";
 import { SearchParamSubmitButton } from "./SearchParamSubmitButton";
 import { SearchParamButton } from "./SearchParamButton";
+import { IParam } from "./SearchParams";
+import { SearchParamTimeRange } from "./SearchParamTimeRange";
 
 export enum SearchParamType {
   INPUT,
   DATE_RANGE,
+  TIME_RANGE,
   SELECT,
   CHECKBOX,
   DATE,
@@ -25,26 +28,10 @@ export interface SearchParamOption {
   label: React.ReactNode;
 }
 
-interface Props {
-  name: string;
-  placeholder?: string;
-  type: SearchParamType;
+interface Props extends IParam {
   value: any;
-  options?: SearchParamOption[];
   onClickExtraButton?: (params: Record<string, any>) => void;
-  label?: string;
-  checkAllItem?: boolean;
   onChangedComponentValue?: () => void;
-  width?: number;
-  loading?: boolean;
-  picker?: DateType;
-  onSearch?: () => Promise<SearchParamOption[]>;
-  config?: Record<string, any>;
-  disabled?: boolean;
-
-  style?: React.CSSProperties;
-  icon?: React.ReactNode;
-  onClick?: () => void;
 }
 
 export type SearchParamComponentProp<R> = {
@@ -56,6 +43,7 @@ export type SearchParamComponent = React.FC<Props>;
 const SearchParamComponents: SearchParamComponentProp<SearchParamComponent> = {
   [SearchParamType.INPUT]: SearchParamInput,
   [SearchParamType.DATE_RANGE]: SearchParamDateRange,
+  [SearchParamType.TIME_RANGE]: SearchParamTimeRange,
   [SearchParamType.SELECT]: SearchParamSelect,
   [SearchParamType.CHECKBOX]: SearchParamCheckbox,
   [SearchParamType.DATE]: SearchParamDate,

@@ -17,7 +17,7 @@ export const SearchParamSelect: SearchParamComponent = ({
         placeholder={placeholder}
         showSearch
         allowClear
-        style={{ minWidth: 100, width }}
+        style={{ minWidth: 50, width }}
         loading={loading}
         options={options}
         disabled={disabled}
