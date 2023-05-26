@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useContainerSize } from "@core/hooks";
 import { StatDataGrid } from "@core/components/StatDataGrid";
 import { use$STATS$Store } from "./use$STATS$Store";
+import { StatRowTd } from "../../components/statTable";
 
 interface Props {}
 
@@ -13,8 +14,144 @@ function StatList2({}: Props) {
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   const colGroups = React.useMemo(() => {
-    return _colGroups ?? [{ width: 100 }, { width: 200 }, { width: 100 }, { width: 100 }];
+    return _colGroups ?? [{ width: 100 }, { width: 60 }, { width: 120 }, { width: 120 }, { width: 120 }];
   }, [_colGroups]);
+
+  const rawBodyData: StatRowTd[][] = React.useMemo(() => {
+    return [
+      [
+        {
+          value: "ABC",
+          rowspan: 2,
+        },
+        {
+          value: "Normal",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "4",
+          align: "right",
+          rowspan: 2,
+        },
+      ],
+      [
+        {
+          value: "Special",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+      ],
+      [
+        {
+          value: "BCD",
+          rowspan: 2,
+        },
+        {
+          value: "Normal",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "4",
+          align: "right",
+          rowspan: 2,
+        },
+      ],
+      [
+        {
+          value: "Special",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+      ],
+      [
+        {
+          value: "CDE",
+          rowspan: 2,
+        },
+        {
+          value: "Normal",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "4",
+          align: "right",
+          rowspan: 2,
+        },
+      ],
+      [
+        {
+          value: "Special",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+      ],
+    ];
+  }, []);
+
+  const rawTotalData: StatRowTd[][] = React.useMemo(() => {
+    return [
+      [
+        {
+          value: "ABC",
+          rowspan: 3,
+        },
+        {
+          value: "Normal",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+        {
+          value: "1",
+          align: "right",
+        },
+      ],
+    ];
+  }, []);
 
   return (
     <Container ref={containerRef}>
@@ -27,14 +164,18 @@ function StatList2({}: Props) {
         onChangeColGroups={setColGroups}
         headColumns={[
           {
-            children: [{ label: "h1", rowspan: 2 }, { label: "h2" }, { label: "h3", colspan: 2 }],
+            children: [
+              { label: "H1", rowspan: 2, colspan: 2 },
+              { label: "H2", colspan: 2 },
+              { label: "Sum", rowspan: 2 },
+            ],
           },
           {
-            children: [{ label: "h2" }, { label: "h3" }, { label: "h4" }],
+            children: [{ label: "h2-1" }, { label: "h2-2" }],
           },
         ]}
-        bodyColumns={[]}
-        data={[]}
+        rawBodyData={rawBodyData}
+        rawTotalData={rawTotalData}
       />
     </Container>
   );

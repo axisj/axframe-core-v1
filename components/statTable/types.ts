@@ -27,6 +27,16 @@ export interface StatBodyTd<T> {
   textCell?: boolean;
 }
 
+export interface StatRowTd {
+  colspan?: number;
+  rowspan?: number;
+  align?: Align;
+  textCell?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+  value: React.ReactNode;
+}
+
 export interface ItemTotal {
   sum: number;
   count: number;
@@ -61,13 +71,15 @@ export interface StatTableProps<T> extends StatTableStyleProps {
   className?: string;
   colGroups: StatCol[];
   onChangeColGroups: (colGroups: StatCol[]) => void;
-  headColumns: StatHeadTr[];
-  bodyColumns: StatBodyTd<T>[];
+  headColumns?: StatHeadTr[];
+  bodyColumns?: StatBodyTd<T>[];
   subtotal?: StatSubTotal<T>;
   total?: StatTotal<T>;
-  data: T[];
+  data?: T[];
   width: number;
   height: number;
   onClick?: (rowIndex: number, item: T) => void;
   selectedRowIndex?: number;
+  rawBodyData?: StatRowTd[][];
+  rawTotalData?: StatRowTd[][];
 }
