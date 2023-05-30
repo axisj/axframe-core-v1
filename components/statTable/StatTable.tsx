@@ -7,6 +7,7 @@ import { StatTableTFoot } from "./StatTableTFoot";
 import { Loading } from "../common";
 import { SMixinScrollerStyle } from "../../styles/emotion";
 import { StatTableRawBody } from "./StatTableRawBody";
+import { StatTableRawFoot } from "./StatTableRawFoot";
 
 function StatTable<T = Record<string, any>>({
   width,
@@ -223,7 +224,7 @@ function StatTable<T = Record<string, any>>({
 
       {rawTotalData ? (
         <FootContainer style={{ width: width, height: footHeight }} role={"foot-container"}>
-          <StatTableRawBody
+          <StatTableRawFoot
             tableClassName={"total-table"}
             colGroups={colGroups}
             tableWidth={tableWidth}
