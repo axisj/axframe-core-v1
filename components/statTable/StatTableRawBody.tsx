@@ -41,6 +41,7 @@ function StatTableRawBody<T>({
                     colSpan={c.colspan}
                     align={c.align ?? "center"}
                     data-text-cell={c.textCell}
+                    className={c.className}
                   >
                     {c.value}
                   </td>
