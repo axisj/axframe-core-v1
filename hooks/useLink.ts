@@ -33,6 +33,7 @@ export function useLink() {
         return;
       }
 
+
       const addedTabUuid = addTab({
         labels,
         path: to,
@@ -40,7 +41,8 @@ export function useLink() {
       });
       setActiveTab(addedTabUuid);
 
-      navigate(to);
+      const hash = getActiveTabPage().page.hash ?? '';
+      navigate(to + hash);
     },
     [addTab, getActiveTabPage, navigate, setActiveTab, updateTab]
   );
@@ -77,7 +79,8 @@ export function useLink() {
       });
       setActiveTab(addedTabUuid);
 
-      navigate(path);
+      const hash = getActiveTabPage().page.hash ?? "";
+      navigate(path + hash);
     },
     [MENUS_LIST, addTab, getActiveTabPage, navigate, setActiveTab, updateTab]
   );
@@ -106,7 +109,8 @@ export function useLink() {
         });
         setActiveTab(addedTabUuid);
 
-        navigate(path);
+        const hash = getActiveTabPage().page.hash ?? "";
+        navigate(path + hash);
       }
     },
     [addTab, getActiveTabPage, navigate, setActiveTab, updateTab]

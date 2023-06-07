@@ -10,6 +10,7 @@ export interface Page {
   fixed?: boolean;
   labels?: Record<LanguageType, string>;
   path?: string;
+  hash?: string;
   icon?: string;
   metaData?: Record<string, any>;
   isHome?: boolean;
