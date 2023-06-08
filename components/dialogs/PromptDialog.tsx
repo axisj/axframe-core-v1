@@ -11,6 +11,7 @@ export interface PromptDialogRequest {
   placeHolder?: string;
   keyName: string;
   dialogWidth?: number;
+  value?: string;
 }
 
 export interface PromptDialogResponse {
@@ -36,6 +37,12 @@ function PromptModal({ open, onOk, onCancel, afterClose, params }: Props) {
       data: form.getFieldsValue(),
     });
   }, [form, onOk]);
+
+  React.useEffect(() => {
+    form.setFieldsValue({
+      [params.keyName]: params.value,
+    });
+  }, [form, params.keyName, params.value]);
 
   return (
     <Modal width={params.dialogWidth ?? 500} {...{ open, onCancel, onOk: onOk as any, afterClose }}>
