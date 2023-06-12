@@ -9,6 +9,9 @@ export async function errorHandler(err: any, msgs?: Record<string, any>) {
     return true;
   }
   if (err?.code) {
+    if (err.code === "ERR_CANCELED") {
+      return true;
+    }
     if (err.code === ApiErrorCode.SAME_REQ_EXCEPTION) {
       return true;
     }
