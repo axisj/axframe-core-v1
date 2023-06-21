@@ -5,9 +5,10 @@ import { css, keyframes } from "@emotion/react";
 interface Props {
   active?: boolean;
   size?: "small" | "normal";
+  message?: string;
 }
 
-export function Loading({ active, size = "small" }: Props) {
+export function Loading({ active, size = "small", message }: Props) {
   if (!active) {
     return null;
   }
@@ -16,11 +17,12 @@ export function Loading({ active, size = "small" }: Props) {
     <Container active={active} size={size}>
       <div role='rft-spinner-box'>
         <div role='rft-spinner' />
-        {size === "normal" && <div role='rft-spinner-text'>Loading</div>}
+        {size === "normal" && <div role='rft-spinner-text'>{message ?? "Loading"}</div>}
       </div>
     </Container>
   );
 }
+
 const SpinnerRotate = keyframes`
   from {
     transform: rotate(0deg);
