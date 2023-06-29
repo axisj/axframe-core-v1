@@ -20,6 +20,7 @@ interface StyleProps {
 interface Props extends StyleProps {
   icon?: React.ReactNode;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
 export function IconText({
@@ -33,6 +34,7 @@ export function IconText({
   active,
   block,
   loading,
+  ...rest
 }: Props) {
   const handleClick = React.useCallback(
     (evt: React.MouseEvent<HTMLAnchorElement>) => {
@@ -49,6 +51,7 @@ export function IconText({
       block={block}
       disabled={disabled}
       active={active}
+      {...rest}
     >
       {icon && (
         <IconContainer iconSize={iconSize} iconPlacement={iconPlacement}>
