@@ -29,3 +29,10 @@ export async function errorHandler(err: any, msgs?: Record<string, any>) {
     }
   }
 }
+
+export function getErrorMsg(err: any) {
+  if (err?.code) {
+    return getI18n().t.apiErrMsg[err.code] ?? `Error : ${err.code}`;
+  }
+  return err?.message;
+}
