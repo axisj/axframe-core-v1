@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 
 export interface IParam {
   name: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   type: SearchParamType;
   options?: SearchParamOption[];
   label?: string;
