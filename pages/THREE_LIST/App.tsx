@@ -91,7 +91,7 @@ function App({}: Props) {
   return (
     <Container stretch role={"page-container"}>
       <Header>
-        <ProgramTitle title={t.pages.example.listWithList.title}>
+        <ProgramTitle title={t.pages.example.threeList.title}>
           <Button icon={<AXFIRevert />} onClick={handleReset} size='small' type={"ghost"}>
             {t.button.reset}
           </Button>
