@@ -14,7 +14,7 @@ export interface IParam {
   placeholder?: string | string[];
   type: SearchParamType;
   options?: SearchParamOption[];
-  label?: string;
+  label?: string | string[];
   width?: number;
   checkAllItem?: boolean;
   loading?: boolean;
