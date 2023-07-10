@@ -99,7 +99,7 @@ function ListDataGridB({ onClick }: Props) {
   return (
     <>
       <Header>
-        <div>LIST</div>
+        <div>{t.pages.example.list.title}</div>
         <ButtonGroup compact>
           <Button onClick={handleAddSubItem}>{t.button.addNew}</Button>
           <Button onClick={handleDelSubItem}>{t.button.del}</Button>

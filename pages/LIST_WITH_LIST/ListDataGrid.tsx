@@ -66,7 +66,7 @@ function ListDataGrid({ onClick }: Props) {
   return (
     <>
       <Header>
-        <div>LIST</div>
+        <div>{t.pages.example.list.title}</div>
         <ButtonGroup compact></ButtonGroup>
       </Header>
       <Container ref={containerRef}>
