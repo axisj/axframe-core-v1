@@ -61,7 +61,7 @@ function App({}: Props) {
           options: t.pages.example.form.cnsltHow.options,
         },
         {
-          placeholder: t.pages.example.form.cnsltDt.label,
+          placeholder: t.pages.example.form.cnsltDt.placeholder,
           name: "timeRange",
           type: SearchParamType.DATE_RANGE,
         },

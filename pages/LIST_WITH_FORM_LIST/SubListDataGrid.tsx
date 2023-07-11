@@ -69,7 +69,7 @@ function SubListDataGrid({}: Props) {
         [
           {
             key: "_",
-            label: "Status",
+            label: t.pages.example.datagrid.status,
             align: "left",
             width: 80,
             itemRender: ({ item }) => {
@@ -78,7 +78,7 @@ function SubListDataGrid({}: Props) {
           },
           {
             key: "code",
-            label: "Code",
+            label: t.pages.example.datagrid.code,
             align: "left",
             width: 80,
             itemRender: InputEditor,
@@ -86,7 +86,7 @@ function SubListDataGrid({}: Props) {
           },
           {
             key: "type",
-            label: "Type",
+            label: t.pages.example.datagrid.type,
             align: "left",
             width: 100,
             itemRender: InputEditor,
@@ -94,12 +94,12 @@ function SubListDataGrid({}: Props) {
           },
           {
             key: "useYn",
-            label: "Use YN",
+            label: t.pages.example.datagrid.useYN,
             align: "left",
             width: 120,
             itemRender: getSelectEditor([
               { value: "Y", label: "사용" },
-              { value: "N", label: "사용안함" },
+              { value: "N", label: "사용 안함" },
             ]),
             getClassName: (item) => "datagrid-editable",
           },
@@ -118,7 +118,7 @@ function SubListDataGrid({}: Props) {
   return (
     <>
       <FormBoxHeader>
-        <div>LIST</div>
+        <div>{t.pages.example.form.subList}</div>
         <ButtonGroup compact>
           <Button onClick={handleAddSubItem}>{t.button.addNew}</Button>
           <Button onClick={handleDelSubItem}>{t.button.del}</Button>

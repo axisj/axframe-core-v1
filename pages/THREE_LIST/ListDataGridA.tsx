@@ -65,23 +65,35 @@ function ListDataGridA({ onClick }: Props) {
         [
           {
             key: "_",
-            label: "Status",
+            label: t.pages.example.datagrid.status,
             align: "left",
             width: 80,
             itemRender: ({ item }) => {
               return item.status !== undefined ? ITEM_STAT[item.status] : "";
             },
           },
-          { key: "code", label: "Code", align: "left", width: 80, itemRender: InputEditor },
-          { key: "type", label: "Type", align: "left", width: 100, itemRender: InputEditor },
+          {
+            key: "code",
+            label: t.pages.example.datagrid.code,
+            align: "left",
+            width: 80,
+            itemRender: InputEditor,
+          },
+          {
+            key: "type",
+            label: t.pages.example.datagrid.type,
+            align: "left",
+            width: 100,
+            itemRender: InputEditor,
+          },          
           {
             key: "useYn",
-            label: "Use YN",
+            label: t.pages.example.datagrid.useYN,
             align: "left",
             width: 120,
             itemRender: getSelectEditor([
               { value: "Y", label: "사용" },
-              { value: "N", label: "사용안함" },
+              { value: "N", label: "사용 안함" },
             ]),
           },
         ] as AXFDGColumn<DtoItem>[]

@@ -65,7 +65,7 @@ function DetailDrawer({ open, onOk, onCancel, params, afterOpenChange }: Props) 
 
   return (
     <Drawer
-      title={`샘플(상세#${params.query?.id})`}
+      title={`${t.pages.example.form.title2} - #${params.query?.id}`}      
       width={800}
       open={open}
       bodyStyle={{ paddingBottom: 80 }}
@@ -74,19 +74,20 @@ function DetailDrawer({ open, onOk, onCancel, params, afterOpenChange }: Props) 
       extra={
         <Space>
           <Button onClick={handleTest} loading={spinning?.test}>
-            TEST
+            {t.button.test}
           </Button>
           <Button type='primary' onClick={handleSave} loading={spinning?.save}>
-            수정하기
+            {t.button.edit}
           </Button>
           <Button onClick={handleDelete} loading={spinning?.delete}>
-            삭제하기
+            {t.button.delete}
           </Button>
-          <Button onClick={onCancel}>취소</Button>
+          <Button onClick={onCancel}>
+            {t.button.cancel}
+          </Button>
         </Space>
       }
     >
-      TEST {params.query?.id}
       <Descriptions bordered size={"small"}>
         <Descriptions.Item label={t.pages.example.form.name.label}>{detail?.name}</Descriptions.Item>
         <Descriptions.Item label={t.pages.example.form.birthDt.label}>{detail?.birthDt}</Descriptions.Item>
@@ -95,7 +96,7 @@ function DetailDrawer({ open, onOk, onCancel, params, afterOpenChange }: Props) 
         <Descriptions.Item label={t.pages.example.form.phone2.label} span={2}>
           {detail?.phone2}
         </Descriptions.Item>
-        <Descriptions.Item label='Status' span={3}>
+        <Descriptions.Item label={t.pages.example.form.status.label} span={3}>
           <Badge status='processing' text='Running' />
         </Descriptions.Item>
         <Descriptions.Item label={t.pages.example.form.hndcapYn.label}>{detail?.hndcapYn}</Descriptions.Item>

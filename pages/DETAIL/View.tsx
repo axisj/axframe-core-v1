@@ -13,7 +13,7 @@ function View({}: Props) {
 
   return (
     <Body>
-      <ContentBoxHeader>{t.pages.example.form.title1}</ContentBoxHeader>
+      <ContentBoxHeader>{`${t.pages.example.form.title2} - `}</ContentBoxHeader>      
       <ContentBox>
         <Descriptions bordered>
           <Descriptions.Item label={t.pages.example.form.name.label}>{detail?.name}</Descriptions.Item>
@@ -23,13 +23,13 @@ function View({}: Props) {
           <Descriptions.Item label={t.pages.example.form.phone2.label} span={2}>
             {detail?.phone2}
           </Descriptions.Item>
-          <Descriptions.Item label='Status' span={3}>
+          <Descriptions.Item label={t.pages.example.form.status.label} span={3}>
             <Badge status='processing' text='Running' />
           </Descriptions.Item>
           <Descriptions.Item label={t.pages.example.form.hndcapYn.label}>{detail?.hndcapYn}</Descriptions.Item>
           <Descriptions.Item label={t.pages.example.form.hndcapGrade.label}>{detail?.hndcapGrade}</Descriptions.Item>
           <Descriptions.Item label={t.pages.example.form.hndcapTyp.label}>{detail?.hndcapTyp}</Descriptions.Item>
-          <Descriptions.Item label='Config Info'>
+          <Descriptions.Item label={t.pages.example.form.configInfo.label}>
             Data disk type: MongoDB
             <br />
             Database version: 3.4

@@ -69,9 +69,9 @@ function DetailModal({ open, onOk, onCancel, afterClose, params }: Props) {
   return (
     <Modal width={800} {...{ open, onCancel, onOk: onOk as any, afterClose }}>
       <Container>
-        <ModalLayout.Header title={`샘플(상세#${params.query?.id})`}>
+        <ModalLayout.Header title={`${t.pages.example.form.title2} - #${params.query?.id}`}>
           <Button size={"small"} onClick={handleTest} loading={spinning?.test}>
-            TEST
+          {t.button.test}
           </Button>
         </ModalLayout.Header>
         <Body>
@@ -83,7 +83,7 @@ function DetailModal({ open, onOk, onCancel, afterClose, params }: Props) {
             <Descriptions.Item label={t.pages.example.form.phone2.label} span={2}>
               {detail?.phone2}
             </Descriptions.Item>
-            <Descriptions.Item label='Status' span={3}>
+            <Descriptions.Item label={t.pages.example.form.status.label} span={3}>
               <Badge status='processing' text='Running' />
             </Descriptions.Item>
             <Descriptions.Item label={t.pages.example.form.hndcapYn.label}>{detail?.hndcapYn}</Descriptions.Item>
@@ -95,12 +95,12 @@ function DetailModal({ open, onOk, onCancel, afterClose, params }: Props) {
         </Body>
         <Footer>
           <Button type='primary' onClick={handleSave} loading={spinning?.save}>
-            수정하기
+          {t.button.edit}
           </Button>
           <Button onClick={handleDelete} loading={spinning?.delete}>
-            삭제하기
+          {t.button.delete}
           </Button>
-          <Button onClick={onCancel}>취소</Button>
+          <Button onClick={onCancel}>{t.button.cancel}</Button>
         </Footer>
       </Container>
     </Modal>

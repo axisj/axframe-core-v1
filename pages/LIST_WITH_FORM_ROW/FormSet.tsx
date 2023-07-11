@@ -130,7 +130,7 @@ function FormSet({ form }: Props) {
               </Col>
               <Col xs={24} sm={8}>
                 <Form.Item label={t.pages.example.form.cnsltDt.label} name={"cnsltDt"}>
-                  <DatePicker />
+                  <DatePicker placeholder={t.pages.example.form.selectDate.placeholder} />
                 </Form.Item>
               </Col>
             </Row>

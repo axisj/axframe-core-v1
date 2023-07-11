@@ -104,14 +104,12 @@ function FormSet({ form }: Props) {
                 name={"cnsltUserCd"}
                 rules={[{ required: true }]}
               >
-                <Select>
-                  <Select.Option value={"system"}>시스템관리자</Select.Option>
-                </Select>
+                <Select options={t.pages.example.form.cnsltUserCd.options} />
               </Form.Item>
             </Col>
             <Col xs={24} sm={8}>
               <Form.Item label={t.pages.example.form.cnsltDt.label} name={"cnsltDt"}>
-                <DatePicker />
+                <DatePicker placeholder={t.pages.example.form.selectDate.placeholder} />
               </Form.Item>
             </Col>
           </Row>
@@ -196,7 +194,7 @@ function FormSet({ form }: Props) {
               <Form.Item label={t.pages.example.form.birthDt.label}>
                 <Space.Compact>
                   <Form.Item name={"birthDt"} noStyle rules={[{ required: true }]}>
-                    <DatePicker picker={"date"} />
+                  <DatePicker picker={"date"} placeholder={t.pages.example.form.selectDate.placeholder} />
                   </Form.Item>
                   <Form.Item name={"age"} noStyle>
                     <Input

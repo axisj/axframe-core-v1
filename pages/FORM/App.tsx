@@ -63,7 +63,7 @@ function App({}: Props) {
         <ButtonGroup compact>
           <Button onClick={reset}>{t.button.reset}</Button>
           <Button type={"primary"} loading={saveSpinning} onClick={handleSave}>
-            저장하기
+          {t.button.save}
           </Button>
         </ButtonGroup>
       </Header>

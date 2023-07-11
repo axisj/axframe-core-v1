@@ -23,7 +23,6 @@ function FormSet({ form }: Props) {
   const formActive = use$LIST_WITH_FORM_LIST$Store((s) => s.formActive);
   const cancelFormActive = use$LIST_WITH_FORM_LIST$Store((s) => s.cancelFormActive);
   const setFormActive = use$LIST_WITH_FORM_LIST$Store((s) => s.setFormActive);
-
   const { t } = useI18n();
 
   const formInitialValues = React.useRef({}).current; // form 의 초기값 reset해도 이값 으로 리셋됨
@@ -68,7 +67,7 @@ function FormSet({ form }: Props) {
   return (
     <>
       <Header>
-        Form
+        {t.pages.example.form.title2}
         <ButtonGroup compact>
           <Button onClick={() => cancelFormActive()}>{t.button.cancel}</Button>
         </ButtonGroup>
@@ -107,7 +106,7 @@ function FormSet({ form }: Props) {
 
               <Col xs={24} sm={8}>
                 <Form.Item label={t.pages.example.form.cnsltDt.label} name={"cnsltDt"}>
-                  <DatePicker />
+                  <DatePicker placeholder={t.pages.example.form.selectDate.placeholder} />
                 </Form.Item>
               </Col>
             </Row>
