@@ -143,7 +143,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     await set({ saveSpinning: true });
 
     try {
-      const apiParam: ExampleSaveRequest = {
+      const apiParam: SaveRequest = {
         ...get().saveRequestValue,
         ...request,
       };
