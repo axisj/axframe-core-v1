@@ -32,18 +32,10 @@ export const phoneNumFormatter = (value) => {
 };
 
 export const phoneNumParser = (value) => {
-  if (value!.substring(0, 1) === "0") {
-    return "0." + value!.substring(1).replace(/[^0-9]/g, "");
-  }
   return `${value}`!.replace(/[^0-9]/g, "");
 };
 
 export const bizNumProps = {
   formatter: bizNumFormatter,
   parser: bizNumParser,
-};
-
-export const phoneNumProps = {
-  formatter: phoneNumFormatter,
-  parser: phoneNumParser,
 };
