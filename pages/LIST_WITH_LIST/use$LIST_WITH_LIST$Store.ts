@@ -88,7 +88,7 @@ const createState: States = {
 // create actions
 const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   onMountApp: async () => {},
-  callListApi: async (request = { pageNumber: 1 }) => {
+  callListApi: async (request) => {
     if (get().spinning) return;
     await set({ spinning: true });
 
@@ -100,6 +100,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       const response = await ExampleService.list(apiParam);
 
       set({
+        listRequestValue: apiParam,
         listData: response.ds.map((values) => ({
           values,
         })),
@@ -117,13 +118,6 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    set({
-      listRequestValue: {
-        ...get().listRequestValue,
-        pageNumber,
-        pageSize,
-      },
-    });
     await get().callListApi({
       pageNumber,
       pageSize,
