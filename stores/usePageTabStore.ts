@@ -34,6 +34,7 @@ export interface TabsActions {
   removeTab: (tabUuid: string) => void;
   removeTabs: (tabUuids: string[]) => void;
   updateTab: (tabUuid: string, page: Page) => void;
+  updateTabLabels: (tabUuid: string, labels: Record<LanguageType, string>) => void;
   setActiveTab: (activeTabUuid: string) => void;
   getActiveTabPage: () => TabPage;
   setActiveTabByPath: (path: string, label?: React.ReactNode) => void;
@@ -97,6 +98,15 @@ export const usePageTabStore = buildStore<TabsStore>(
     updateTab: (tabUuid, page) => {
       const pages = get().pages;
       pages.set(tabUuid, page);
+      set({ pages: new Map([...pages]) });
+    },
+    updateTabLabels: (tabUuid, labels) => {
+      const pages = get().pages;
+      const page = pages.get(tabUuid);
+      pages.set(tabUuid, {
+        ...page,
+        labels,
+      });
       set({ pages: new Map([...pages]) });
     },
     setActiveTab: (activeTabUuid) => {
@@ -205,4 +215,18 @@ export const setMetaDataByPath = <T extends Record<string, any>>(routePath: stri
 
 export const getMetaDataByPath = <T extends Record<string, any>>(routePath: string) => {
   return usePageTabStore.getState().getTabMetaDataByPath<T>(routePath);
+};
+
+export const setLabelsByPath = (routePath: string, labels: Record<LanguageType, string>) => {
+  const tabPage = usePageTabStore.getState().getPageByPath(routePath);
+  if (tabPage) {
+    usePageTabStore.getState().updateTabLabels(tabPage.tabUuid, labels);
+  }
+};
+
+export const removeTabByPath = (routePath: string) => {
+  const tabPage = usePageTabStore.getState().getPageByPath(routePath);
+  if (tabPage) {
+    usePageTabStore.getState().removeTab(tabPage.tabUuid);
+  }
 };
