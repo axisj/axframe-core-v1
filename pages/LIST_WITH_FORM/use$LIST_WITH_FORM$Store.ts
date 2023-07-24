@@ -90,7 +90,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListSelectedRowKey: async (key, detail) => {
     set({ listSelectedRowKey: key, detail, saveRequestValue: { ...detail } });
   },
-  callListApi: async (request = { pageNumber: 1 }) => {
+  callListApi: async (request) => {
     if (get().listSpinning) return;
     await set({ listSpinning: true });
 
@@ -102,6 +102,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       const response = await ExampleService.list(apiParam);
 
       set({
+        listRequestValue: apiParam,
         listData: response.ds.map((values) => ({
           values,
         })),
@@ -119,13 +120,6 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    set({
-      listRequestValue: {
-        ...get().listRequestValue,
-        pageNumber,
-        pageSize,
-      },
-    });
     await get().callListApi({
       pageNumber,
       pageSize,
@@ -143,7 +137,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     await set({ saveSpinning: true });
 
     try {
-      const apiParam: ExampleSaveRequest = {
+      const apiParam: SaveRequest = {
         ...get().saveRequestValue,
         ...request,
       };

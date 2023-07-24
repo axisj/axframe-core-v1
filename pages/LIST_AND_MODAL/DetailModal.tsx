@@ -9,20 +9,20 @@ import { useDidMountEffect, useSpinning } from "@core/hooks";
 import { Loading } from "@core/components/common";
 import { useI18n } from "@core/hooks/useI18n";
 
-export interface ExampleModalRequest {
+export interface ModalRequest {
   query?: Record<string, any>;
 }
 
-export interface ExampleModalResponse {
+export interface ModalResponse {
   save?: boolean;
   delete?: boolean;
 }
 
 interface Props {
   open: boolean;
-  onOk: (value: ExampleModalResponse) => ExampleModalResponse;
+  onOk: (value: ModalResponse) => ModalResponse;
   onCancel: (reason?: any) => void;
-  params: ExampleModalRequest;
+  params: ModalRequest;
   afterClose: () => void;
 }
 
@@ -111,9 +111,9 @@ const Container = styled(ModalLayout)``;
 const Body = styled(ModalLayout.Body)``;
 const Footer = styled(ModalLayout.Footer)``;
 
-export async function openDetailModal(params: ExampleModalRequest = {}) {
+export async function openDetailModal(params: ModalRequest = {}) {
   const openModal = useModalStore.getState().openModal;
-  return await openModal<ExampleModalResponse>((open, resolve, reject, onClose, afterClose) => (
+  return await openModal<ModalResponse>((open, resolve, reject, onClose, afterClose) => (
     <DetailModal open={open} onOk={resolve} onCancel={onClose} afterClose={afterClose} params={params} />
   ));
 }

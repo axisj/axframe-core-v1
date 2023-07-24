@@ -72,7 +72,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setListColWidths: (colWidths) => set({ listColWidths: colWidths }),
   setListSpinning: (spinning) => set({ listSpinning: spinning }),
   setListSortParams: (sortParams) => set({ listSortParams: sortParams }),
-  callListApi: async (request = { pageNumber: 1 }) => {
+  callListApi: async (request) => {
     if (get().listSpinning) return;
     await set({ listSpinning: true });
 
@@ -81,6 +81,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       const response = await ExampleService.list(apiParam);
 
       set({
+        listRequestValue: apiParam,
         listData: response.ds.map((values) => ({
           values,
         })),
@@ -98,13 +99,6 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
   changeListPage: async (pageNumber, pageSize) => {
-    set({
-      listRequestValue: {
-        ...get().listRequestValue,
-        pageNumber,
-        pageSize,
-      },
-    });
     await get().callListApi({
       pageNumber,
       pageSize,

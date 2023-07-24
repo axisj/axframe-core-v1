@@ -41,7 +41,9 @@ function App({}: Props) {
 
   const handleSearch = React.useCallback(async () => {
     try {
-      await callListApi();
+      await callListApi({
+        pageNumber: 1,
+      });
     } catch (e) {
       await errorHandling(e);
     }
@@ -108,13 +110,7 @@ function App({}: Props) {
         </ProgramTitle>
 
         <ButtonGroup compact>
-          <Button
-            onClick={() => {
-              callListApi();
-            }}
-          >
-            {t.button.search}
-          </Button>
+          <Button onClick={handleSearch}>{t.button.search}</Button>
         </ButtonGroup>
       </Header>
 
