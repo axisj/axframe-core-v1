@@ -14,6 +14,7 @@ interface Props {
   title?: string;
   icon?: React.ReactNode;
   disableIcon?: boolean;
+  disableBreadcrumb?: boolean;
   spinning?: boolean;
   children?: React.ReactNode;
 }
@@ -25,7 +26,7 @@ interface BreadCrumb {
   children: AppMenu[];
 }
 
-function ProgramTitle({ title, icon, disableIcon, spinning, children }: Props) {
+function ProgramTitle({ title, icon, disableIcon, disableBreadcrumb, spinning, children }: Props) {
   const { currentLanguage } = useI18n();
   const { APP_MENUS, MENUS_LIST } = useAppMenu();
   const { linkByRoute } = useLink();
@@ -112,7 +113,7 @@ function ProgramTitle({ title, icon, disableIcon, spinning, children }: Props) {
     <Container>
       {spinning ? <Spinner /> : disableIcon ? null : icon ?? <MenuIcon typeName={iconTy ?? "Default"} fontSize={22} />}
       <TitleWrap>{title ?? currentMenu?.multiLanguage[currentLanguage]}</TitleWrap>
-      <Breadcrumb items={bItems} />
+      {!disableBreadcrumb && <Breadcrumb items={bItems} />}
       {children}
     </Container>
   );
