@@ -8,6 +8,7 @@ import { PageLayout } from "styles/pageStyled";
 import { DateType, SearchParam, SearchParamOption, SearchParamType } from "./SearchParam";
 import { deleteEmptyValue, getDayJsRangeValue } from "@core/utils/object";
 import dayjs from "dayjs";
+import { css } from "@emotion/react";
 
 export interface IParam {
   name: string;
@@ -45,6 +46,7 @@ interface Props {
   filterWidth?: number;
   filterLabel?: string;
   disableFilter?: boolean;
+  labelMinWidth?: number;
 }
 
 export function SearchParams({
@@ -61,6 +63,7 @@ export function SearchParams({
   filterWidth,
   filterLabel,
   disableFilter = false,
+  labelMinWidth = 60,
 }: Props) {
   const [showChildren, setShowChildren] = React.useState(false);
 
@@ -142,7 +145,7 @@ export function SearchParams({
           );
         })}
       <Container>
-        <DefaultWrap role={"page-search-bar"}>
+        <DefaultWrap role={"page-search-bar"} labelMinWidth={labelMinWidth}>
           {params && params?.length > 0 && (
             <Space wrap align={"center"} size={[5, 5]}>
               {params.map((param, idx) => {
@@ -204,7 +207,7 @@ const Container = styled.div`
   flex: 1;
 `;
 
-const DefaultWrap = styled.div`
+const DefaultWrap = styled.div<{ labelMinWidth: number }>`
   ${SMixinFlexRow("stretch", "center")};
   gap: 6px;
   margin-bottom: 15px;
@@ -213,7 +216,12 @@ const DefaultWrap = styled.div`
   }
 
   .ant-form-item .ant-form-item-label > label {
-    min-width: 60px;
+    ${({ labelMinWidth }) => {
+      return css`
+        min-width: ${labelMinWidth}px;
+      `;
+    }};
+    letter-spacing: -1px;
   }
 `;
 
