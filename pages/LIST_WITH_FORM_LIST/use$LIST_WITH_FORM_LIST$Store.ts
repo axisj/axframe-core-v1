@@ -7,14 +7,14 @@ import {
 } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGDataItemStatus, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
-import { setMetaDataByPath } from "@core/stores/usePageTabStore";
+import { getTabStoreListener } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
-import { omit, pick } from "lodash";
+import { omit } from "lodash";
 import { convertDateToString } from "@core/utils/object";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
 import { ProgramFn } from "@types";
@@ -240,23 +240,23 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
 
-  syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = [
-      "programFn",
-      "listSortParams",
-      "listRequestValue",
-      "listColWidths",
-      "listSelectedRowKey",
-      "flexGrow",
-      "saveRequestValue",
-      "detail",
-      "formActive",
-      "subListCheckedIndexes",
-      "subListSelectedRowKey",
-      "subListColWidths",
-      "subListData",
-    ];
-    set(pick(metaData ?? createState, metaDataKeys));
+  syncMetadata: (s = createState) => {
+    const metaData: MetaData = {
+      programFn: s.programFn,
+      listSortParams: s.listSortParams,
+      listRequestValue: s.listRequestValue,
+      listColWidths: s.listColWidths,
+      listSelectedRowKey: s.listSelectedRowKey,
+      flexGrow: s.flexGrow,
+      saveRequestValue: s.saveRequestValue,
+      detail: s.detail,
+      formActive: s.formActive,
+      subListCheckedIndexes: s.subListCheckedIndexes,
+      subListSelectedRowKey: s.subListSelectedRowKey,
+      subListColWidths: s.subListColWidths,
+      subListData: s.subListData,
+    };
+    set(metaData);
   },
   ...pageStoreActions(set, get, { createState }),
 });
@@ -273,51 +273,21 @@ export const use$LIST_WITH_FORM_LIST$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST_WITH_FORM_LIST$Store.subscribe(
-  (s) => [
-    s.programFn,
-    s.listSortParams,
-    s.listRequestValue,
-    s.listColWidths,
-    s.listSelectedRowKey,
-    s.flexGrow,
-    s.saveRequestValue,
-    s.detail,
-    s.formActive,
-    s.subListCheckedIndexes,
-    s.subListSelectedRowKey,
-    s.subListColWidths,
-    s.subListData,
-  ],
-  ([
-    programFn,
-    listSortParams,
-    listRequestValue,
-    listColWidths,
-    listSelectedRowKey,
-    flexGrow,
-    saveRequestValue,
-    detail,
-    formActive,
-    subListCheckedIndexes,
-    subListSelectedRowKey,
-    subListColWidths,
-    subListData,
-  ]) => {
-    setMetaDataByPath<MetaData>(createState.routePath, {
-      programFn,
-      listSortParams,
-      listRequestValue,
-      listColWidths,
-      listSelectedRowKey,
-      flexGrow,
-      saveRequestValue,
-      detail,
-      formActive,
-      subListCheckedIndexes,
-      subListSelectedRowKey,
-      subListColWidths,
-      subListData,
-    });
-  },
+  (s): MetaData => ({
+    programFn: s.programFn,
+    listSortParams: s.listSortParams,
+    listRequestValue: s.listRequestValue,
+    listColWidths: s.listColWidths,
+    listSelectedRowKey: s.listSelectedRowKey,
+    flexGrow: s.flexGrow,
+    saveRequestValue: s.saveRequestValue,
+    detail: s.detail,
+    formActive: s.formActive,
+    subListCheckedIndexes: s.subListCheckedIndexes,
+    subListSelectedRowKey: s.subListSelectedRowKey,
+    subListColWidths: s.subListColWidths,
+    subListData: s.subListData,
+  }),
+  getTabStoreListener<MetaData>(createState.routePath),
   { equalityFn: shallow }
 );

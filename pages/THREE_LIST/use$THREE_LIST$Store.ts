@@ -1,14 +1,13 @@
 import { create } from "zustand";
 import { ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGDataItemStatus } from "@axframe/datagrid";
-import { setMetaDataByPath } from "@core/stores/usePageTabStore";
+import { getTabStoreListener } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
-import { pick } from "lodash";
 import { ExampleService } from "services";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
 import { ProgramFn } from "@types";
@@ -240,21 +239,21 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
 
-  syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = [
-      "programFn",
-      "listRequestValue",
-      "listAColWidths",
-      "listASelectedRowKey",
-      "listACheckedIndexes",
-      "listBColWidths",
-      "listBSelectedRowKey",
-      "listBCheckedIndexes",
-      "listCColWidths",
-      "listCSelectedRowKey",
-      "listCCheckedIndexes",
-    ];
-    set(pick(metaData ?? createState, metaDataKeys));
+  syncMetadata: (s = createState) => {
+    const metaData: MetaData = {
+      programFn: s.programFn,
+      listRequestValue: s.listRequestValue,
+      listAColWidths: s.listAColWidths,
+      listASelectedRowKey: s.listASelectedRowKey,
+      listACheckedIndexes: s.listACheckedIndexes,
+      listBColWidths: s.listBColWidths,
+      listBSelectedRowKey: s.listBSelectedRowKey,
+      listBCheckedIndexes: s.listBCheckedIndexes,
+      listCColWidths: s.listCColWidths,
+      listCSelectedRowKey: s.listCSelectedRowKey,
+      listCCheckedIndexes: s.listCCheckedIndexes,
+    };
+    set(metaData);
   },
 
   ...pageStoreActions(set, get, { createState }),
@@ -272,45 +271,19 @@ export const use$THREE_LIST$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$THREE_LIST$Store.subscribe(
-  (s) => [
-    s.programFn,
-    s.listRequestValue,
-    s.listAColWidths,
-    s.listASelectedRowKey,
-    s.listACheckedIndexes,
-    s.listBColWidths,
-    s.listBSelectedRowKey,
-    s.listBCheckedIndexes,
-    s.listCColWidths,
-    s.listCSelectedRowKey,
-    s.listCCheckedIndexes,
-  ],
-  ([
-    programFn,
-    listRequestValue,
-    listAColWidths,
-    listASelectedRowKey,
-    listACheckedIndexes,
-    listBColWidths,
-    listBSelectedRowKey,
-    listBCheckedIndexes,
-    listCColWidths,
-    listCSelectedRowKey,
-    listCCheckedIndexes,
-  ]) => {
-    setMetaDataByPath<MetaData>(createState.routePath, {
-      programFn,
-      listRequestValue,
-      listAColWidths,
-      listASelectedRowKey,
-      listACheckedIndexes,
-      listBColWidths,
-      listBSelectedRowKey,
-      listBCheckedIndexes,
-      listCColWidths,
-      listCSelectedRowKey,
-      listCCheckedIndexes,
-    });
-  },
+  (s): MetaData => ({
+    programFn: s.programFn,
+    listRequestValue: s.listRequestValue,
+    listAColWidths: s.listAColWidths,
+    listASelectedRowKey: s.listASelectedRowKey,
+    listACheckedIndexes: s.listACheckedIndexes,
+    listBColWidths: s.listBColWidths,
+    listBSelectedRowKey: s.listBSelectedRowKey,
+    listBCheckedIndexes: s.listBCheckedIndexes,
+    listCColWidths: s.listCColWidths,
+    listCSelectedRowKey: s.listCSelectedRowKey,
+    listCCheckedIndexes: s.listCCheckedIndexes,
+  }),
+  getTabStoreListener<MetaData>(createState.routePath),
   { equalityFn: shallow }
 );

@@ -3,13 +3,12 @@ import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleR
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
 import { errorDialog } from "@core/components/dialogs/errorDialog";
-import { setMetaDataByPath } from "@core/stores/usePageTabStore";
+import { getTabStoreListener } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
-import { pick } from "lodash";
 import { ProgramFn } from "@types";
 
 interface ListRequest extends ExampleListRequest {}
@@ -119,9 +118,14 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       await set({ detailSpinning: false });
     }
   },
-  syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = ["programFn", "listSortParams", "listRequestValue", "listColWidths"];
-    set(pick(metaData ?? createState, metaDataKeys));
+  syncMetadata: (s = createState) => {
+    const metaData: MetaData = {
+      programFn: s.programFn,
+      listSortParams: s.listSortParams,
+      listRequestValue: s.listRequestValue,
+      listColWidths: s.listColWidths,
+    };
+    set(metaData);
   },
 
   ...pageStoreActions(set, get, { createState }),
@@ -138,14 +142,12 @@ export const use$LIST_AND_DRAWER$Store = create(
 );
 
 use$LIST_AND_DRAWER$Store.subscribe(
-  (s) => [s.programFn, s.listSortParams, s.listRequestValue, s.listColWidths],
-  ([programFn, listSortParams, listRequestValue, listColWidths]) => {
-    setMetaDataByPath<MetaData>(createState.routePath, {
-      programFn,
-      listSortParams,
-      listRequestValue,
-      listColWidths,
-    });
-  },
+  (s): MetaData => ({
+    programFn: s.programFn,
+    listSortParams: s.listSortParams,
+    listRequestValue: s.listRequestValue,
+    listColWidths: s.listColWidths,
+  }),
+  getTabStoreListener<MetaData>(createState.routePath),
   { equalityFn: shallow }
 );

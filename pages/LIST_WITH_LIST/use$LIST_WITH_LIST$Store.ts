@@ -2,14 +2,13 @@ import { create } from "zustand";
 import { ExampleItem, ExampleListRequest, ExampleSubItem } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGDataItemStatus, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
-import { setMetaDataByPath } from "@core/stores/usePageTabStore";
+import { getTabStoreListener } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
-import { pick } from "lodash";
 import { addDataGridList, delDataGridList } from "@core/utils/array";
 import { ProgramFn } from "@types";
 
@@ -191,20 +190,20 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     }
   },
 
-  syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = [
-      "programFn",
-      "listRequestValue",
-      "listColWidths",
-      "listSortParams",
-      "listSelectedRowKey",
-      "flexGrow",
-      "childListColWidths",
-      "childListSelectedRowKey",
-      "childListCheckedIndexes",
-      "childListData",
-    ];
-    set(pick(metaData ?? createState, metaDataKeys));
+  syncMetadata: (s = createState) => {
+    const metaData: MetaData = {
+      programFn: s.programFn,
+      listRequestValue: s.listRequestValue,
+      listColWidths: s.listColWidths,
+      listSortParams: s.listSortParams,
+      listSelectedRowKey: s.listSelectedRowKey,
+      flexGrow: s.flexGrow,
+      childListColWidths: s.childListColWidths,
+      childListSelectedRowKey: s.childListSelectedRowKey,
+      childListCheckedIndexes: s.childListCheckedIndexes,
+      childListData: s.childListData,
+    };
+    set(metaData);
   },
 
   ...pageStoreActions(set, get, { createState }),
@@ -222,42 +221,18 @@ export const use$LIST_WITH_LIST$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST_WITH_LIST$Store.subscribe(
-  (s) => [
-    s.programFn,
-    s.listRequestValue,
-    s.listColWidths,
-    s.listSortParams,
-    s.listSelectedRowKey,
-    s.flexGrow,
-    s.childListColWidths,
-    s.childListSelectedRowKey,
-    s.childListCheckedIndexes,
-    s.childListData,
-  ],
-  ([
-    programFn,
-    listRequestValue,
-    listColWidths,
-    listSortParams,
-    listSelectedRowKey,
-    flexGrow,
-    childListColWidths,
-    childListSelectedRowKey,
-    childListCheckedIndexes,
-    childListData,
-  ]) => {
-    setMetaDataByPath<MetaData>(createState.routePath, {
-      programFn,
-      listRequestValue,
-      listColWidths,
-      listSortParams,
-      listSelectedRowKey,
-      flexGrow,
-      childListColWidths,
-      childListSelectedRowKey,
-      childListCheckedIndexes,
-      childListData,
-    });
-  },
+  (s): MetaData => ({
+    programFn: s.programFn,
+    listRequestValue: s.listRequestValue,
+    listColWidths: s.listColWidths,
+    listSortParams: s.listSortParams,
+    listSelectedRowKey: s.listSelectedRowKey,
+    flexGrow: s.flexGrow,
+    childListColWidths: s.childListColWidths,
+    childListSelectedRowKey: s.childListSelectedRowKey,
+    childListCheckedIndexes: s.childListCheckedIndexes,
+    childListData: s.childListData,
+  }),
+  getTabStoreListener<MetaData>(createState.routePath),
   { equalityFn: shallow }
 );

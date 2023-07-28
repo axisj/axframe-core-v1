@@ -41,7 +41,7 @@ export interface TabsActions {
   clearTab: () => void;
   getPageByPath: (path: string) => TabPage | undefined;
   getTabMetaDataByPath: <T extends Record<string, any>>(path: string) => T | undefined;
-  setTabMetaDataByPath: <T extends Record<string, any>>(path: string, metaData: Record<keyof T, any>) => void;
+  setTabMetaDataByPath: <T extends Record<string, any>>(path: string, metaData: Partial<Record<keyof T, any>>) => void;
 }
 
 export interface TabsStore extends PagesGroup, TabsActions {}
@@ -209,7 +209,10 @@ usePageTabStore.persist.onFinishHydration((state) => {
   }
 });
 
-export const setMetaDataByPath = <T extends Record<string, any>>(routePath: string, metaData: Record<keyof T, any>) => {
+export const setMetaDataByPath = <T extends Record<string, any>>(
+  routePath: string,
+  metaData: Partial<Record<keyof T, any>>
+) => {
   usePageTabStore.getState().setTabMetaDataByPath<T>(routePath, metaData);
 };
 
@@ -229,4 +232,10 @@ export const removeTabByPath = (routePath: string) => {
   if (tabPage) {
     usePageTabStore.getState().removeTab(tabPage.tabUuid);
   }
+};
+
+export const getTabStoreListener = <T extends Record<string, any>>(routerPath: string) => {
+  return (metaData: T) => {
+    setMetaDataByPath<T>(routerPath, metaData);
+  };
 };

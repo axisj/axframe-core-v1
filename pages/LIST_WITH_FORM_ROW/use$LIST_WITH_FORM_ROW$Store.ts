@@ -2,14 +2,13 @@ import { create } from "zustand";
 import { ExampleItem, ExampleListRequest, ExampleSaveRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
-import { setMetaDataByPath } from "@core/stores/usePageTabStore";
+import { getTabStoreListener } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import React from "react";
 import { ROUTES } from "router/Routes";
-import { pick } from "lodash";
 import { convertDateToString } from "@core/utils/object";
 import { ProgramFn } from "@types";
 
@@ -157,19 +156,19 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set({ formActive: true, detail: undefined, saveRequestValue: undefined });
   },
 
-  syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = [
-      "programFn",
-      "listSortParams",
-      "listRequestValue",
-      "listColWidths",
-      "listSelectedRowKey",
-      "flexGrow",
-      "saveRequestValue",
-      "detail",
-      "formActive",
-    ];
-    set(pick(metaData ?? createState, metaDataKeys));
+  syncMetadata: (s = createState) => {
+    const metaData: MetaData = {
+      programFn: s.programFn,
+      listSortParams: s.listSortParams,
+      listRequestValue: s.listRequestValue,
+      listColWidths: s.listColWidths,
+      listSelectedRowKey: s.listSelectedRowKey,
+      flexGrow: s.flexGrow,
+      saveRequestValue: s.saveRequestValue,
+      detail: s.detail,
+      formActive: s.formActive,
+    };
+    set(metaData);
   },
   ...pageStoreActions(set, get, { createState }),
 });
@@ -186,39 +185,17 @@ export const use$LIST_WITH_FORM_ROW$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST_WITH_FORM_ROW$Store.subscribe(
-  (s) => [
-    s.programFn,
-    s.listSortParams,
-    s.listRequestValue,
-    s.listColWidths,
-    s.listSelectedRowKey,
-    s.flexGrow,
-    s.saveRequestValue,
-    s.detail,
-    s.formActive,
-  ],
-  ([
-    programFn,
-    listSortParams,
-    listRequestValue,
-    listColWidths,
-    listSelectedRowKey,
-    flexGrow,
-    saveRequestValue,
-    detail,
-    formActive,
-  ]) => {
-    setMetaDataByPath<MetaData>(createState.routePath, {
-      programFn,
-      listSortParams,
-      listRequestValue,
-      listColWidths,
-      listSelectedRowKey,
-      flexGrow,
-      saveRequestValue,
-      detail,
-      formActive,
-    });
-  },
+  (s): MetaData => ({
+    programFn: s.programFn,
+    listSortParams: s.listSortParams,
+    listRequestValue: s.listRequestValue,
+    listColWidths: s.listColWidths,
+    listSelectedRowKey: s.listSelectedRowKey,
+    flexGrow: s.flexGrow,
+    saveRequestValue: s.saveRequestValue,
+    detail: s.detail,
+    formActive: s.formActive,
+  }),
+  getTabStoreListener<MetaData>(createState.routePath),
   { equalityFn: shallow }
 );

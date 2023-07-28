@@ -5,13 +5,12 @@ import {
   ExampleStatRequest,
 } from "@core/services/example/ExampleRepositoryInterface";
 import { ExampleService } from "services";
-import { setMetaDataByPath } from "@core/stores/usePageTabStore";
+import { getTabStoreListener } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
 import { pageStoreActions } from "@core/stores/pageStoreActions";
 import { ROUTES } from "router/Routes";
-import { pick } from "lodash";
 import { StatCol } from "@core/components/statTable";
 import { ProgramFn } from "@types";
 
@@ -90,17 +89,17 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
   setColGroupsPg1: (colGroups) => set({ colGroupsPg1: colGroups }),
   setColGroupsPg2: (colGroups) => set({ colGroupsPg2: colGroups }),
 
-  syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = [
-      "programFn",
-      "listRequestValue",
-      "colGroupsPg1",
-      "colGroupsPg2",
-      "activeTabKey",
-      "flexGrowPg1",
-      "flexGrowPg2",
-    ];
-    set(pick(metaData ?? createState, metaDataKeys));
+  syncMetadata: (s = createState) => {
+    const metaData: MetaData = {
+      programFn: s.programFn,
+      listRequestValue: s.listRequestValue,
+      colGroupsPg1: s.colGroupsPg1,
+      colGroupsPg2: s.colGroupsPg2,
+      activeTabKey: s.activeTabKey,
+      flexGrowPg1: s.flexGrowPg1,
+      flexGrowPg2: s.flexGrowPg2,
+    };
+    set(metaData);
   },
 
   ...pageStoreActions(set, get, { createState }),
@@ -118,25 +117,15 @@ export const use$STATS$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$STATS$Store.subscribe(
-  (s) => [
-    s.programFn,
-    s.listRequestValue,
-    s.colGroupsPg1,
-    s.colGroupsPg2,
-    s.activeTabKey,
-    s.flexGrowPg1,
-    s.flexGrowPg2,
-  ],
-  ([programFn, listRequestValue, colGroupsPg1, colGroupsPg2, activeTabKey, flexGrowPg1, flexGrowPg2]) => {
-    setMetaDataByPath<MetaData>(createState.routePath, {
-      programFn,
-      listRequestValue,
-      colGroupsPg1,
-      colGroupsPg2,
-      activeTabKey,
-      flexGrowPg1,
-      flexGrowPg2,
-    });
-  },
+  (s): MetaData => ({
+    programFn: s.programFn,
+    listRequestValue: s.listRequestValue,
+    colGroupsPg1: s.colGroupsPg1,
+    colGroupsPg2: s.colGroupsPg2,
+    activeTabKey: s.activeTabKey,
+    flexGrowPg1: s.flexGrowPg1,
+    flexGrowPg2: s.flexGrowPg2,
+  }),
+  getTabStoreListener<MetaData>(createState.routePath),
   { equalityFn: shallow }
 );
