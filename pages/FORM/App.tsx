@@ -56,7 +56,7 @@ function App({}: Props) {
     <Container>
       <Header>
         <ProgramTitle icon={<AXFIWriteForm />} title={t.pages.example.form.title}>
-          <Button icon={<AXFIRevert />} onClick={reset} size='small' type={"ghost"}>
+          <Button icon={<AXFIRevert />} onClick={reset} size='small' type={"text"}>
             {t.button.reset}
           </Button>
         </ProgramTitle>

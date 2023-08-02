@@ -107,7 +107,7 @@ function App({}: Props) {
     <Container stretch role={"page-container"}>
       <Header>
         <ProgramTitle title={t.pages.example.listWithList.title}>
-          <Button icon={<AXFIRevert />} onClick={handleReset} size='small' type={"ghost"}>
+          <Button icon={<AXFIRevert />} onClick={handleReset} size='small' type={"text"}>
             {t.button.reset}
           </Button>
         </ProgramTitle>
