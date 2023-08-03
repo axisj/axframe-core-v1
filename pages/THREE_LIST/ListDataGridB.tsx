@@ -93,7 +93,7 @@ function ListDataGridB({ onClick }: Props) {
 
         return column;
       }),
-    [t, listBColWidths]
+    [listBColWidths]
   );
 
   return (
