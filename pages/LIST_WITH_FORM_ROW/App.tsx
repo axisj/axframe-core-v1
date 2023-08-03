@@ -68,7 +68,7 @@ function App({}: Props) {
     } catch (e) {
       await errorHandling(e);
     }
-  }, [callListApi, errorDialog]);
+  }, [callListApi]);
 
   const handleSave = useCallback(async () => {
     try {
@@ -80,11 +80,15 @@ function App({}: Props) {
 
     try {
       await callSaveApi();
-      await reset();
+      await callListApi();
+      if (!listSelectedRowKey) {
+        cancelFormActive();
+        setFormActive();
+      }
     } catch (e) {
       await errorHandling(e as any);
     }
-  }, [form, callSaveApi, reset, errorDialog]);
+  }, [form, callSaveApi, callListApi, listSelectedRowKey, cancelFormActive, setFormActive]);
 
   const params = React.useMemo(
     () =>

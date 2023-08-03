@@ -71,11 +71,15 @@ function App({}: Props) {
 
     try {
       await callSaveApi();
-      await reset();
+      await callListApi();
+      if (!listSelectedRowKey) {
+        cancelFormActive();
+        setFormActive();
+      }
     } catch (e) {
       await errorHandling(e);
     }
-  }, [callSaveApi, form, reset]);
+  }, [callListApi, callSaveApi, cancelFormActive, form, listSelectedRowKey, setFormActive]);
 
   const onClickItem = React.useCallback(
     (params: AXFDGClickParams<DtoItem>) => {
