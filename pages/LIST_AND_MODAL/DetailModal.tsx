@@ -114,7 +114,7 @@ const Footer = styled(ModalLayout.Footer)``;
 export async function openDetailModal(params: ModalRequest = {}) {
   const openModal = useModalStore.getState().openModal;
   return await openModal<ModalResponse>((open, resolve, reject, onClose, afterClose) => (
-    <DetailModal open={open} onOk={resolve} onCancel={onClose} afterClose={afterClose} params={params} />
+    <DetailModal open={open} onOk={resolve} onCancel={reject} afterClose={afterClose} params={params} />
   ));
 }
 

@@ -75,7 +75,7 @@ const Footer = styled(ModalLayout.Footer)``;
 export async function openPromptDialog(params: PromptDialogRequest) {
   const openModal = useModalStore.getState().openModal;
   return await openModal<PromptDialogResponse>((open, resolve, reject, onClose, afterClose) => (
-    <PromptModal open={open} onOk={resolve} onCancel={onClose} afterClose={afterClose} params={params} />
+    <PromptModal open={open} onOk={resolve} onCancel={reject} afterClose={afterClose} params={params} />
   ));
 }
 
