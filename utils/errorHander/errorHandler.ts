@@ -8,6 +8,9 @@ export async function errorHandler(err: any, msgs?: Record<string, any>) {
   if (err === "confirm_cancel") {
     return true;
   }
+  if (err?.nativeEvent) {
+    return true;
+  }
   if (err?.code) {
     if (err.code === "ERR_CANCELED") {
       return true;

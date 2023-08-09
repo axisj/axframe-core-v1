@@ -58,11 +58,15 @@ export const useModalStore = create<ModalStore>((set, get) => ({
         get().closeModal(id);
       };
       modal.onClose = (evt) => {
-        if (evt.target["tagName"] !== "INPUT" && evt.target["tagName"] !== "TEXTAREA") {
+        if (evt?.target && evt?.currentTarget) {
+          if (evt.target["tagName"] !== "INPUT" && evt.target["tagName"] !== "TEXTAREA") {
+            modal.reject();
+            return;
+          }
+          evt.currentTarget["focus"]();
+        } else {
           modal.reject();
-          return;
         }
-        evt.currentTarget["focus"]();
       };
       modal.afterClose = () => {
         get().removeModal(id);

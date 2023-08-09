@@ -34,34 +34,33 @@ function ListDataGrid({ onClick }: Props) {
     [setListColWidths]
   );
 
-  const columns = React.useMemo(
-    () =>
-      (
-        [
-          { key: "id", label: t.pages.example.datagrid.id, align: "left", width: 80 },
-          { key: "name", label: t.pages.example.datagrid.성명, align: "left", width: 80 },
-          { key: "cnsltDt", label: t.pages.example.datagrid.상담일, align: "left", width: 100 },
-          { key: "area", label: t.pages.example.datagrid.행정구, align: "left", width: 80 },
-          { key: "birthDt", label: t.pages.example.datagrid.생년월일, align: "center", width: 120 },
-          { key: "phone1", label: t.pages.example.datagrid.연락처, align: "center", width: 150 },
-          { key: "cnsltHow", label: t.pages.example.datagrid.상담방법, align: "left", width: 100 },
-          { key: "cnsltPath", label: t.pages.example.datagrid.상담경로, align: "left", width: 150 },
-          { key: "fmTyp", label: t.pages.example.datagrid.가구유형, align: "left", width: 100 },
-          { key: "homeTyp", label: t.pages.example.datagrid.거주형태, align: "left", width: 100 },
-          { key: "fldA", label: t.pages.example.datagrid.수급, align: "left", width: 100 },
-          { key: "hopePoint", label: t.pages.example.datagrid.주요욕구, align: "left", width: 150 },
-          { key: "updatedByNm", label: t.pages.example.datagrid.상담원, align: "left", width: 120 },
-        ] as AXFDGColumn<DtoItem>[]
-      ).map((column, colIndex) => {
-        if (listColWidths.length > 0) {
-          column.width = listColWidths[colIndex];
-          return column;
-        }
-
+  const columns = React.useMemo(() => {
+    const datagrid = t.pages.example.datagrid;
+    return (
+      [
+        { key: "id", label: datagrid.id, align: "left", width: 80 },
+        { key: "name", label: datagrid.성명, align: "left", width: 80 },
+        { key: "cnsltDt", label: datagrid.상담일, align: "left", width: 100 },
+        { key: "area", label: datagrid.행정구, align: "left", width: 80 },
+        { key: "birthDt", label: datagrid.생년월일, align: "center", width: 120 },
+        { key: "phone1", label: datagrid.연락처, align: "center", width: 150 },
+        { key: "cnsltHow", label: datagrid.상담방법, align: "left", width: 100 },
+        { key: "cnsltPath", label: datagrid.상담경로, align: "left", width: 150 },
+        { key: "fmTyp", label: datagrid.가구유형, align: "left", width: 100 },
+        { key: "homeTyp", label: datagrid.거주형태, align: "left", width: 100 },
+        { key: "fldA", label: datagrid.수급, align: "left", width: 100 },
+        { key: "hopePoint", label: datagrid.주요욕구, align: "left", width: 150 },
+        { key: "updatedByNm", label: datagrid.상담원, align: "left", width: 120 },
+      ] as AXFDGColumn<DtoItem>[]
+    ).map((column, colIndex) => {
+      if (listColWidths.length > 0) {
+        column.width = listColWidths[colIndex];
         return column;
-      }),
-    [t, listColWidths]
-  );
+      }
+
+      return column;
+    });
+  }, [t, listColWidths]);
 
   return (
     <>
