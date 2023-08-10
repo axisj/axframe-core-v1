@@ -157,20 +157,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
     set({ formActive: true, detail: undefined, saveRequestValue: undefined });
   },
 
-  syncMetadata: (s = createState) => {
-    const metaData: MetaData = {
-      programFn: s.programFn,
-      listSortParams: s.listSortParams,
-      listRequestValue: s.listRequestValue,
-      listColWidths: s.listColWidths,
-      listSelectedRowKey: s.listSelectedRowKey,
-      flexGrow: s.flexGrow,
-      saveRequestValue: s.saveRequestValue,
-      detail: s.detail,
-      formActive: s.formActive,
-    };
-    set(metaData);
-  },
+  syncMetadata: (s = createState) => set(s),
   ...pageStoreActions(set, get, { createState }),
 });
 

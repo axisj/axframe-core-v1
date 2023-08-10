@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { ExampleItem, ExampleListRequest } from "@core/services/example/ExampleRepositoryInterface";
 import { AXFDGDataItem, AXFDGPage, AXFDGSortParam } from "@axframe/datagrid";
 import { ExampleService } from "services";
-import { setMetaDataByPath } from "@core/stores/usePageTabStore";
+import { getTabStoreListener, setMetaDataByPath } from "@core/stores/usePageTabStore";
 import { subscribeWithSelector } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { PageStoreActions, StoreActions } from "@core/stores/types";
@@ -98,10 +98,7 @@ const createActions: StoreActions<States & Actions, Actions> = (set, get) => ({
       pageSize,
     });
   },
-  syncMetadata: (metaData) => {
-    const metaDataKeys: (keyof MetaData)[] = ["programFn", "listSortParams", "listRequestValue", "listColWidths"];
-    set(pick(metaData ?? createState, metaDataKeys));
-  },
+  syncMetadata: (s = createState) => set(s),
 
   ...pageStoreActions(set, get, { createState }),
 });
@@ -118,14 +115,12 @@ export const use$LIST$Store = create(
 
 // pageModel 에 저장할 대상 모델 셀렉터 정의
 use$LIST$Store.subscribe(
-  (s) => [s.programFn, s.listSortParams, s.listRequestValue, s.listColWidths],
-  ([programFn, listSortParams, listRequestValue, listColWidths]) => {
-    setMetaDataByPath<MetaData>(createState.routePath, {
-      programFn,
-      listSortParams,
-      listRequestValue,
-      listColWidths,
-    });
-  },
+  (s): MetaData => ({
+    programFn: s.programFn,
+    listSortParams: s.listSortParams,
+    listRequestValue: s.listRequestValue,
+    listColWidths: s.listColWidths,
+  }),
+  getTabStoreListener<MetaData>(createState.routePath),
   { equalityFn: shallow }
 );
