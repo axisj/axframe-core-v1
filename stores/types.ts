@@ -7,7 +7,7 @@ export type StoreActions<T, R> = (set: ZustandSetter<T>, get: ZustandGetter<T>) 
 export interface PageStoreActions<T> {
   syncMetadata: (metaData?: T) => void;
   onMountApp: () => Promise<void>;
-  init: () => void;
+  init: () => Promise<void>;
   reset: () => void;
   destroy: () => void;
 }

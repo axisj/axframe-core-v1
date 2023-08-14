@@ -2,11 +2,16 @@ import { toNumber } from "./";
 
 export function toMoney(value: unknown): string {
   const n = toNumber(value);
+  let fractionDigit = 0;
 
-  return Number.isNaN(n)
-    ? String(value)
-    : n
-        .toFixed(0)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (Number.isNaN(n)) {
+    return String(value);
+  } else if (!Number.isInteger(n)) {
+    fractionDigit = 2;
+  }
+
+  return n
+    .toFixed(fractionDigit)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
