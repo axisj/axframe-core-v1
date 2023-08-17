@@ -7,7 +7,6 @@ import { Breadcrumb } from "antd";
 import { useI18n, useLink } from "../../hooks";
 import { AppMenu } from "../../../services";
 import { matchPath } from "react-router-dom";
-import { Loading } from "./Loading";
 import { Spinner } from "./Spinner";
 
 interface Props {
@@ -30,10 +29,17 @@ function ProgramTitle({ title, icon, disableIcon, disableBreadcrumb, spinning, c
   const { currentLanguage } = useI18n();
   const { APP_MENUS, MENUS_LIST } = useAppMenu();
   const { linkByRoute } = useLink();
-  const currentRoute = React.useMemo(() => ROUTES_LIST.find((route) => matchPath(route.path, location.pathname)), []);
+  const currentRoute = React.useMemo(
+    () =>
+      ROUTES_LIST.find((route) => {
+        // console.log("ROUTES_LIST", route.key, route.path, location.pathname, matchPath(route.path, location.pathname));
+        return matchPath(route.path, location.pathname);
+      }),
+    []
+  );
 
   const { iconTy, breadCrumbs } = React.useMemo(() => {
-    const currentMenu = MENUS_LIST.find((m) => m.progCd === currentRoute?.program_type);
+    const currentMenu = MENUS_LIST.find((m) => m.progCd && m.progCd === currentRoute?.program_type);
 
     const breadCrumbs: BreadCrumb[] = [];
     currentMenu?.keyPath?.reduce((acc, cur) => {
@@ -105,7 +111,7 @@ function ProgramTitle({ title, icon, disableIcon, disableBreadcrumb, spinning, c
 
   const currentMenu = React.useMemo(() => {
     if (currentRoute) {
-      return MENUS_LIST.find((m) => m.progCd === currentRoute.program_type);
+      return MENUS_LIST.find((m) => m.progCd && m.progCd === currentRoute.program_type);
     }
   }, [MENUS_LIST, currentRoute]);
 

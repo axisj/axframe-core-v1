@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useContainerSize } from "@core/hooks";
 import { StatDataGrid } from "@core/components/StatDataGrid";
 import { use$STATS$Store } from "./use$STATS$Store";
-import { StatRowTd } from "../../components/statTable";
+import { StatRowTd } from "@core/components/statTable";
 
 interface Props {}
 
