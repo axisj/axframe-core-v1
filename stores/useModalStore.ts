@@ -35,7 +35,7 @@ export interface ModalModel {
 }
 
 export interface ModalActions {
-  openModal: <T = void>(modalFactory: ModalFactory<T>) => Promise<T>;
+  openModal: <T = void>(modalFactory: ModalFactory<T>, id?: string) => Promise<T>;
   closeModal: (id?: string) => void;
   removeModal: (id?: string) => void;
 }
@@ -44,9 +44,14 @@ export interface ModalStore extends ModalModel, ModalActions {}
 
 export const useModalStore = create<ModalStore>((set, get) => ({
   modals: new Map(),
-  openModal: <T = void>(modalFactory) => {
+  openModal: <T = void>(modalFactory, id) => {
     return new Promise<T>((resolve, reject) => {
-      const id = uuidv4();
+      if (!id) id = uuidv4();
+
+      if (get().modals.get(id)) {
+        return;
+      }
+
       const modal = new ModalModelClass({ id, modalFactory });
 
       modal.resolve = (value) => {
