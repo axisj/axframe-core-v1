@@ -53,9 +53,9 @@ export function ChartJS({ chartType, labels, datasets }: ChartJSProps) {
           },
         },
         plugins: {
-          legend: {
-            position: "right" as const,
-          },
+          // legend: {
+          //   position: "right" as const,
+          // },
           tooltip: {
             callbacks: {
               label: function (context) {
@@ -71,7 +71,7 @@ export function ChartJS({ chartType, labels, datasets }: ChartJSProps) {
         <ChartContainer ref={containerRef}>
           <Bar
             width={containerWidth}
-            height={700}
+            height={630}
             options={options}
             data={{
               labels,
