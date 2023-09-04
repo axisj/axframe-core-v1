@@ -1,23 +1,6 @@
-import { get, set, del } from "idb-keyval";
+import { del, get, set } from "idb-keyval";
 import LZUTF8 from "lzutf8";
-import { StateStorage } from "zustand/middleware";
 import { PersistOptions } from "zustand/middleware/persist";
-
-// Custom storage object
-const storage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    // console.log(name, 'has been retrieved')
-    return (await get(name)) || null;
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    // console.log(name, 'with value', value, 'has been saved')
-    await set(name, value);
-  },
-  removeItem: async (name: string): Promise<void> => {
-    // console.log(name, 'has been deleted')
-    await del(name);
-  },
-};
 
 function replacer(key, value) {
   if (value instanceof Map) {
@@ -46,26 +29,33 @@ export function getPersistSerializer<T>(
   return {
     version: storeVersion,
     name: `store-${storeName}`,
-    getStorage: () => storage,
-    serialize: (state) => {
-      return LZUTF8.compress(JSON.stringify(state, replacer), {
-        outputEncoding: "StorageBinaryString",
-      });
-    },
-    deserialize: (str) => {
-      const storageValue = JSON.parse(
-        LZUTF8.decompress(str, {
-          inputEncoding: "StorageBinaryString",
-        }),
-        reviver
-      );
+    storage: {
+      getItem: async (name) => {
+        const value: string | undefined = await get(name);
+        const storageValue = JSON.parse(
+          LZUTF8.decompress(value, {
+            inputEncoding: "StorageBinaryString",
+          }),
+          reviver
+        );
 
-      storageValue.state.loaded = false;
+        storageValue.state.loaded = false;
 
-      if (deserializeFallback) {
-        return deserializeFallback(storageValue);
-      }
-      return storageValue;
+        if (deserializeFallback) {
+          return deserializeFallback(storageValue);
+        }
+        return storageValue;
+      },
+      setItem: async (name, value) => {
+        const storageValue = LZUTF8.compress(JSON.stringify(value, replacer), {
+          outputEncoding: "StorageBinaryString",
+        });
+
+        await set(name, storageValue);
+      },
+      removeItem: async (name) => {
+        await del(name);
+      },
     },
   };
 }
