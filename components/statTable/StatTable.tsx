@@ -76,6 +76,7 @@ function StatTable<T = Record<string, any>>({
             subTotalValues[bc.key].count += 1;
           } else {
             subTotalValues[bc.key] = {
+              value: curItem[bc.key],
               sum: curItem[bc.key],
               count: 1,
             };

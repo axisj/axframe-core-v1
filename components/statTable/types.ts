@@ -38,6 +38,7 @@ export interface StatRowTd {
 }
 
 export interface ItemTotal {
+  value: any;
   sum: number;
   count: number;
 }
