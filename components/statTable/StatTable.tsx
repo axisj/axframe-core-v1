@@ -72,12 +72,12 @@ function StatTable<T = Record<string, any>>({
 
         if (subtotal?.columns.find((sc) => sc.key === bc.key)) {
           if (bc.key in subTotalValues) {
-            subTotalValues[bc.key].sum += curItem[bc.key];
+            subTotalValues[bc.key].sum += curItem[bc.key] ?? 0;
             subTotalValues[bc.key].count += 1;
           } else {
             subTotalValues[bc.key] = {
               value: curItem[bc.key],
-              sum: curItem[bc.key],
+              sum: curItem[bc.key] ?? 0,
               count: 1,
             };
           }
@@ -85,11 +85,11 @@ function StatTable<T = Record<string, any>>({
 
         if (total?.columns.find((tc) => tc.key === bc.key)) {
           if (bc.key in totalValues) {
-            totalValues[bc.key].sum += curItem[bc.key];
+            totalValues[bc.key].sum += curItem[bc.key] ?? 0;
             totalValues[bc.key].count += 1;
           } else {
             totalValues[bc.key] = {
-              sum: curItem[bc.key],
+              sum: curItem[bc.key] ?? 0,
               count: 1,
             };
           }
