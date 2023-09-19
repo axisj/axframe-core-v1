@@ -209,9 +209,7 @@ usePageTabStore.persist.onFinishHydration((state) => {
   }
 });
 
-setTimeout(() => {
-  usePageTabStore.getState().setLoaded(true);
-}, 300);
+usePageTabStore.getState().setLoaded(true);
 
 export const setMetaDataByPath = <T extends Record<string, any>>(
   routePath: string,
