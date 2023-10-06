@@ -209,8 +209,6 @@ usePageTabStore.persist.onFinishHydration((state) => {
   }
 });
 
-usePageTabStore.getState().setLoaded(true);
-
 export const setMetaDataByPath = <T extends Record<string, any>>(
   routePath: string,
   metaData: Partial<Record<keyof T, any>>
