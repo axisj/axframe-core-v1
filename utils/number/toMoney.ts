@@ -1,6 +1,8 @@
 import { toNumber } from "./";
 
 export function toMoney(value: unknown): string {
+  if (value === undefined || value === null) return "-";
+
   const n = toNumber(value);
   let fractionDigit = 0;
 

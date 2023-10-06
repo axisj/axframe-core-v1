@@ -11,6 +11,7 @@ export interface StatHeadTd {
   rowspan?: number;
   label: string;
   align?: Align;
+  className?: string;
 }
 
 export interface StatHeadTr {
@@ -25,6 +26,7 @@ export interface StatBodyTd<T> {
   itemRender?: (item: T) => React.ReactNode;
   align?: Align;
   textCell?: boolean;
+  className?: string;
 }
 
 export interface StatRowTd {
@@ -51,6 +53,7 @@ export interface StatTotalTd<T> {
   itemRender?: (total: ItemTotal, item: Record<keyof T, ItemTotal>) => React.ReactNode;
   align?: Align;
   textCell?: boolean;
+  className?: string;
 }
 
 export interface StatSubTotal<T> {

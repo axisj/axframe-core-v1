@@ -53,7 +53,13 @@ function StatTableTBody<T>({
                   })();
 
                   return (
-                    <td key={si} colSpan={sc.colspan} align={sc.align ?? "center"} data-text-cell={sc.textCell}>
+                    <td
+                      key={si}
+                      colSpan={sc.colspan}
+                      align={sc.align ?? "center"}
+                      data-text-cell={sc.textCell}
+                      className={sc.className}
+                    >
                       {tdValue}
                     </td>
                   );
@@ -79,6 +85,7 @@ function StatTableTBody<T>({
                         }
                       }}
                       align={c.align ?? "center"}
+                      className={c.className}
                       data-text-cell={c.textCell}
                     >
                       {tdValue}
