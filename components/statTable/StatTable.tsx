@@ -8,6 +8,7 @@ import { Loading } from "../common";
 import { SMixinScrollerStyle } from "../../styles/emotion";
 import { StatTableRawBody } from "./StatTableRawBody";
 import { StatTableRawFoot } from "./StatTableRawFoot";
+import { alpha } from "../../../styles/palette/colorUtil";
 
 function StatTable<T = Record<string, any>>({
   width,
@@ -287,7 +288,7 @@ const FootContainer = styled.div`
   position: relative;
   overflow: hidden;
   border-top: 1px solid ${(p) => p.theme.border_color_base};
-  background: ${(p) => p.theme.axfdg_body_hover_odd_bg};
+  background: ${(p) => alpha(p.theme.highlight_color, 0.1)};
 `;
 
 export { StatTable };

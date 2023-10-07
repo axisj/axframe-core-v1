@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StatCol, StatRowTd, StatTableStyleProps } from "./types";
 import styled from "@emotion/styled";
+import { alpha } from "../../../styles/palette/colorUtil";
 
 interface Props<T> {
   tableClassName?: string;
@@ -87,7 +88,7 @@ const Table = styled.table<StatTableStyleProps>`
     }
     tr[role="subtotal"] {
       td {
-        background: #ffeeee;
+        background: ${(p) => alpha(p.theme.highlight_color, 0.1)};
       }
     }
   }

@@ -61,7 +61,6 @@ const Table = styled.table<StatTableStyleProps>`
   width: 100%;
   border-collapse: collapse;
   border-style: hidden;
-  background: ${(p) => p.theme.axfdg_body_hover_odd_bg};
   border-bottom: 1px solid ${(p) => p.theme.border_color_base};
 
   tfoot {
@@ -85,11 +84,6 @@ const Table = styled.table<StatTableStyleProps>`
     tr.selected {
       background: ${(p) => p.theme.item_active_bg};
       color: ${(p) => p.theme.primary_color};
-    }
-    tr[role="subtotal"] {
-      td {
-        background: #ffeeee;
-      }
     }
   }
 `;

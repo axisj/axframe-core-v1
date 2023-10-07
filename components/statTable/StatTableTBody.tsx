@@ -2,6 +2,7 @@ import * as React from "react";
 import { ItemTotal, StatBodyTd, StatCol, StatSubTotal, StatTableStyleProps } from "./types";
 import { toMoney } from "@core/utils/number";
 import styled from "@emotion/styled";
+import { alpha } from "../../../styles/palette/colorUtil";
 
 interface Props<T> {
   tableWidth: number;
@@ -133,7 +134,7 @@ const Table = styled.table<StatTableStyleProps>`
     }
     tr[role="subtotal"] {
       td {
-        background: #ffeeee;
+        background: ${(p) => alpha(p.theme.highlight_color, 0.1)};
       }
     }
   }
