@@ -47,7 +47,7 @@ export const SearchParamDateRange: SearchParamComponent = ({
   return (
     <Form.Item name={name} {...(label ? { label, style: { marginBottom: 0, marginRight: 10 } } : { noStyle: true })}>
       <DatePicker.RangePicker
-        style={{ width: 220 }}
+        style={{ width: 230 }}
         showNow
         disabled={disabled}
         placeholder={placeholders}
