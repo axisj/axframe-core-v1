@@ -10,6 +10,7 @@ export function StatDataGrid<T>({ width, height, headRowHeight = 28, bodyRowHeig
   return (
     <Container>
       <StatTable<T>
+        className={"stat-data-grid"}
         headRowHeight={headRowHeight}
         bodyRowHeight={bodyRowHeight}
         width={width}

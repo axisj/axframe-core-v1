@@ -68,7 +68,6 @@ const Table = styled.table<StatTableStyleProps>`
       background-color: transparent;
       white-space: nowrap;
       border: 1px solid ${(p) => p.theme.border_color_base};
-      line-height: 20px;
       padding: 0 6.5px;
       height: ${(p) => p.bodyRowHeight}px;
       color: ${(p) => p.theme.axfdg_body_color};
